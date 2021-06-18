@@ -1,0 +1,43 @@
+@import 'styles/theme.scss';
+
+.container {
+  padding: 20px;
+  flex-direction: column;
+  background-color: $backgroundGray;
+  flex: 0 0 12em;
+}
+.logoContainer {
+  display: flex;
+  align-items: center;
+  span {
+    font-size: 28px;
+    font-weight: 700;
+    color: $primary;
+    margin-left: 10px;
+  }
+}
+.navContainer {
+  margin-top: 20px;
+  width: 200px;
+}
+.navItem {
+  display: flex;
+  align-items: center;
+  margin-top: 6px;
+  color: $gray;
+  padding: 6px 12px;
+  &:hover {
+    color: white;
+    cursor: pointer;
+    background-color: $secondary;
+    border-radius: 12px;
+  }
+  span {
+    font-size: 22px;
+    font-weight: 500;
+    margin-left: 12px;
+  }
+}
+.navItemActive {
+  color: white;
+}

@@ -1,0 +1,23 @@
+@import 'styles/theme.scss';
+
+.navItem {
+  display: flex;
+  align-items: center;
+  margin-bottom: 6px;
+  color: $gray;
+  padding: 6px 12px;
+  &:hover {
+    color: white;
+    cursor: pointer;
+    background-color: $secondary;
+    border-radius: 12px;
+  }
+  span {
+    font-size: 22px;
+    font-weight: 500;
+    margin-left: 12px;
+  }
+}
+.navItemActive {
+  color: white;
+}

@@ -1,0 +1,16 @@
+@import 'styles/theme.scss';
+
+.container {
+  background-color: $backgroundGray;
+  border-radius: 12px;
+  //padding: 16px;
+  margin-bottom: 24px;
+}
+.divider {
+  border: 0;
+  border-top: 1px solid $gray;
+  margin: 0;
+}
+.padding {
+  padding: 16px 16px 8px;
+}

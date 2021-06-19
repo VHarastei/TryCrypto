@@ -1,0 +1,31 @@
+@import 'styles/theme.scss';
+
+.container {
+  display: flex;
+}
+.miniChart {
+  height: 200px;
+  padding: 16px;
+  flex-shrink: 2;
+  flex-basis: 100%;
+  border-right: 1px solid $gray;
+  position: relative;
+  cursor: pointer;
+}
+.miniChartButton {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: 0.2s ease;
+}
+.display {
+  opacity: 1;
+}
+.discoverMore {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+}

@@ -1,43 +1,73 @@
 @import 'styles/theme.scss';
 
 .container {
-  padding: 20px;
   flex-direction: column;
-  background-color: $backgroundGray;
-  flex: 0 0 12em;
+  width: 100%;
 }
-.logoContainer {
+
+.header {
   display: flex;
   align-items: center;
-  span {
-    font-size: 28px;
-    font-weight: 700;
-    color: $primary;
-    margin-left: 10px;
+  position: sticky;
+  top: 0px;
+  z-index: 101;
+
+  .logoContainer {
+    display: flex;
+    flex-grow: 0;
+    flex-shrink: 0;
+    flex-basis: 220px;
+    height: 80px;
+    justify-content: center;
+    align-items: center;
+    background-color: $backgroundGray;
+    padding: 20px 20px;
+    span {
+      font-size: 26px;
+      font-weight: 700;
+      color: $primary;
+      margin-left: 10px;
+    }
+  }
+  .headerBar {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+    padding: 20px 24px;
+    background-color: $background;
+
+    .activePage {
+      font-size: 24px;
+      font-weight: 500;
+    }
+    .userContainer {
+      display: flex;
+      align-items: center;
+      span {
+        font-size: 24px;
+        font-weight: 500;
+        margin-left: 6px;
+      }
+    }
   }
 }
-.navContainer {
-  margin-top: 20px;
-  width: 200px;
-}
-.navItem {
+
+.content {
   display: flex;
-  align-items: center;
-  margin-top: 6px;
-  color: $gray;
-  padding: 6px 12px;
-  &:hover {
-    color: white;
-    cursor: pointer;
-    background-color: $secondary;
-    border-radius: 12px;
+
+  .navContainer {
+    position: sticky;
+    top: 80px;
+    height: calc(100vh - 80px);
+    display: flex;
+    flex-direction: column;
+    padding: 0px 20px;
+    width: 220px;
+    background-color: $backgroundGray;
   }
-  span {
-    font-size: 22px;
-    font-weight: 500;
-    margin-left: 12px;
+  .children {
+    padding: 12px 24px;
+    width: calc(100% - 220px);
   }
-}
-.navItemActive {
-  color: white;
 }

@@ -1,7 +1,6 @@
-import { Header } from 'components/Header';
 import { Navbar } from 'components/Navbar';
-import React from 'react';
 import { useRouter } from 'next/router';
+import React from 'react';
 import styles from './Layout.module.scss';
 
 type PropsType = {
@@ -14,11 +13,9 @@ export const Layout: React.FC<PropsType> = ({ children }) => {
 
   return (
     <div className={styles.container}>
-      <Navbar active={current} />
-      <div className={styles.content}>
-        <Header current={current} />
+      <Navbar active={current}>
         <div>{children}</div>
-      </div>
+      </Navbar>
     </div>
   );
 };

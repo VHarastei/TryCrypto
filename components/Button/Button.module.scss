@@ -1,0 +1,25 @@
+@import 'styles/theme.scss';
+
+.button {
+  color: white;
+  font-size: 20px;
+  font-weight: 500;
+  border-radius: 8px;
+  padding: 7px 14px;
+  cursor: pointer;
+  transition: 0.2s;
+  outline: none;
+  border: 0;
+}
+.primary {
+  background-color: $primary;
+  &:hover {
+    background-color: #f19a30;
+  }
+}
+.secondary {
+  background-color: $secondary;
+  &:hover {
+    background-color: #35373d;
+  }
+}

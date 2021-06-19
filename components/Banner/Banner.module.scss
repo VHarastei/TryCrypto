@@ -1,0 +1,11 @@
+@import 'styles/theme.scss';
+
+.container {
+  background-color: $backgroundGray;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 24px;
+}
+.textContainer {
+  margin: 0 0 20px;
+}

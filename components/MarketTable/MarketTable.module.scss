@@ -1,0 +1,88 @@
+@import 'styles/theme.scss';
+
+.table {
+  border: 0;
+  border-spacing: 0;
+  border-collapse: initial;
+  width: 100%;
+  .tableHeader {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 16px;
+    th {
+      font-size: 16px;
+      font-weight: 400;
+      color: $gray;
+    }
+  }
+  .tableRow {
+    display: flex;
+    justify-content: space-between;
+    padding: 16px;
+    border-top: 1px solid $gray;
+    td {
+      display: flex;
+      align-items: center;
+      font-size: 18px;
+      font-weight: 400;
+      p {
+        margin: 0 10px;
+      }
+      span {
+        color: $gray;
+      }
+    }
+  }
+  .name {
+    text-align: left;
+    flex-basis: 25%;
+  }
+  .price {
+    text-align: left;
+    flex-basis: 18.3%;
+  }
+  .change {
+    text-align: left;
+    flex-basis: 18.3%;
+    color: $green;
+  }
+  .marketCap {
+    text-align: left;
+    flex-basis: 18.3%;
+  }
+  .watch {
+    text-align: center;
+    flex-basis: 20%;
+    justify-content: center;
+  }
+}
+
+.searchBar {
+  display: flex;
+  align-items: center;
+  padding-bottom: 8px;
+}
+.searchBarField {
+  border: 1px solid $gray;
+  border-radius: 12px;
+  padding: 8px 12px;
+  color: $gray;
+  display: flex;
+  align-items: center;
+  max-width: 350px;
+  width: 100%;
+  margin-right: 16px;
+  input {
+    width: 100%;
+    box-shadow: none;
+    appearance: none;
+    background-color: $backgroundGray;
+    color: white;
+    border: 0;
+    outline: 0;
+    font-size: 16px;
+    margin-left: 8px;
+    height: 20px;
+    line-height: 20px;
+  }
+}

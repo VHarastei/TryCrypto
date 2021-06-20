@@ -3,9 +3,16 @@
 .navItem {
   display: flex;
   align-items: center;
-  margin-bottom: 6px;
+  margin-bottom: 16px;
   color: $gray;
   padding: 6px 12px;
+  width: 187px;
+  @media all and (max-width: 1280px) {
+    width: 54px;
+    span {
+      display: none;
+    }
+  }
   &:hover {
     color: white;
     cursor: pointer;

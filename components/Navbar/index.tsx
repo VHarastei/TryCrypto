@@ -1,13 +1,12 @@
-import React from 'react';
 import Image from 'next/image';
-import logoIcon from 'public/static/logo.png';
-import homeIcon from 'public/static/home.png';
-import portfolioIcon from 'public/static/portfolio.png';
-import marketIcon from 'public/static/market.png';
 import educationIcon from 'public/static/education.png';
+import homeIcon from 'public/static/home.png';
+import logoIcon from 'public/static/logo.png';
+import marketIcon from 'public/static/market.png';
+import portfolioIcon from 'public/static/portfolio.png';
 import userIcon from 'public/static/user.png';
+import React from 'react';
 import styles from './Navbar.module.scss';
-import Link from 'next/link';
 import { NavItem } from './NavItem';
 
 type PropsType = {
@@ -38,7 +37,7 @@ export const Navbar: React.FC<PropsType> = ({ active, children }) => {
           <NavItem icon={marketIcon} href="market" active={active} />
           <NavItem icon={educationIcon} href="education" active={active} />
         </nav>
-        <div className={styles.children}>{children}</div>
+        <div className={styles.childrenContainer}>{children}</div>
       </div>
     </div>
   );

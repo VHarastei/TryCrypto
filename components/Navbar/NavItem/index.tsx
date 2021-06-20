@@ -13,7 +13,7 @@ export const NavItem: React.FC<PropsType> = ({ icon, href, active }) => {
   return (
     <Link href={`/${href}`}>
       <a className={styles.navItem}>
-        <Image src={icon} alt={`${icon} icon`} width={24} height={24} />
+        <Image layout="fixed" src={icon} alt={`${icon} icon`} width={30} height={30} />
         <span className={active === href ? styles.navItemActive : ''}>
           {href[0].toUpperCase() + href.slice(1)}
         </span>

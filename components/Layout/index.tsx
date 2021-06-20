@@ -14,7 +14,7 @@ export const Layout: React.FC<PropsType> = ({ children }) => {
   return (
     <div className={styles.container}>
       <Navbar active={current}>
-        <div>{children}</div>
+        <div className={styles.children}>{children}</div>
       </Navbar>
     </div>
   );

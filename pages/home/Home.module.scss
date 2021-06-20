@@ -1,4 +1,9 @@
 @import 'styles/theme.scss';
 
-.container {
+.miniPortfolio {
+  display: flex;
+  gap: 24px;
 }
+// .miniPortfolio > * + * {
+//   margin-left: 24px;  //or gap: 24px;
+// }

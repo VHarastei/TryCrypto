@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './Button.module.scss';
 
 type PropsType = {
-  children: string;
+  children: string | React.ReactNode;
   color?: 'primary' | 'secondary';
   className?: string;
 };

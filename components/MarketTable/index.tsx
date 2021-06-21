@@ -1,54 +1,60 @@
+import { Button } from 'components/Button';
 import { Card } from 'components/Card';
+import Image from 'next/image';
+import Link from 'next/link';
+import btcIcon from 'public/static/btc.png';
+import searchIcon from 'public/static/search.png';
+import starIcon from 'public/static/star.png';
 import React from 'react';
 import styles from './MarketTable.module.scss';
-import searchIcon from 'public/static/search.png';
-import Image from 'next/image';
-import { Typography } from 'components/Typography';
-import { Button } from 'components/Button';
-import { Divider } from 'components/Divider';
-import btcIcon from 'public/static/btc.png';
-import starIcon from 'public/static/star.png';
 
 export const MarketTable = () => {
   return (
     <Card title={SearchBar}>
-      <table className={styles.table}>
-        <div className={styles.tableHeader}>
-          <th className={styles.name}>Name</th>
-          <th className={styles.price}>Price</th>
-          <th className={styles.change}>Change</th>
-          <th className={styles.marketCap}>Market Cap</th>
-          <th className={styles.watch}>Watch</th>
+      <div className={styles.table}>
+        <ul className={styles.tableHeader}>
+          <li className={styles.name}>Name</li>
+          <li className={styles.price}>Price</li>
+          <li className={styles.change}>Change</li>
+          <li className={styles.marketCap}>Market Cap</li>
+          <li className={styles.watch}>Watch</li>
+        </ul>
+
+        <div>
+          <TableRow />
+          <TableRow />
+          <TableRow />
+          <TableRow />
+          <TableRow />
+          <TableRow />
+          <TableRow />
+          <TableRow />
+          <TableRow />
         </div>
-        <TableRow />
-        <TableRow />
-        <TableRow />
-        <TableRow />
-        <TableRow />
-        <TableRow />
-        <TableRow />
-        <TableRow />
-        <TableRow />
-      </table>
+      </div>
     </Card>
   );
 };
 
 const TableRow = () => {
   return (
-    <div className={styles.tableRow}>
-      <td className={styles.name}>
-        <Image layout="fixed" src={btcIcon} alt={`btc icon`} width={24} height={24} />
-        <p>Bitcoin</p>
-        <span>BTC</span>
-      </td>
-      <td className={styles.price}>$40.324.40 </td>
-      <td className={styles.change}>+0.35%</td>
-      <td className={styles.marketCap}>749.4B</td>
-      <td className={styles.watch}>
-        <Image layout="fixed" src={starIcon} alt={`btc icon`} width={24} height={24} />
-      </td>
-    </div>
+    <Link href="/market/bitcoin">
+      <a>
+        <ul className={styles.tableRow}>
+          <li className={styles.name}>
+            <Image layout="fixed" src={btcIcon} alt={`btc icon`} width={30} height={30} />
+            <p>Bitcoin</p>
+            <span>BTC</span>
+          </li>
+          <li className={styles.price}>$40.324.40 </li>
+          <li className={styles.change}>+0.35%</li>
+          <li className={styles.marketCap}>749.4B</li>
+          <li className={styles.watch}>
+            <Image layout="fixed" src={starIcon} alt={`star icon`} width={24} height={24} />
+          </li>
+        </ul>
+      </a>
+    </Link>
   );
 };
 

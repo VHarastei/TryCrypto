@@ -1,6 +1,50 @@
 @import 'styles/theme.scss';
 
-.container {
+.header {
+  margin-top: 24px;
   display: flex;
-  gap: 24px;
+  align-items: center;
+  justify-content: space-between;
+  .nameContainer {
+    display: flex;
+    align-items: center;
+
+    h1 {
+      margin: 0;
+      font-weight: 500;
+      color: $gray;
+    }
+    .name {
+      margin: 0px 8px 0px 16px;
+      color: white;
+    }
+  }
+  .watchlistBtn {
+    display: flex;
+    align-items: center;
+    span {
+      margin-left: 6px;
+    }
+  }
+}
+.menu {
+  display: flex;
+  border-bottom: 1px solid $gray;
+  margin-top: 12px;
+  margin-bottom: 40px;
+  .tab {
+    padding: 16px 0px;
+    border-bottom: 3px solid transparent;
+    border-radius: 1px;
+    margin-right: 24px;
+    cursor: pointer;
+    color: $gray;
+    font-weight: 500;
+    font-size: 18px;
+    transition: 0.2s ease-out;
+  }
+  .active {
+    border-color: white;
+    color: white;
+  }
 }

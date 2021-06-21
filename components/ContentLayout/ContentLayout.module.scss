@@ -1,0 +1,25 @@
+.container {
+  display: flex;
+  width: 100%;
+  gap: 24px;
+  & > * {
+    //first-child
+    width: 100%;
+  }
+  & > * + * {
+    //last-child
+    max-width: 380px;
+  }
+  @media all and (max-width: 1024px) {
+    flex-direction: column;
+    gap: 0px;
+
+    & > * + * {
+      //last-child
+      max-width: 2000px;
+      width: 100%;
+      display: flex;
+      gap: 24px;
+    }
+  }
+}

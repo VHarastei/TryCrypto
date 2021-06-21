@@ -1,3 +1,4 @@
+import { ContentLayout } from 'components/ContentLayout';
 import { Layout } from 'components/Layout';
 import { MarketTable } from 'components/MarketTable';
 import { RecentTransaction } from 'components/RecentTransaction';
@@ -7,10 +8,10 @@ import styles from './Market.module.scss';
 export default function Market() {
   return (
     <Layout>
-      <div className={styles.container}>
+      <ContentLayout>
         <MarketTable />
         <RecentTransaction simplified />
-      </div>
+      </ContentLayout>
     </Layout>
   );
 }

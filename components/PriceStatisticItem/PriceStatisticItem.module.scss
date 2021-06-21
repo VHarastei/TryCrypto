@@ -1,0 +1,15 @@
+@import 'styles/theme.scss';
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 6px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid $gray;
+}
+.last {
+  padding-bottom: 0;
+  margin-bottom: 0;
+  border-bottom: none;
+}

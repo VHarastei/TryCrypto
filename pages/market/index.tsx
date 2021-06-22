@@ -1,7 +1,7 @@
 import { ContentLayout } from 'components/ContentLayout';
 import { Layout } from 'components/Layout';
 import { MarketTable } from 'components/MarketTable';
-import { RecentTransaction } from 'components/RecentTransaction';
+import { RecentTransactions } from 'components/RecentTransactions';
 import React from 'react';
 import styles from './Market.module.scss';
 
@@ -10,7 +10,9 @@ export default function Market() {
     <Layout>
       <ContentLayout>
         <MarketTable />
-        <RecentTransaction simplified />
+        <div>
+          <RecentTransactions simplified />
+        </div>
       </ContentLayout>
     </Layout>
   );

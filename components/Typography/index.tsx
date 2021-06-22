@@ -3,7 +3,7 @@ import styles from './Typography.module.scss';
 
 type PropsType = {
   children: string;
-  variant?: 'title' | 'regularText' | 'mediumText';
+  variant?: 'title' | 'regularText' | 'mediumText' | 'thinText';
   color?: 'gray' | 'white';
 };
 
@@ -20,7 +20,9 @@ export const Typography: React.FC<PropsType> = ({
           ? styles.title
           : variant === 'regularText'
           ? styles.regularText
-          : styles.mediumText
+          : variant === 'mediumText'
+          ? styles.mediumText
+          : styles.thinText
       } 
       ${color === 'white' ? styles.white : styles.gray}
       `}

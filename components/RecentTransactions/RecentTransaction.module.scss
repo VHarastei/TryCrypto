@@ -1,0 +1,22 @@
+@import 'styles/theme.scss';
+
+.transactionContainer {
+  border-top: 1px solid $gray;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  margin-top: -1px;
+  .nameContainer {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+
+    .date {
+      text-align: center;
+    }
+  }
+  .priceContainer {
+    text-align: end;
+  }
+}

@@ -8,7 +8,7 @@ import styles from './Market.module.scss';
 import Image from 'next/image';
 import btcIcon from 'public/static/btc.png';
 import starIcon from 'public/static/star.png';
-import { RecentTransaction } from 'components/RecentTransaction';
+import { RecentTransactions } from 'components/RecentTransactions';
 import { Paper } from 'components/Paper';
 import { Typography } from 'components/Typography';
 import { PriceStatisticItem } from 'components/PriceStatisticItem';
@@ -18,7 +18,6 @@ const Currency = () => {
   const { currencyId } = router.query;
 
   const [tab, setTab] = React.useState<'tab1' | 'tab2'>('tab1');
-  console.log(tab);
   const handleChangeTab = (newTab: 'tab1' | 'tab2') => {
     setTab(newTab);
   };
@@ -70,6 +69,7 @@ const Currency = () => {
               <div>CONTENT</div>
               <div>CONTENT</div>
               <div>CONTENT</div>
+              <div>CONTENT</div>
             </Paper>
             <Card title="About Bitcoin" withPadding>
               <div>
@@ -92,15 +92,7 @@ const Currency = () => {
       ) : (
         <ContentLayout>
           <div>
-            <Card title="BTC Price Statistics">
-              <div>No transactions</div>
-              <div>No transactions</div>
-              <div>No transactions</div>
-              <div>No transactions</div>
-              <div>No transactions</div>
-              <div>No transactions</div>
-              <div>No transactions</div>
-            </Card>
+            <RecentTransactions currency="bitcoin" simplified />
           </div>
           <Paper>
             <div>BUY - SELL</div>

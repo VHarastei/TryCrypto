@@ -8,12 +8,9 @@ type PropsType = {
 };
 
 export const Layout: React.FC<PropsType> = ({ children }) => {
-  const router = useRouter();
-  const current = router.pathname.slice(1);
-
   return (
     <div className={styles.container}>
-      <Navbar active={current}>
+      <Navbar>
         <div className={styles.children}>{children}</div>
       </Navbar>
     </div>

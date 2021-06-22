@@ -1,7 +1,7 @@
 import { Banner } from 'components/Banner';
 import { Card } from 'components/Card';
 import { Layout } from 'components/Layout';
-import { RecentTransaction } from 'components/RecentTransaction';
+import { RecentTransactions } from 'components/RecentTransactions';
 import { Typography } from 'components/Typography';
 import { Watchlist } from 'components/Watchlist';
 import React from 'react';
@@ -29,7 +29,7 @@ export default function Home() {
           <h2>Pie chart</h2>
           <h2>Pie chart</h2>
         </Card>
-        <RecentTransaction />
+        <RecentTransactions />
       </div>
     </Layout>
   );

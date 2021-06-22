@@ -45,8 +45,14 @@
     background-color: $background;
 
     .activePage {
+      cursor: pointer;
       font-size: 24px;
       font-weight: 500;
+      display: flex;
+      align-items: center;
+      span {
+        margin-left: 6px;
+      }
     }
     .userContainer {
       display: flex;

@@ -11,7 +11,7 @@ export default function Market() {
       <ContentLayout>
         <MarketTable />
         <div>
-          <RecentTransactions simplified />
+          <RecentTransactions simplified withPadding />
         </div>
       </ContentLayout>
     </Layout>

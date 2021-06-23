@@ -12,6 +12,7 @@ import { RecentTransactions } from 'components/RecentTransactions';
 import { Paper } from 'components/Paper';
 import { Typography } from 'components/Typography';
 import { PriceStatisticItem } from 'components/PriceStatisticItem';
+import { BuySell } from 'components/BuySell';
 
 const Currency = () => {
   const router = useRouter();
@@ -94,15 +95,9 @@ const Currency = () => {
           <div>
             <RecentTransactions currency="bitcoin" simplified />
           </div>
-          <Paper>
-            <div>BUY - SELL</div>
-            <div>BUY - SELL</div>
-            <div>BUY - SELL</div>
-            <div>BUY - SELL</div>
-            <div>BUY - SELL</div>
-            <div>BUY - SELL</div>
-            <div>BUY - SELL</div>
-          </Paper>
+          <div>
+            <BuySell />
+          </div>
         </ContentLayout>
       )}
     </Layout>

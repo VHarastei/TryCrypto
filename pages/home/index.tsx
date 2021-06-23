@@ -29,7 +29,7 @@ export default function Home() {
           <h2>Pie chart</h2>
           <h2>Pie chart</h2>
         </Card>
-        <RecentTransactions />
+        <RecentTransactions withPadding />
       </div>
     </Layout>
   );

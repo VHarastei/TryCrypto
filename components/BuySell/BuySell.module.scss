@@ -1,0 +1,76 @@
+@import 'styles/theme.scss';
+
+.tabs {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+
+  .tab {
+    width: 100%;
+    padding: 20px;
+    font-size: 24px;
+    font-weight: 400;
+    border-top: 2px solid transparent;
+    background-color: #1e2124;
+    cursor: pointer;
+    color: $gray;
+    text-align: center;
+    .buyTab {
+      border-top-left-radius: 12px;
+    }
+    .sellTab {
+      border-top-right-radius: 12px;
+    }
+  }
+  .active {
+    border-top: 2px solid $primary;
+    background-color: transparent;
+    color: $primary;
+  }
+}
+
+.content {
+  padding: 40px 24px 0px;
+}
+.buy {
+  .inputContainer {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    input {
+      display: flex;
+      background-color: transparent;
+      padding: 0px;
+      margin: 0px;
+      box-shadow: none;
+      border: none;
+      overflow: hidden;
+      outline: none;
+      font-size: 62px;
+      color: $primary;
+      //width: 40px;
+      max-width: 230px;
+      -moz-appearance: textfield;
+    }
+    .switchCurrency {
+      position: absolute;
+      right: 0px;
+      top: 50%;
+    }
+  }
+}
+
+// input[type='number']::-webkit-outer-spin-button,
+// input[type='number']::-webkit-inner-spin-button {
+//   -webkit-appearance: none;
+//   margin: 0;
+// }
+// input[type='number'] {
+//   -moz-appearance: textfield;
+// }

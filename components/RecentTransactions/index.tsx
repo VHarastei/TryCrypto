@@ -1,14 +1,19 @@
 import { Card } from 'components/Card';
 import { Typography } from 'components/Typography';
-import React from 'react';
-import styles from './RecentTransaction.module.scss';
+import { format, parseISO, formatISO } from 'date-fns';
 import Image from 'next/image';
 import boughtIcon from 'public/static/bought.svg';
-import { formatISO } from 'date-fns/esm';
-import { add, format, parseISO, toDate } from 'date-fns';
+import soldIcon from 'public/static/sold.png';
+import React from 'react';
+import styles from './RecentTransaction.module.scss';
+// import format from 'date-fns/format'
+// import add from 'date-fns/add'
+// import parseISO from 'date-fns/parseISO'
+//import dateFns from "date-fns";
 
 type PropsType = {
   simplified?: boolean;
+  withPadding?: boolean;
   currency?: string;
 };
 
@@ -22,7 +27,7 @@ type Transaction = {
   price: number;
 };
 
-export const RecentTransactions: React.FC<PropsType> = ({ simplified, currency }) => {
+export const RecentTransactions: React.FC<PropsType> = ({ simplified, withPadding, currency }) => {
   //request for transactions of actual currency
 
   const transactions: Transaction[] = [
@@ -31,12 +36,12 @@ export const RecentTransactions: React.FC<PropsType> = ({ simplified, currency }
       type: 'bought',
       currency: 'Stellar Lumens',
       symbol: 'XLM',
-      source: 'market',
+      source: 'education',
       amount: 56.10533,
       price: 18.77,
     },
     {
-      date: formatISO(add(Date.now(), { days: 4 })),
+      date: formatISO(Date.now()),
       type: 'sold',
       currency: 'Stellar Lumens',
       symbol: 'XLM',
@@ -50,6 +55,7 @@ export const RecentTransactions: React.FC<PropsType> = ({ simplified, currency }
     <Card
       title={currency ? `Balance: 56.10537 XLM` : 'Recent transactions'}
       button={simplified ? undefined : { name: 'View portfolio', href: '/' }}
+      withPadding={withPadding}
     >
       <div>
         {currency ? (
@@ -68,7 +74,15 @@ export const RecentTransactions: React.FC<PropsType> = ({ simplified, currency }
   );
 };
 
-const Transaction: React.FC<Transaction> = ({ date, type, currency, symbol, source, amount }) => {
+const Transaction: React.FC<Transaction> = ({
+  date,
+  type,
+  currency,
+  symbol,
+  source,
+  amount,
+  price,
+}) => {
   const parsedDate = parseISO(date);
   const month = format(parsedDate, 'MMM').toUpperCase();
   const day = format(parsedDate, 'd');
@@ -82,19 +96,28 @@ const Transaction: React.FC<Transaction> = ({ date, type, currency, symbol, sour
           </Typography>
           <Typography variant="regularText">{day}</Typography>
         </div>
-        {/* check transaction type and display correct photo*/}
-        <Image layout="fixed" src={boughtIcon} alt={`btc icon`} width={36} height={36} />
+        <Image
+          layout="fixed"
+          src={type === 'bought' ? boughtIcon : soldIcon}
+          alt={`transaction type icon`}
+          width={36}
+          height={36}
+        />
         <div>
-          <Typography variant="regularText">Bought Stellar Lumens</Typography>
+          <Typography variant="regularText">{`${
+            type === 'bought' ? 'Bought' : 'Sold'
+          } ${currency}`}</Typography>
           <Typography variant="thinText" color="gray">
-            From market
+            {`${type === 'bought' ? 'From' : 'To'} ${source}`}
           </Typography>
         </div>
       </div>
       <div className={styles.priceContainer}>
-        <Typography variant="regularText">+56.1053 XLM</Typography>
+        <Typography variant="regularText">{`${
+          type === 'bought' ? '+' : '-'
+        }${amount} ${symbol}`}</Typography>
         <Typography variant="thinText" color="gray">
-          +$18.77
+          {`${type === 'bought' ? '+' : '-'}$${price} `}
         </Typography>
       </div>
     </div>

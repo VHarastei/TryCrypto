@@ -5,12 +5,14 @@ type PropsType = {
   children: string;
   variant?: 'title' | 'regularText' | 'mediumText' | 'thinText';
   color?: 'gray' | 'white';
+  className?: string;
 };
 
 export const Typography: React.FC<PropsType> = ({
   children,
   variant = 'title',
   color = 'white',
+  className,
 }) => {
   return (
     <div
@@ -25,6 +27,7 @@ export const Typography: React.FC<PropsType> = ({
           : styles.thinText
       } 
       ${color === 'white' ? styles.white : styles.gray}
+      ${className}
       `}
     >
       {children}

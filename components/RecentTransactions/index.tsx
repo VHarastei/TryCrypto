@@ -6,10 +6,6 @@ import boughtIcon from 'public/static/bought.svg';
 import soldIcon from 'public/static/sold.png';
 import React from 'react';
 import styles from './RecentTransaction.module.scss';
-// import format from 'date-fns/format'
-// import add from 'date-fns/add'
-// import parseISO from 'date-fns/parseISO'
-//import dateFns from "date-fns";
 
 type PropsType = {
   simplified?: boolean;
@@ -34,26 +30,26 @@ export const RecentTransactions: React.FC<PropsType> = ({ simplified, withPaddin
     {
       date: formatISO(Date.now()),
       type: 'bought',
-      currency: 'Stellar Lumens',
-      symbol: 'XLM',
+      currency: 'Bitcoin',
+      symbol: 'BTC',
       source: 'education',
-      amount: 56.10533,
-      price: 18.77,
+      amount: 5.10533,
+      price: 1218.77,
     },
     {
       date: formatISO(Date.now()),
       type: 'sold',
-      currency: 'Stellar Lumens',
-      symbol: 'XLM',
+      currency: 'Bitcoin',
+      symbol: 'BTC',
       source: 'market',
-      amount: 21.34132,
-      price: 9.12,
+      amount: 1.34132,
+      price: 3324.12,
     },
   ];
 
   return (
     <Card
-      title={currency ? `Balance: 56.10537 XLM` : 'Recent transactions'}
+      title={currency ? `Balance: 6.10537 BTC` : 'Recent transactions'}
       button={simplified ? undefined : { name: 'View portfolio', href: '/' }}
       withPadding={withPadding}
     >

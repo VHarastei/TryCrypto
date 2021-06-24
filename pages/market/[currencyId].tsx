@@ -1,18 +1,17 @@
 import { Button } from 'components/Button';
+import { BuySellCard } from 'components/BuySellCard';
 import { Card } from 'components/Card';
 import { ContentLayout } from 'components/ContentLayout';
 import { Layout } from 'components/Layout';
-import { useRouter } from 'next/router';
-import React from 'react';
-import styles from './Market.module.scss';
+import { Paper } from 'components/Paper';
+import { PriceStatisticItem } from 'components/PriceStatisticItem';
+import { RecentTransactions } from 'components/RecentTransactions';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import btcIcon from 'public/static/btc.png';
 import starIcon from 'public/static/star.png';
-import { RecentTransactions } from 'components/RecentTransactions';
-import { Paper } from 'components/Paper';
-import { Typography } from 'components/Typography';
-import { PriceStatisticItem } from 'components/PriceStatisticItem';
-import { BuySell } from 'components/BuySell';
+import React from 'react';
+import styles from './Market.module.scss';
 
 const Currency = () => {
   const router = useRouter();
@@ -93,10 +92,10 @@ const Currency = () => {
       ) : (
         <ContentLayout>
           <div>
-            <RecentTransactions currency="bitcoin" simplified />
+            <RecentTransactions currency="Bitcoin" simplified />
           </div>
           <div>
-            <BuySell />
+            <BuySellCard currency="Bitcoin" symbol="BTC" />
           </div>
         </ContentLayout>
       )}

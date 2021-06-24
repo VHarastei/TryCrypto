@@ -1,0 +1,92 @@
+@import 'styles/theme.scss';
+
+.inputContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  .input {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $gray;
+    .currency {
+      font-size: 30px;
+      font-weight: 500;
+    }
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    input {
+      display: flex;
+      background-color: transparent;
+      padding: 0px;
+      margin: 0px;
+      box-shadow: none;
+      border: none;
+      overflow: hidden;
+      outline: none;
+      font-size: 58px;
+      color: $primary;
+      max-width: 230px;
+      -moz-appearance: textfield;
+      margin-left: 6px;
+    }
+  }
+  .switchCurrencyContainer {
+    text-align: center;
+    .switchCurrency {
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      padding: 4px;
+      margin-bottom: 4px;
+    }
+  }
+}
+.inputTextField {
+  text-align: center;
+  margin: 16px;
+}
+
+.infoContainer {
+  border: 1px solid $gray;
+  border-radius: 4px;
+  margin-bottom: 16px;
+  .infoItem {
+    &:last-of-type {
+      border-bottom: 0;
+    }
+    padding: 10px 12px;
+    border-bottom: 1px solid $gray;
+    display: flex;
+    align-items: center;
+
+    .actionInfo {
+      max-width: 90px;
+      width: 100%;
+    }
+    .currencyInfo {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      span {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .moreInfo {
+        transform: rotate(180deg);
+      }
+    }
+  }
+}
+
+.button {
+  padding: 0;
+  padding: 16px;
+  width: 100%;
+  margin-bottom: 16px;
+}

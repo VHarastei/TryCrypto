@@ -1,6 +1,8 @@
 import { MarketApi, TableCoin } from 'api/marketApi';
 import { Button } from 'components/Button';
 import { Card } from 'components/Card';
+import { Typography } from 'components/Typography';
+import { createPagination } from 'helpers/createPagination';
 import Image from 'next/image';
 import Link from 'next/link';
 import btcIcon from 'public/static/btc.png';
@@ -8,6 +10,8 @@ import searchIcon from 'public/static/search.png';
 import React, { useEffect, useState } from 'react';
 import styles from './MarketTable.module.scss';
 import { TableRow } from './TableRow/TableRow';
+import arrowIcon from 'public/static/back.svg';
+import { useDidMount } from 'hooks/useDidMount';
 
 type PropsType = {
   data: TableCoin[];
@@ -15,30 +19,38 @@ type PropsType = {
 
 export const MarketTable: React.FC<PropsType> = ({ data }) => {
   const [coins, setCoins] = useState<TableCoin[]>(data);
-  const [page, setPage] = useState(1);
-  const formatPercent = (number: number) => `${new Number(number).toFixed(2)}%`;
+  const [currentPage, setCurrentPage] = useState(1);
 
-  const formatDollar = (number: number, maximumSignificantDigits: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      maximumSignificantDigits,
-    }).format(number);
-  };
-  const handleLoadMore = async (page: number) => {
-    const newCoins = await MarketApi.getTableData(page);
-    setCoins([...coins, ...newCoins]);
-  };
+  const { pagination, showing } = createPagination({
+    numberOfItems: 1000,
+    itemsPerPage: 100,
+    numberOfButtons: 5,
+    currentPage,
+  });
+
+  const didMount = useDidMount();
 
   useEffect(() => {
-    if (page !== 1) handleLoadMore(page);
-  }, [page]);
+    const handleLoadMore = async (currentPage: number) => {
+      const newCoins = await MarketApi.getTableData(currentPage);
+      setCoins(newCoins);
+    };
+    if (!didMount) {
+      handleLoadMore(currentPage);
+      window.scrollTo(0, 0);
+    }
+  }, [currentPage]);
 
   return (
     <Card title={SearchBar}>
       <div className={styles.table}>
         <ul className={styles.tableHeader}>
-          <li className={styles.name}>Name</li>
+          <li className={styles.name}>
+            <Typography variant="thinText" color="gray">
+              Name
+            </Typography>
+            <span className={`${styles.sort} ${styles.desc}`}></span>
+          </li>
           <li className={styles.price}>Price</li>
           <li className={styles.change}>Change</li>
           <li className={styles.marketCap}>Market Cap</li>
@@ -47,42 +59,48 @@ export const MarketTable: React.FC<PropsType> = ({ data }) => {
 
         <div>
           {coins.map((coin: TableCoin) => {
-            return <TableRow coin={coin} />;
+            return <TableRow key={coin.id} coin={coin} />;
           })}
         </div>
-        <Button
-          color="secondary"
-          onClick={() => setPage((prev) => prev + 1)}
-          className={styles.loadMoreBtn}
-        >
-          Load more
-        </Button>
+        <div className={styles.paginationContainer}>
+          <div className={styles.showing}>{`Showing ${showing} out of 1000`}</div>
+          <div className={styles.pagination}>
+            <div
+              color="secondary"
+              onClick={() => setCurrentPage((prev) => prev - 1)}
+              className={`${styles.paginationArrow} ${
+                pagination[0] === currentPage ? styles.disabledArrow : ''
+              }`}
+            >
+              <Image src={arrowIcon} alt="Arrow icon" width={14} height={14} />
+            </div>
+            {pagination.map((page) => {
+              return (
+                <div
+                  key={page}
+                  color="secondary"
+                  onClick={() => setCurrentPage(page)}
+                  className={`${styles.paginationBtn} ${page === currentPage ? styles.active : ''}`}
+                >
+                  {page}
+                </div>
+              );
+            })}
+            <div
+              color="secondary"
+              onClick={() => setCurrentPage((prev) => prev + 1)}
+              className={`${styles.paginationArrow} ${styles.rotate} ${
+                pagination.reverse()[0] === currentPage ? styles.disabledArrow : ''
+              }`}
+            >
+              <Image src={arrowIcon} alt="Arrow icon" width={14} height={14} />
+            </div>
+          </div>
+        </div>
       </div>
     </Card>
   );
 };
-
-// const TableRow = () => {
-//   return (
-//     <Link href="/market/bitcoin">
-//       <a>
-//         <ul className={styles.tableRow}>
-//           <li className={styles.name}>
-//             <Image layout="fixed" src={btcIcon} alt={`btc icon`} width={30} height={30} />
-//             <p>Bitcoin</p>
-//             <span>BTC</span>
-//           </li>
-//           <li className={styles.price}>$40.324.40 </li>
-//           <li className={styles.change}>+0.35%</li>
-//           <li className={styles.marketCap}>749.4B</li>
-//           <li className={styles.watch}>
-//             <Image layout="fixed" src={starIcon} alt={`star icon`} width={24} height={24} />
-//           </li>
-//         </ul>
-//       </a>
-//     </Link>
-//   );
-// };
 
 const SearchBar = () => {
   return (

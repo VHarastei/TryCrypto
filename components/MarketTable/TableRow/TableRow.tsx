@@ -21,7 +21,7 @@ export const TableRow: React.FC<PropsType> = ({ coin }) => {
   };
 
   return (
-    <Link href={`/market/${coin.id}`} key={coin.id}>
+    <Link href={`/market/${coin.id}`}>
       <a>
         <ul className={styles.container}>
           <li className={styles.name}>

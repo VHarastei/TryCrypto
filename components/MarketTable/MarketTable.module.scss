@@ -18,6 +18,23 @@
       font-size: 16px;
       font-weight: 400;
       color: $gray;
+      display: flex;
+      align-items: center;
+    }
+    .sort {
+      width: 10px;
+      height: 5px;
+      margin-left: 6px;
+    }
+    .desc {
+      border-top: solid 5px $primary;
+      border-left: solid 5px transparent;
+      border-right: solid 5px transparent;
+    }
+    .asc {
+      border-bottom: solid 5px $primary;
+      border-left: solid 5px transparent;
+      border-right: solid 5px transparent;
     }
   }
   .name {
@@ -41,10 +58,6 @@
     flex-basis: 7%;
     justify-content: center;
   }
-}
-
-.loadMoreBtn {
-  margin: 16px;
 }
 
 .searchBar {
@@ -74,5 +87,56 @@
     margin-left: 8px;
     height: 20px;
     line-height: 20px;
+  }
+}
+.paginationContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  .pagination {
+    margin: 16px 0px;
+    display: flex;
+    align-items: center;
+    .paginationArrow {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      margin: 0px 6px;
+      user-select: none;
+    }
+    .disabledArrow {
+      pointer-events: none;
+    }
+    .rotate {
+      transform: rotate(180deg);
+    }
+    .paginationBtn {
+      cursor: pointer;
+      border-radius: 4px;
+      height: 32px;
+      min-width: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0px 2px;
+      padding: 0px 6px;
+      font-size: 16px;
+      font-weight: 600;
+      user-select: none;
+      &:hover {
+        background-color: $secondary;
+      }
+    }
+    .active {
+      background-color: $primary;
+    }
+    .active:hover {
+      background-color: $primary;
+    }
+  }
+  .showing {
+    position: absolute;
+    left: 16px;
   }
 }

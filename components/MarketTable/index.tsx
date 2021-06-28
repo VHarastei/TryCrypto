@@ -1,73 +1,101 @@
-import { MarketApi, TableCoin } from 'api/marketApi';
+import { fetcher } from 'api';
+import { Key, MarketApi, TableCoin, TableConfig } from 'api/marketApi';
 import { Button } from 'components/Button';
 import { Card } from 'components/Card';
 import { Typography } from 'components/Typography';
 import { createPagination } from 'helpers/createPagination';
+import { useDidMount } from 'hooks/useDidMount';
+import { useSortableData } from 'hooks/useSortableData';
 import Image from 'next/image';
 import Link from 'next/link';
-import btcIcon from 'public/static/btc.png';
+import arrowIcon from 'public/static/back.svg';
 import searchIcon from 'public/static/search.png';
 import React, { useEffect, useState } from 'react';
+import useSWR from 'swr';
 import styles from './MarketTable.module.scss';
 import { TableRow } from './TableRow/TableRow';
-import arrowIcon from 'public/static/back.svg';
-import { useDidMount } from 'hooks/useDidMount';
 
 type PropsType = {
   data: TableCoin[];
+  currentPage: number;
 };
 
-export const MarketTable: React.FC<PropsType> = ({ data }) => {
-  const [coins, setCoins] = useState<TableCoin[]>(data);
-  const [currentPage, setCurrentPage] = useState(1);
+export const MarketTable: React.FC<PropsType> = (props) => {
+  const [currentPage, setCurrentPage] = useState(props.currentPage);
+  const { data } = useSWR(MarketApi.getTableDataUrl(currentPage), fetcher, {
+    initialData: currentPage === props.currentPage ? props.data : undefined,
+    refreshInterval: 30000,
+  });
+
+  const { items, setItems, requestSort, sortConfig } = useSortableData({
+    data,
+    config: { key: 'market_cap', direction: 'desc' },
+  });
+
+  useEffect(() => {
+    if (data) setItems(data);
+  }, [data]);
 
   const { pagination, showing } = createPagination({
-    numberOfItems: 1000,
+    numberOfItems: 6120,
     itemsPerPage: 100,
     numberOfButtons: 5,
     currentPage,
   });
 
-  const didMount = useDidMount();
+  const getClassName = (name: Key) => {
+    if (!sortConfig) return '';
+    return sortConfig.key === name ? sortConfig.direction : '';
+  };
 
-  useEffect(() => {
-    const handleLoadMore = async (currentPage: number) => {
-      const newCoins = await MarketApi.getTableData(currentPage);
-      setCoins(newCoins);
-    };
-    if (!didMount) {
-      handleLoadMore(currentPage);
-      window.scrollTo(0, 0);
-    }
-  }, [currentPage]);
+  const handleChangePage = (newPage: number) => () => {
+    setCurrentPage(newPage);
+    window.scrollTo(0, 0);
+  };
 
   return (
     <Card title={SearchBar}>
+      {/* {data ? ( */}
       <div className={styles.table}>
         <ul className={styles.tableHeader}>
-          <li className={styles.name}>
-            <Typography variant="thinText" color="gray">
-              Name
-            </Typography>
-            <span className={`${styles.sort} ${styles.desc}`}></span>
-          </li>
-          <li className={styles.price}>Price</li>
-          <li className={styles.change}>Change</li>
-          <li className={styles.marketCap}>Market Cap</li>
+          <TableHeaderItem
+            name="Name"
+            itemKey="name"
+            requestSort={requestSort}
+            getClassName={getClassName}
+          />
+          <TableHeaderItem
+            name="Price"
+            itemKey="current_price"
+            requestSort={requestSort}
+            getClassName={getClassName}
+          />
+          <TableHeaderItem
+            name="Change 24h"
+            itemKey="price_change_percentage_24h"
+            requestSort={requestSort}
+            getClassName={getClassName}
+          />
+          <TableHeaderItem
+            name="Market Cap"
+            itemKey="market_cap"
+            requestSort={requestSort}
+            getClassName={getClassName}
+          />
           <li className={styles.watch}>Watch</li>
         </ul>
 
         <div>
-          {coins.map((coin: TableCoin) => {
+          {items.map((coin: TableCoin) => {
             return <TableRow key={coin.id} coin={coin} />;
           })}
         </div>
         <div className={styles.paginationContainer}>
-          <div className={styles.showing}>{`Showing ${showing} out of 1000`}</div>
+          <div className={styles.showing}>{`Showing ${showing} out of 6120`}</div>
           <div className={styles.pagination}>
             <div
               color="secondary"
-              onClick={() => setCurrentPage((prev) => prev - 1)}
+              onClick={handleChangePage(currentPage - 1)}
               className={`${styles.paginationArrow} ${
                 pagination[0] === currentPage ? styles.disabledArrow : ''
               }`}
@@ -76,19 +104,24 @@ export const MarketTable: React.FC<PropsType> = ({ data }) => {
             </div>
             {pagination.map((page) => {
               return (
-                <div
-                  key={page}
-                  color="secondary"
-                  onClick={() => setCurrentPage(page)}
-                  className={`${styles.paginationBtn} ${page === currentPage ? styles.active : ''}`}
-                >
-                  {page}
-                </div>
+                <Link key={page} href={`/market${page === 1 ? '' : `?page=${page}`}`}>
+                  <a>
+                    <div
+                      color="secondary"
+                      onClick={handleChangePage(page)}
+                      className={`${styles.paginationBtn} ${
+                        page === currentPage ? styles.active : ''
+                      }`}
+                    >
+                      {page}
+                    </div>
+                  </a>
+                </Link>
               );
             })}
             <div
               color="secondary"
-              onClick={() => setCurrentPage((prev) => prev + 1)}
+              onClick={handleChangePage(currentPage + 1)}
               className={`${styles.paginationArrow} ${styles.rotate} ${
                 pagination.reverse()[0] === currentPage ? styles.disabledArrow : ''
               }`}
@@ -98,7 +131,33 @@ export const MarketTable: React.FC<PropsType> = ({ data }) => {
           </div>
         </div>
       </div>
+      {/* ) : (
+        <div>nema</div>
+      )} */}
     </Card>
+  );
+};
+
+type TableHeaderItemPropsType = {
+  name: string;
+  itemKey: Key;
+  requestSort: (key: Key) => void;
+  getClassName: (name: Key) => string;
+};
+
+const TableHeaderItem: React.FC<TableHeaderItemPropsType> = ({
+  name,
+  itemKey,
+  requestSort,
+  getClassName,
+}) => {
+  return (
+    <li className={styles[itemKey]} onClick={() => requestSort(itemKey)}>
+      <Typography variant="thinText" color="gray">
+        {name}
+      </Typography>
+      <span className={`${styles.sort} ${styles[getClassName(itemKey)]}`}></span>
+    </li>
   );
 };
 

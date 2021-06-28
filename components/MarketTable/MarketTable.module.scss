@@ -20,6 +20,13 @@
       color: $gray;
       display: flex;
       align-items: center;
+      user-select: none;
+      div {
+        cursor: pointer;
+      }
+      div:hover {
+        color: $primary;
+      }
     }
     .sort {
       width: 10px;
@@ -41,15 +48,15 @@
     text-align: left;
     flex-basis: 35%;
   }
-  .price {
+  .current_price {
     text-align: left;
     flex-basis: 18.3%;
   }
-  .change {
+  .price_change_percentage_24h {
     text-align: left;
     flex-basis: 18.3%;
   }
-  .marketCap {
+  .market_cap {
     text-align: left;
     flex-basis: 20.3%;
   }

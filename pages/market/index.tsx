@@ -1,3 +1,4 @@
+import { fetcher } from 'api';
 import { MarketApi, TableCoin } from 'api/marketApi';
 import axios from 'axios';
 import { ContentLayout } from 'components/ContentLayout';
@@ -10,13 +11,14 @@ import styles from './Market.module.scss';
 
 type PropsType = {
   data: TableCoin[];
+  currentPage: number;
 };
 
-export default function Market({ data }: PropsType) {
+export default function Market({ data, currentPage }: PropsType) {
   return (
     <Layout>
       <ContentLayout>
-        <MarketTable data={data} />
+        <MarketTable data={data} currentPage={currentPage} />
         <div>
           <RecentTransactions simplified withPadding />
         </div>
@@ -26,11 +28,12 @@ export default function Market({ data }: PropsType) {
 }
 
 export async function getServerSideProps(ctx: GetServerSidePropsContext) {
-  const data: TableCoin[] = await MarketApi.getTableData();
+  let currentPage = 1;
+  const { page } = ctx.query;
+  if (page) currentPage = +page;
 
+  const data: TableCoin[] = await fetcher(MarketApi.getTableDataUrl(currentPage)());
   return {
-    props: {
-      data,
-    },
+    props: { data, currentPage },
   };
 }

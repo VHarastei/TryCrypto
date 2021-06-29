@@ -2,6 +2,7 @@ import { fetcher } from 'api';
 import { Key, MarketApi, TableCoin, TableConfig } from 'api/marketApi';
 import { Button } from 'components/Button';
 import { Card } from 'components/Card';
+import { Paper } from 'components/Paper';
 import { Typography } from 'components/Typography';
 import { createPagination } from 'helpers/createPagination';
 import { useDidMount } from 'hooks/useDidMount';
@@ -9,7 +10,6 @@ import { useSortableData } from 'hooks/useSortableData';
 import Image from 'next/image';
 import Link from 'next/link';
 import arrowIcon from 'public/static/back.svg';
-import searchIcon from 'public/static/search.png';
 import React, { useEffect, useState } from 'react';
 import useSWR from 'swr';
 import styles from './MarketTable.module.scss';
@@ -23,7 +23,7 @@ type PropsType = {
 export const MarketTable: React.FC<PropsType> = (props) => {
   const [currentPage, setCurrentPage] = useState(props.currentPage);
   const { data } = useSWR(MarketApi.getTableDataUrl(currentPage), fetcher, {
-    initialData: currentPage === props.currentPage ? props.data : undefined,
+    initialData: currentPage === props.currentPage ? props.data : [],
     refreshInterval: 30000,
   });
 
@@ -33,7 +33,7 @@ export const MarketTable: React.FC<PropsType> = (props) => {
   });
 
   useEffect(() => {
-    if (data) setItems(data);
+    if (data.length) setItems(data);
   }, [data]);
 
   const { pagination, showing } = createPagination({
@@ -54,42 +54,41 @@ export const MarketTable: React.FC<PropsType> = (props) => {
   };
 
   return (
-    <Card title={SearchBar}>
-      {/* {data ? ( */}
-      <div className={styles.table}>
-        <ul className={styles.tableHeader}>
-          <TableHeaderItem
-            name="Name"
-            itemKey="name"
-            requestSort={requestSort}
-            getClassName={getClassName}
-          />
-          <TableHeaderItem
-            name="Price"
-            itemKey="current_price"
-            requestSort={requestSort}
-            getClassName={getClassName}
-          />
-          <TableHeaderItem
-            name="Change 24h"
-            itemKey="price_change_percentage_24h"
-            requestSort={requestSort}
-            getClassName={getClassName}
-          />
-          <TableHeaderItem
-            name="Market Cap"
-            itemKey="market_cap"
-            requestSort={requestSort}
-            getClassName={getClassName}
-          />
-          <li className={styles.watch}>Watch</li>
-        </ul>
+    <div className={styles.table}>
+      <ul className={styles.tableHeader}>
+        <TableHeaderItem
+          name="Name"
+          itemKey="name"
+          requestSort={requestSort}
+          getClassName={getClassName}
+        />
+        <TableHeaderItem
+          name="Price"
+          itemKey="current_price"
+          requestSort={requestSort}
+          getClassName={getClassName}
+        />
+        <TableHeaderItem
+          name="Change 24h"
+          itemKey="price_change_percentage_24h"
+          requestSort={requestSort}
+          getClassName={getClassName}
+        />
+        <TableHeaderItem
+          name="Market Cap"
+          itemKey="market_cap"
+          requestSort={requestSort}
+          getClassName={getClassName}
+        />
+        <li className={styles.watch}>Watch</li>
+      </ul>
 
-        <div>
-          {items.map((coin: TableCoin) => {
-            return <TableRow key={coin.id} coin={coin} />;
-          })}
-        </div>
+      <div>
+        {items.map((coin: TableCoin) => {
+          return <TableRow key={coin.id} coin={coin} />;
+        })}
+      </div>
+      {data.length && (
         <div className={styles.paginationContainer}>
           <div className={styles.showing}>{`Showing ${showing} out of 6120`}</div>
           <div className={styles.pagination}>
@@ -130,11 +129,8 @@ export const MarketTable: React.FC<PropsType> = (props) => {
             </div>
           </div>
         </div>
-      </div>
-      {/* ) : (
-        <div>nema</div>
-      )} */}
-    </Card>
+      )}
+    </div>
   );
 };
 
@@ -158,17 +154,5 @@ const TableHeaderItem: React.FC<TableHeaderItemPropsType> = ({
       </Typography>
       <span className={`${styles.sort} ${styles[getClassName(itemKey)]}`}></span>
     </li>
-  );
-};
-
-const SearchBar = () => {
-  return (
-    <div className={styles.searchBar}>
-      <div className={styles.searchBarField}>
-        <Image src={searchIcon} alt="Search icon" width={28} height={28} />
-        <input placeholder="Search coin name"></input>
-      </div>
-      <Button>Search</Button>
-    </div>
   );
 };

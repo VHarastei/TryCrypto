@@ -48,3 +48,37 @@
     color: white;
   }
 }
+
+.searchBar {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  border-bottom: 1px solid $gray;
+  .searchBarField {
+    border: 1px solid $gray;
+    border-radius: 12px;
+    padding: 8px 12px;
+    color: $gray;
+    display: flex;
+    align-items: center;
+    max-width: 350px;
+    width: 100%;
+    margin-right: 16px;
+    input {
+      width: 80%;
+      box-shadow: none;
+      appearance: none;
+      background-color: $backgroundGray;
+      color: white;
+      border: 0;
+      outline: 0;
+      font-size: 16px;
+      margin-left: 8px;
+      height: 20px;
+      line-height: 20px;
+    }
+    .searchBarFieldRemove {
+      cursor: pointer;
+    }
+  }
+}

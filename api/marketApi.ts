@@ -28,9 +28,11 @@ export const MarketApi = {
   //     )
   //     .then(({ data }) => data);
   // },
-  getTableDataUrl: (page: number = 1) => {
+  getTableDataUrl: (page: number = 1, ids?: string[]) => {
     return () =>
-      `coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=${page}&sparkline=false`;
+      `coins/markets?vs_currency=usd${
+        ids ? `&ids=${ids}` : ``
+      }&order=market_cap_desc&per_page=100&page=${page}&sparkline=false`;
   },
   getCoinsListUrl: () => `coins/list?include_platform=false`,
 };

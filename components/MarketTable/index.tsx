@@ -1,40 +1,25 @@
 import { fetcher } from 'api';
-import { Key, MarketApi, TableCoin, TableConfig } from 'api/marketApi';
-import { Button } from 'components/Button';
-import { Card } from 'components/Card';
-import { Paper } from 'components/Paper';
-import { Typography } from 'components/Typography';
+import { MarketApi, TableCoin } from 'api/marketApi';
 import { createPagination } from 'helpers/createPagination';
-import { useDidMount } from 'hooks/useDidMount';
-import { useSortableData } from 'hooks/useSortableData';
 import Image from 'next/image';
 import Link from 'next/link';
 import arrowIcon from 'public/static/back.svg';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import useSWR from 'swr';
 import styles from './MarketTable.module.scss';
-import { TableRow } from './TableRow/TableRow';
+import { SortableTable } from './SortableTable';
 
 type PropsType = {
   data: TableCoin[];
   currentPage: number;
 };
 
-export const MarketTable: React.FC<PropsType> = (props) => {
+export const MarketTable: React.FC<PropsType> = React.memo((props) => {
   const [currentPage, setCurrentPage] = useState(props.currentPage);
   const { data } = useSWR(MarketApi.getTableDataUrl(currentPage), fetcher, {
     initialData: currentPage === props.currentPage ? props.data : [],
     refreshInterval: 30000,
   });
-
-  const { items, setItems, requestSort, sortConfig } = useSortableData({
-    data,
-    config: { key: 'market_cap', direction: 'desc' },
-  });
-
-  useEffect(() => {
-    if (data.length) setItems(data);
-  }, [data]);
 
   const { pagination, showing } = createPagination({
     numberOfItems: 6120,
@@ -43,51 +28,13 @@ export const MarketTable: React.FC<PropsType> = (props) => {
     currentPage,
   });
 
-  const getClassName = (name: Key) => {
-    if (!sortConfig) return '';
-    return sortConfig.key === name ? sortConfig.direction : '';
-  };
-
   const handleChangePage = (newPage: number) => () => {
     setCurrentPage(newPage);
     window.scrollTo(0, 0);
   };
-
   return (
-    <div className={styles.table}>
-      <ul className={styles.tableHeader}>
-        <TableHeaderItem
-          name="Name"
-          itemKey="name"
-          requestSort={requestSort}
-          getClassName={getClassName}
-        />
-        <TableHeaderItem
-          name="Price"
-          itemKey="current_price"
-          requestSort={requestSort}
-          getClassName={getClassName}
-        />
-        <TableHeaderItem
-          name="Change 24h"
-          itemKey="price_change_percentage_24h"
-          requestSort={requestSort}
-          getClassName={getClassName}
-        />
-        <TableHeaderItem
-          name="Market Cap"
-          itemKey="market_cap"
-          requestSort={requestSort}
-          getClassName={getClassName}
-        />
-        <li className={styles.watch}>Watch</li>
-      </ul>
-
-      <div>
-        {items.map((coin: TableCoin) => {
-          return <TableRow key={coin.id} coin={coin} />;
-        })}
-      </div>
+    <div>
+      <SortableTable data={data} />
       {data.length && (
         <div className={styles.paginationContainer}>
           <div className={styles.showing}>{`Showing ${showing} out of 6120`}</div>
@@ -132,27 +79,4 @@ export const MarketTable: React.FC<PropsType> = (props) => {
       )}
     </div>
   );
-};
-
-type TableHeaderItemPropsType = {
-  name: string;
-  itemKey: Key;
-  requestSort: (key: Key) => void;
-  getClassName: (name: Key) => string;
-};
-
-const TableHeaderItem: React.FC<TableHeaderItemPropsType> = ({
-  name,
-  itemKey,
-  requestSort,
-  getClassName,
-}) => {
-  return (
-    <li className={styles[itemKey]} onClick={() => requestSort(itemKey)}>
-      <Typography variant="thinText" color="gray">
-        {name}
-      </Typography>
-      <span className={`${styles.sort} ${styles[getClassName(itemKey)]}`}></span>
-    </li>
-  );
-};
+});

@@ -1,0 +1,121 @@
+@import 'styles/theme.scss';
+
+.table {
+  border: 0;
+  border-spacing: 0;
+  border-collapse: initial;
+  width: 100%;
+  text-align: center;
+  .tableHeader {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 24px;
+    margin: 0;
+    border-bottom: 1px solid $gray;
+
+    li {
+      list-style: none;
+      font-size: 16px;
+      font-weight: 400;
+      color: $gray;
+      display: flex;
+      align-items: center;
+      user-select: none;
+      div {
+        cursor: pointer;
+      }
+      div:hover {
+        color: $primary;
+      }
+    }
+    .sort {
+      width: 10px;
+      height: 5px;
+      margin-left: 6px;
+    }
+    .desc {
+      border-top: solid 5px $primary;
+      border-left: solid 5px transparent;
+      border-right: solid 5px transparent;
+    }
+    .asc {
+      border-bottom: solid 5px $primary;
+      border-left: solid 5px transparent;
+      border-right: solid 5px transparent;
+    }
+  }
+  .name {
+    text-align: left;
+    flex-basis: 35%;
+  }
+  .current_price {
+    text-align: left;
+    flex-basis: 18.3%;
+  }
+  .price_change_percentage_24h {
+    text-align: left;
+    flex-basis: 18.3%;
+  }
+  .market_cap {
+    text-align: left;
+    flex-basis: 20.3%;
+  }
+  .watch {
+    text-align: center;
+    flex-basis: 7%;
+    justify-content: center;
+  }
+}
+
+.tableRowContainer {
+  display: flex;
+  justify-content: space-between;
+  padding: 16px 24px;
+  border-bottom: 1px solid $gray;
+  cursor: pointer;
+  margin: 0;
+
+  &:hover {
+    background-color: $secondary;
+  }
+  li {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+    font-weight: 400;
+    p {
+      margin: 0 10px 0px 16px;
+    }
+    span {
+      color: $gray;
+    }
+  }
+  .name {
+    text-align: left;
+    flex-basis: 35%;
+  }
+  .price {
+    text-align: left;
+    flex-basis: 18.3%;
+  }
+  .change {
+    text-align: left;
+    flex-basis: 18.3%;
+  }
+  .changeSuccess {
+    color: $green;
+  }
+  .changeDanger {
+    color: $red;
+  }
+  .marketCap {
+    text-align: left;
+    flex-basis: 20.3%;
+  }
+  .watch {
+    text-align: center;
+    flex-basis: 7%;
+    justify-content: center;
+  }
+}

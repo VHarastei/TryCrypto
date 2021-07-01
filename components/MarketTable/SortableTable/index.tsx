@@ -16,6 +16,7 @@ export const SortableTable: React.FC<PropsType> = React.memo(({ data }) => {
     data,
     config: { key: 'market_cap', direction: 'desc' },
   });
+  //console.log('render SortableTable');
 
   useEffect(() => {
     if (data.length) setItems(data);

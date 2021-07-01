@@ -15,6 +15,8 @@ import closeIcon from 'public/static/close.svg';
 import loadingIcon from 'public/static/loading.svg';
 import { Button } from 'components/Button';
 import { SortableTable } from 'components/MarketTable/SortableTable';
+import useDebounce from 'hooks/useDebounce';
+import { Typography } from 'components/Typography';
 
 type PropsType = {
   data: TableCoin[];
@@ -23,46 +25,48 @@ type PropsType = {
 };
 
 export default function Market({ data, coinsList, currentPage }: PropsType) {
-  const [coinName, setCoinName] = React.useState<string>('');
-  const [searchCoinIds, setSearchCoinIds] = React.useState<string[]>([]);
-  const [foundedCoins, setFoundedCoins] = React.useState<TableCoin[] | undefined>();
+  const [searchCoinsIds, setSearchCoinsIds] = React.useState<string[]>([]);
+  const [searchCoinName, setSearchCoinName] = React.useState<string>('');
+  const [foundedCoins, setFoundedCoins] = React.useState<TableCoin[] | undefined>(undefined);
+  const [isInvalidCoinName, setIsInvalidCoinName] = React.useState(false);
+  const debouncedSearch: string[] = useDebounce(searchCoinsIds, 1500);
 
   let { data: fnddCoins } = useSWR<TableCoin[]>(
-    searchCoinIds.length ? MarketApi.getTableDataUrl(1, searchCoinIds) : null,
+    debouncedSearch.length ? MarketApi.getTableDataUrl(1, debouncedSearch) : null,
     fetcher
   );
 
   useEffect(() => {
-    setFoundedCoins(fnddCoins);
+    if (fnddCoins) setFoundedCoins(fnddCoins);
   }, [fnddCoins]);
 
-  const handleChangeCoinName = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
     if (val[val.length - 1] === ' ') return;
-    if (!val) setFoundedCoins(undefined);
-    setCoinName(val);
-  };
-
-  const handleSearchCoins = () => {
+    setSearchCoinName(val);
+    if (!val) {
+      setIsInvalidCoinName(false);
+      setFoundedCoins(undefined);
+    }
     let srchCoinIds: string[] = [];
     coinsList.forEach((coin) => {
       if (
-        (coin.name.toLowerCase().includes(coinName.toLowerCase()) ||
-          coin.symbol.toLowerCase().includes(coinName.toLowerCase())) &&
-        coinName &&
+        (coin.name.toLowerCase().includes(val.toLowerCase()) ||
+          coin.symbol.toLowerCase().includes(val.toLowerCase())) &&
+        val &&
         srchCoinIds.length <= 400
       )
         srchCoinIds.push(coin.id);
     });
-
-    if (srchCoinIds.length) setSearchCoinIds(srchCoinIds);
+    if (val) setIsInvalidCoinName(!!!srchCoinIds.length);
+    setSearchCoinsIds(srchCoinIds);
   };
 
   const handleRemoveCoinName = () => {
-    setCoinName('');
+    setSearchCoinName('');
     setFoundedCoins(undefined);
+    setIsInvalidCoinName(false);
   };
-  console.log(foundedCoins);
   return (
     <Layout>
       <ContentLayout>
@@ -72,10 +76,10 @@ export default function Market({ data, coinsList, currentPage }: PropsType) {
               <Image layout="fixed" src={searchIcon} alt="Search icon" width={28} height={28} />
               <input
                 placeholder="Search coin name"
-                value={coinName}
-                onChange={handleChangeCoinName}
+                value={searchCoinName}
+                onChange={handleSearch}
               />
-              {coinName && !fnddCoins ? (
+              {searchCoinName && !isInvalidCoinName && !fnddCoins ? (
                 <Image
                   className={styles.searchBarFieldRemove}
                   src={loadingIcon}
@@ -84,21 +88,27 @@ export default function Market({ data, coinsList, currentPage }: PropsType) {
                   height={24}
                 />
               ) : (
-                coinName && (
+                searchCoinName && (
                   <Image
                     onClick={handleRemoveCoinName}
                     className={styles.searchBarFieldRemove}
                     src={closeIcon}
-                    alt="Search icon"
+                    alt="Remove icon"
                     width={24}
                     height={24}
                   />
                 )
               )}
             </div>
-            <Button onClick={handleSearchCoins}>Search</Button>
           </div>
-          {foundedCoins ? (
+          {isInvalidCoinName ? (
+            <div className={styles.notFound}>
+              <Typography variant="regularText">We couldn't find that asset</Typography>
+              <Typography variant="thinText" color="gray">
+                Try again with a different term.
+              </Typography>
+            </div>
+          ) : foundedCoins ? (
             <SortableTable data={foundedCoins} />
           ) : (
             <MarketTable data={data} currentPage={currentPage} />

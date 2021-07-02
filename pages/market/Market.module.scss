@@ -48,6 +48,21 @@
     color: white;
   }
 }
+.aboutCurrency {
+  a {
+    color: $primary;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
+}
+.preloader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 400px;
+}
 
 .searchBar {
   display: flex;

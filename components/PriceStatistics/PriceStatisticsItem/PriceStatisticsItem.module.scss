@@ -7,6 +7,12 @@
   padding-bottom: 6px;
   margin-bottom: 12px;
   border-bottom: 1px solid $gray;
+  &:last-of-type {
+    border-bottom: 0;
+  }
+  div {
+    font-weight: 500;
+  }
 }
 .last {
   padding-bottom: 0;

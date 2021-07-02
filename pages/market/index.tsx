@@ -3,20 +3,19 @@ import { ListCoin, MarketApi, TableCoin } from 'api/marketApi';
 import { ContentLayout } from 'components/ContentLayout';
 import { Layout } from 'components/Layout';
 import { MarketTable } from 'components/MarketTable';
+import { SortableTable } from 'components/MarketTable/SortableTable';
 import { Paper } from 'components/Paper';
 import { RecentTransactions } from 'components/RecentTransactions';
-import { GetServerSidePropsContext, NextPage } from 'next';
+import { Typography } from 'components/Typography';
+import useDebounce from 'hooks/useDebounce';
+import { GetServerSidePropsContext } from 'next';
+import Image from 'next/image';
+import closeIcon from 'public/static/close.svg';
+import loadingIcon from 'public/static/loading.svg';
+import searchIcon from 'public/static/search.png';
 import React, { useEffect } from 'react';
 import useSWR from 'swr';
 import styles from './Market.module.scss';
-import Image from 'next/image';
-import searchIcon from 'public/static/search.png';
-import closeIcon from 'public/static/close.svg';
-import loadingIcon from 'public/static/loading.svg';
-import { Button } from 'components/Button';
-import { SortableTable } from 'components/MarketTable/SortableTable';
-import useDebounce from 'hooks/useDebounce';
-import { Typography } from 'components/Typography';
 
 type PropsType = {
   data: TableCoin[];

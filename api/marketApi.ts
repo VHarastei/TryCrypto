@@ -35,4 +35,6 @@ export const MarketApi = {
       }&order=market_cap_desc&per_page=100&page=${page}&sparkline=false`;
   },
   getCoinsListUrl: () => `coins/list?include_platform=false`,
+  getCurrencyDataUrl: (currencyId: string) =>
+    `coins/${currencyId}?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=true`,
 };

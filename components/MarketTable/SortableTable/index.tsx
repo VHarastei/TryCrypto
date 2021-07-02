@@ -6,6 +6,8 @@ import React, { useEffect } from 'react';
 import styles from './SortableTable.module.scss';
 import Image from 'next/image';
 import starIcon from 'public/static/star.png';
+import { formatDollar } from 'helpers/formatDollar';
+import { formatPercent } from 'helpers/formatPercent';
 
 type PropsType = {
   data: TableCoin[];
@@ -94,16 +96,6 @@ type TableRowPropsType = {
 };
 
 export const TableRow: React.FC<TableRowPropsType> = ({ coin }) => {
-  const formatPercent = (number: number) => `${new Number(number).toFixed(2)}%`;
-
-  const formatDollar = (number: number, maximumSignificantDigits: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      maximumSignificantDigits,
-    }).format(number);
-  };
-
   return (
     <Link href={`/market/${coin.id}`}>
       <a>

@@ -1,0 +1,10 @@
+@import 'styles/theme.scss';
+
+.container {
+  margin-bottom: 32px;
+  .title {
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 6px;
+  }
+}

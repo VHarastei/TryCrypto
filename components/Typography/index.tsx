@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './Typography.module.scss';
 
 type PropsType = {
-  children: string;
+  children: string | string[];
   variant?: 'title' | 'regularText' | 'mediumText' | 'thinText';
   color?: 'gray' | 'white';
   className?: string;

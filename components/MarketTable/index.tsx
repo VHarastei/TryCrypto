@@ -20,7 +20,6 @@ export const MarketTable: React.FC<PropsType> = React.memo((props) => {
     initialData: currentPage === props.currentPage ? props.data : [],
     refreshInterval: 30000,
   });
-  //console.log('render MarketTable');
 
   const { pagination, showing } = createPagination({
     numberOfItems: 6120,

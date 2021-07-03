@@ -13,9 +13,53 @@
   div {
     font-weight: 500;
   }
+  .col {
+    text-align: right;
+    &:first-of-type {
+      text-align: left;
+    }
+  }
 }
-.last {
-  padding-bottom: 0;
-  margin-bottom: 0;
-  border-bottom: none;
+.subTitle {
+  font-size: 14px;
+  font-weight: 500;
+  color: $gray;
+  margin-top: 2px;
+}
+.subValue {
+  font-size: 14px;
+  margin-top: 2px;
+  &:first-of-type {
+    margin-top: 0;
+    font-size: 18px;
+  }
+}
+
+.green {
+  color: $green;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  span {
+    margin-right: 3px;
+    width: 10px;
+    height: 5px;
+    border-bottom: solid 5px $green;
+    border-left: solid 5px transparent;
+    border-right: solid 5px transparent;
+  }
+}
+.red {
+  color: $red;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  span {
+    margin-right: 3px;
+    width: 10px;
+    height: 5px;
+    border-top: solid 5px $red;
+    border-left: solid 5px transparent;
+    border-right: solid 5px transparent;
+  }
 }

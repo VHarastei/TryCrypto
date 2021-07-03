@@ -5,12 +5,10 @@ import { BuySellCard } from 'components/BuySellCard';
 import { Card } from 'components/Card';
 import { ContentLayout } from 'components/ContentLayout';
 import { Layout } from 'components/Layout';
+import { MarketChart } from 'components/MarketChart';
 import { Paper } from 'components/Paper';
 import { PriceStatistics } from 'components/PriceStatistics';
 import { RecentTransactions } from 'components/RecentTransactions';
-import { Typography } from 'components/Typography';
-import { formatDollar } from 'helpers/formatDollar';
-import { formatPercent } from 'helpers/formatPercent';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import loadingIcon from 'public/static/loading.svg';
@@ -27,7 +25,6 @@ export default function Currency() {
     currencyId ? MarketApi.getCurrencyDataUrl(currencyId as string) : null,
     fetcher
   );
-  console.log(currency);
 
   const [tab, setTab] = React.useState<'tab1' | 'tab2'>('tab1');
   const handleChangeTab = (newTab: 'tab1' | 'tab2') => {
@@ -46,7 +43,6 @@ export default function Currency() {
                 width={48}
                 height={48}
               />
-
               <h1 className={styles.name}>{currency.name}</h1>
               <h1>{currency.symbol.toUpperCase()}</h1>
             </div>
@@ -70,34 +66,14 @@ export default function Currency() {
             >
               Wallet
             </div>
-
             <div className={styles.line}></div>
           </div>
           {tab === 'tab1' ? (
             <ContentLayout>
               <div>
-                <Paper>
-                  <div>CONTENT</div>
-                  <div>CONTENT</div>
-                  <div>CONTENT</div>
-                  <div>CONTENT</div>
-                  <div>CONTENT</div>
-                  <div>CONTENT</div>
-                  <div>CONTENT</div>
-                  <div>CONTENT</div>
-                  <div>CONTENT</div>
-                  <div>CONTENT</div>
-                  <div>CONTENT</div>
-                  <div>CONTENT</div>
-                  <div>CONTENT</div>
-                </Paper>
+                <MarketChart currencyId={currency.id} marketData={currency.market_data} />
                 {currency.description.en && (
                   <Card title={`About ${currency.name}`} withPadding>
-                    {/* <pre
-                    dangerouslySetInnerHTML={{ __html: currency.description.en }}
-                  ></pre> */}
-                    {/* <textarea>{currency.description.en}</textarea> */}
-
                     <div
                       className={styles.aboutCurrency}
                       dangerouslySetInnerHTML={{
@@ -108,34 +84,11 @@ export default function Currency() {
                 )}
               </div>
               <div>
-                {/* <Card title={`${currency.name} Statistics`} withPadding>
-                  <div>{`${currency.name} Price Today`}</div>
-                  <PriceStatisticItem
-                    prop={'Current price'}
-                    value={formatDollar(currency.market_data.current_price.usd, 20)}
-                  />
-                  <PriceStatisticItem
-                    prop={'24h Low'}
-                    value={formatDollar(currency.market_data.low_24h.usd, 20)}
-                  />
-                  <PriceStatisticItem
-                    prop={'24h High'}
-                    value={formatDollar(currency.market_data.high_24h.usd, 20)}
-                  />
-                  <PriceStatisticItem
-                    prop={'Market Cap'}
-                    value={formatDollar(currency.market_data.market_cap.usd, 20)}
-                  />
-                  <PriceStatisticItem
-                    prop={'24h Market Cap Change'}
-                    value={formatPercent(currency.market_data.market_cap_change_percentage_24h)}
-                  />
-                  <PriceStatisticItem
-                    prop={'24h Volume'}
-                    value={formatDollar(currency.market_data.total_volume.usd, 20)}
-                  />
-                </Card> */}
-                <PriceStatistics currency={currency.name} data={currency.market_data} />
+                <PriceStatistics
+                  currency={currency.name}
+                  symbol={currency.symbol}
+                  data={currency.market_data}
+                />
               </div>
             </ContentLayout>
           ) : (
@@ -157,17 +110,3 @@ export default function Currency() {
     </Layout>
   );
 }
-
-type PriceStatisticGroupPropsType = {
-  title: string;
-  children: React.ReactNode;
-};
-
-const PriceStatisticGroup: React.FC<PriceStatisticGroupPropsType> = ({ title, children }) => {
-  return (
-    <div>
-      <div>{title}</div>
-      {children}
-    </div>
-  );
-};

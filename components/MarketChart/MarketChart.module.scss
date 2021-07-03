@@ -1,0 +1,47 @@
+@import 'styles/theme.scss';
+
+.header {
+  display: flex;
+  padding: 16px;
+  padding-bottom: 6px;
+  //align-items: center;
+  justify-content: space-between;
+  .chartSelectorContainer {
+    display: flex;
+    :last-of-type {
+      padding-right: 0px;
+    }
+  }
+  .chartPriceContainer {
+    display: flex;
+    .chartPrice {
+      font-size: 38px;
+      font-weight: 400;
+    }
+    span {
+      font-size: 18px;
+      padding-top: 2px;
+      margin-left: 6px;
+      font-weight: 400;
+      color: $green;
+    }
+  }
+}
+
+.chartSelector {
+  font-size: 14px;
+  font-weight: 500;
+  padding: 2px 2px 2px 0px;
+  margin: 0px 5px;
+  color: $gray;
+  cursor: pointer;
+  &:hover {
+    color: white;
+  }
+}
+.chartSelectorActive {
+  color: $primary;
+  &:hover {
+    color: $primary;
+  }
+}

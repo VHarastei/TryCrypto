@@ -7,11 +7,11 @@ import { ContentLayout } from 'components/ContentLayout';
 import { Layout } from 'components/Layout';
 import { MarketChart } from 'components/MarketChart';
 import { Paper } from 'components/Paper';
+import { Preloader } from 'components/Preloader';
 import { PriceStatistics } from 'components/PriceStatistics';
 import { RecentTransactions } from 'components/RecentTransactions';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import loadingIcon from 'public/static/loading.svg';
 import starIcon from 'public/static/star.png';
 import React from 'react';
 import useSWR from 'swr';
@@ -23,7 +23,8 @@ export default function Currency() {
 
   let { data: currency } = useSWR(
     currencyId ? MarketApi.getCurrencyDataUrl(currencyId as string) : null,
-    fetcher
+    fetcher,
+    { refreshInterval: 30000 }
   );
 
   const [tab, setTab] = React.useState<'tab1' | 'tab2'>('tab1');
@@ -103,8 +104,8 @@ export default function Currency() {
           )}
         </div>
       ) : (
-        <div className={styles.preloader}>
-          <Image src={loadingIcon} alt="Search icon" width={72} height={72} />
+        <div className={styles.preloaderContainer}>
+          <Preloader />
         </div>
       )}
     </Layout>

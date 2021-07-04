@@ -37,6 +37,6 @@ export const MarketApi = {
   getCoinsListUrl: () => `coins/list?include_platform=false`,
   getCurrencyDataUrl: (currencyId: string) =>
     `coins/${currencyId}?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=true`,
-  getMarketChartUrl: (currencyId: string, interval: number) =>
+  getMarketChartUrl: (currencyId: string, interval: string) =>
     `coins/${currencyId}/market_chart?vs_currency=usd&days=${interval}`,
 };

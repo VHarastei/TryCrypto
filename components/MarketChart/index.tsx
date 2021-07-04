@@ -2,7 +2,7 @@ import { fetcher } from 'api';
 import { MarketApi } from 'api/marketApi';
 import { Paper } from 'components/Paper';
 import { format } from 'date-fns';
-import React, { useState } from 'react';
+import React, { Component, useEffect, useState } from 'react';
 import useSWR from 'swr';
 import styles from './MarketChart.module.scss';
 import {
@@ -14,6 +14,7 @@ import {
 } from 'victory';
 import { formatDollar } from 'helpers/formatDollar';
 import { formatPercent } from 'helpers/formatPercent';
+import { Preloader } from 'components/Preloader';
 
 type PropsType = {
   currencyId: string;
@@ -30,16 +31,28 @@ type ChartArrayType = {
 };
 
 export const MarketChart: React.FC<PropsType> = ({ currencyId, marketData }) => {
-  const [dataInterval, setDataInterval] = useState(intervals[0].value);
+  const [dataInterval, setDataInterval] = useState(intervals[1].value);
   const [chartType, setChartType] = useState<ChartType>('prices');
+  const [chartData, setChartData] = useState<ChartDataType | undefined>(undefined);
 
   const { data } = useSWR<ChartDataType>(
     MarketApi.getMarketChartUrl(currencyId, dataInterval),
-    fetcher
+    fetcher,
+    { refreshInterval: 30000 }
   );
+  console.log('render');
+  useEffect(() => {
+    if (data) setChartData(data);
+  }, [data]);
   //console.log(data?.[chartType]);
 
-  if (!data) return <div>loading...</div>;
+  if (!chartData)
+    return (
+      <div className={styles.preloaderContainer}>
+        <Preloader />
+      </div>
+    );
+  //const lastPrice = chartData.prices[chartData.prices.length - 1][1];
 
   return (
     <Paper>
@@ -49,6 +62,7 @@ export const MarketChart: React.FC<PropsType> = ({ currencyId, marketData }) => 
             {chartTypes.map((chartTps) => {
               return (
                 <ChartSelector
+                  key={chartTps.value}
                   name={chartTps.name}
                   isActive={chartTps.value === chartType}
                   handleSelectChart={() => setChartType(chartTps.value)}
@@ -68,6 +82,7 @@ export const MarketChart: React.FC<PropsType> = ({ currencyId, marketData }) => 
             {intervals.map((interval) => {
               return (
                 <ChartSelector
+                  key={interval.value}
                   name={interval.name}
                   isActive={interval.value === dataInterval}
                   handleSelectChart={() => setDataInterval(interval.value)}
@@ -78,29 +93,22 @@ export const MarketChart: React.FC<PropsType> = ({ currencyId, marketData }) => 
         </div>
       </div>
       <VictoryChart
+        style={{
+          parent: {
+            zIndex: 99,
+          },
+        }}
+        animate={{ duration: 300 }}
         width={1000}
         height={400}
-        padding={{ left: 0, top: 36, bottom: 32, right: 0 }}
+        padding={{ left: 0, top: 76, bottom: 32, right: 0 }}
         domainPadding={{ y: 5 }}
         containerComponent={
           <VictoryVoronoiContainer
-            labels={({ datum }) => `${formatDollar(datum.y, 5)}`} // Format the price
-            //title={`${currencyId} price data chart`} // For screen readers
-            labelComponent={
-              <VictoryTooltip
-                style={{
-                  fill: '#333',
-                  fontSize: 18,
-                }}
-                flyoutStyle={{
-                  fill: '#fff',
-                  stroke: '#fff',
-                  strokeWidth: 1,
-                  padding: 10,
-                  margin: 10,
-                }}
-              />
-            }
+            labels={({ datum }) => ` `}
+            style={{ cursor: 'crosshair', zIndex: 99 }}
+            portalZIndex={99}
+            labelComponent={<CustomSVGTooltip />}
           />
         }
       >
@@ -113,7 +121,7 @@ export const MarketChart: React.FC<PropsType> = ({ currencyId, marketData }) => 
               padding: 0,
             },
           }}
-          data={data.prices.map((item) => ({
+          data={chartData.prices.map((item) => ({
             x: item[0],
             y: item[1],
           }))}
@@ -131,10 +139,12 @@ export const MarketChart: React.FC<PropsType> = ({ currencyId, marketData }) => 
             },
           }}
           tickFormat={(x) => {
-            if (dataInterval <= 1) {
+            if (+dataInterval <= 1) {
               return format(x, 'p');
             }
-
+            if (dataInterval === 'max') {
+              return format(x, 'MMM y');
+            }
             return format(x, 'MMM d');
           }}
         />
@@ -162,28 +172,36 @@ const ChartSelector: React.FC<ChartSelectorPropsType> = ({ name, isActive, handl
 
 type IntervalsType = {
   name: string;
-  value: number;
+  value: string;
 };
 const intervals: IntervalsType[] = [
   {
     name: '1H',
-    value: 0.0416,
+    value: '0.0416',
   },
   {
     name: '1D',
-    value: 1,
+    value: '1',
   },
   {
     name: '1W',
-    value: 7,
+    value: '7',
   },
   {
     name: '1M',
-    value: 30,
+    value: '30',
   },
   {
     name: '3M',
-    value: 90,
+    value: '90',
+  },
+  {
+    name: '1Y',
+    value: '365',
+  },
+  {
+    name: 'MAX',
+    value: 'max',
   },
 ];
 
@@ -207,3 +225,50 @@ const chartTypes: ChartTypesType[] = [
     value: 'total_volumes',
   },
 ];
+
+const CustomSVGTooltip = (props: any) => {
+  const { x, y, datum } = props;
+
+  return (
+    <foreignObject
+      style={{ pointerEvents: 'none' }}
+      x={x - 75}
+      y={y - 80}
+      width="150"
+      height="100%"
+    >
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          flexDirection: 'column',
+          position: 'relative',
+          height: `auto`,
+          padding: `4px`,
+          background: 'white',
+          color: 'black',
+          borderRadius: '4px',
+        }}
+      >
+        <div style={{ fontSize: 20, fontWeight: 750 }}>
+          {formatDollar(datum.y < 0.000000001 ? 0.000000001 : datum.y, datum.y < 0.0001 ? 1 : 7)}
+        </div>
+        <div style={{ fontSize: 12, fontWeight: 700, color: '#7b7f82' }}>
+          {format(datum.x, 'MMM d p')}
+        </div>
+        <div
+          style={{
+            position: 'absolute',
+            backgroundColor: '#f3aa4e',
+            bottom: -35,
+            left: '50',
+            height: 16,
+            width: 16,
+            borderRadius: 100,
+            border: '4px solid #212528',
+          }}
+        ></div>
+      </div>
+    </foreignObject>
+  );
+};

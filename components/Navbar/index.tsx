@@ -41,6 +41,7 @@ export const Navbar: React.FC<PropsType> = ({ children }) => {
           </div>
         </div>
       </header>
+
       <div className={styles.content}>
         <nav className={styles.navContainer}>
           <NavItem icon={homeIcon} href="home" active={active} />

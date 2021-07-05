@@ -23,3 +23,19 @@
 .gray {
   color: $gray;
 }
+.green {
+  color: $green;
+}
+.red {
+  color: $red;
+}
+@for $i from 3 through 8 {
+  .fw-#{$i * 100} {
+    font-weight: #{$i * 100};
+  }
+}
+@for $i from 1 through 7 {
+  .fs-#{$i * 2 + 10} {
+    font-size: #{$i * 2 + 10}px;
+  }
+}

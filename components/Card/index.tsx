@@ -21,7 +21,7 @@ export const Card: React.FC<PropsType> = ({ children, title, button, withPadding
     <div className={`${styles.container} ${className}`}>
       <div>
         <div className={`${styles.title} ${withPadding ? '' : ''}`}>
-          {typeof title === 'string' ? <Typography>{title}</Typography> : <Title />}
+          {typeof title === 'string' ? <Typography variant="title">{title}</Typography> : <Title />}
         </div>
         <div className={`${withPadding ? styles.withPadding : ''}`}>{children}</div>
       </div>

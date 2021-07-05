@@ -13,7 +13,7 @@ export const Banner: React.FC<PropsType> = ({ title, text, button }) => {
   return (
     <div className={styles.container}>
       <div className={styles.textContainer}>
-        <Typography>{title}</Typography>
+        <Typography variant="title">{title}</Typography>
         <Typography variant="thinText" color="gray">
           {text}
         </Typography>

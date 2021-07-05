@@ -1,20 +1,16 @@
 import { fetcher } from 'api';
 import { MarketApi } from 'api/marketApi';
 import { Paper } from 'components/Paper';
+import { Preloader } from 'components/Preloader';
+import { PriceChangeField } from 'components/PriceChangeField';
 import { format } from 'date-fns';
-import React, { Component, useEffect, useState } from 'react';
-import useSWR from 'swr';
-import styles from './MarketChart.module.scss';
-import {
-  VictoryLine,
-  VictoryChart,
-  VictoryAxis,
-  VictoryTooltip,
-  VictoryVoronoiContainer,
-} from 'victory';
 import { formatDollar } from 'helpers/formatDollar';
 import { formatPercent } from 'helpers/formatPercent';
-import { Preloader } from 'components/Preloader';
+import React, { useEffect, useState } from 'react';
+import useSWR from 'swr';
+import { VictoryAxis, VictoryChart, VictoryLine, VictoryVoronoiContainer } from 'victory';
+import { CustomTooltip } from './CustomTooltip';
+import styles from './MarketChart.module.scss';
 
 type PropsType = {
   currencyId: string;
@@ -40,11 +36,9 @@ export const MarketChart: React.FC<PropsType> = ({ currencyId, marketData }) => 
     fetcher,
     { refreshInterval: 30000 }
   );
-  console.log('render');
   useEffect(() => {
     if (data) setChartData(data);
   }, [data]);
-  //console.log(data?.[chartType]);
 
   if (!chartData)
     return (
@@ -52,7 +46,6 @@ export const MarketChart: React.FC<PropsType> = ({ currencyId, marketData }) => 
         <Preloader />
       </div>
     );
-  //const lastPrice = chartData.prices[chartData.prices.length - 1][1];
 
   return (
     <Paper>
@@ -74,7 +67,9 @@ export const MarketChart: React.FC<PropsType> = ({ currencyId, marketData }) => 
             <div className={styles.chartPrice}>
               {formatDollar(marketData.current_price.usd, 20)}
             </div>
-            <span>{'+' + formatPercent(marketData.price_change_percentage_24h)}</span>
+            <div className={styles.chartPricePercent}>
+              <PriceChangeField value={marketData.price_change_percentage_24h} />
+            </div>
           </div>
         </div>
         <div>
@@ -98,17 +93,17 @@ export const MarketChart: React.FC<PropsType> = ({ currencyId, marketData }) => 
             zIndex: 99,
           },
         }}
-        animate={{ duration: 300 }}
+        animate={{ duration: 300, onLoad: { duration: 300 } }}
         width={1000}
         height={400}
         padding={{ left: 0, top: 76, bottom: 32, right: 0 }}
         domainPadding={{ y: 5 }}
         containerComponent={
           <VictoryVoronoiContainer
-            labels={({ datum }) => ` `}
+            labels={() => ` `}
             style={{ cursor: 'crosshair', zIndex: 99 }}
             portalZIndex={99}
-            labelComponent={<CustomSVGTooltip />}
+            labelComponent={<CustomTooltip />}
           />
         }
       >
@@ -121,7 +116,7 @@ export const MarketChart: React.FC<PropsType> = ({ currencyId, marketData }) => 
               padding: 0,
             },
           }}
-          data={chartData.prices.map((item) => ({
+          data={chartData[chartType].map((item) => ({
             x: item[0],
             y: item[1],
           }))}
@@ -225,50 +220,3 @@ const chartTypes: ChartTypesType[] = [
     value: 'total_volumes',
   },
 ];
-
-const CustomSVGTooltip = (props: any) => {
-  const { x, y, datum } = props;
-
-  return (
-    <foreignObject
-      style={{ pointerEvents: 'none' }}
-      x={x - 75}
-      y={y - 80}
-      width="150"
-      height="100%"
-    >
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          flexDirection: 'column',
-          position: 'relative',
-          height: `auto`,
-          padding: `4px`,
-          background: 'white',
-          color: 'black',
-          borderRadius: '4px',
-        }}
-      >
-        <div style={{ fontSize: 20, fontWeight: 750 }}>
-          {formatDollar(datum.y < 0.000000001 ? 0.000000001 : datum.y, datum.y < 0.0001 ? 1 : 7)}
-        </div>
-        <div style={{ fontSize: 12, fontWeight: 700, color: '#7b7f82' }}>
-          {format(datum.x, 'MMM d p')}
-        </div>
-        <div
-          style={{
-            position: 'absolute',
-            backgroundColor: '#f3aa4e',
-            bottom: -35,
-            left: '50',
-            height: 16,
-            width: 16,
-            borderRadius: 100,
-            border: '4px solid #212528',
-          }}
-        ></div>
-      </div>
-    </foreignObject>
-  );
-};

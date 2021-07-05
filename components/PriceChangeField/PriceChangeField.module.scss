@@ -1,0 +1,30 @@
+@import 'styles/theme.scss';
+
+.green {
+  color: $green;
+  display: flex;
+  align-items: center;
+  //justify-content: flex-end;
+  span {
+    margin-right: 3px;
+    width: 10px;
+    height: 5px;
+    border-bottom: solid 5px $green;
+    border-left: solid 5px transparent;
+    border-right: solid 5px transparent;
+  }
+}
+.red {
+  color: $red;
+  display: flex;
+  align-items: center;
+  //justify-content: flex-end;
+  span {
+    margin-right: 3px;
+    width: 10px;
+    height: 5px;
+    border-top: solid 5px $red;
+    border-left: solid 5px transparent;
+    border-right: solid 5px transparent;
+  }
+}

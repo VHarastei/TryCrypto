@@ -8,6 +8,7 @@ import Image from 'next/image';
 import starIcon from 'public/static/star.png';
 import { formatDollar } from 'helpers/formatDollar';
 import { formatPercent } from 'helpers/formatPercent';
+import { PriceChangeField } from 'components/PriceChangeField';
 
 type PropsType = {
   data: TableCoin[];
@@ -105,12 +106,9 @@ export const TableRow: React.FC<TableRowPropsType> = ({ coin }) => {
             <span>{coin.symbol.toUpperCase()}</span>
           </li>
           <li className={styles.price}>{formatDollar(coin.current_price, 20)}</li>
-          <li
-            className={`${styles.change} ${
-              coin.price_change_percentage_24h > 0 ? styles.changeSuccess : styles.changeDanger
-            }`}
-          >
-            {formatPercent(coin.price_change_percentage_24h)}
+          <li className={`${styles.change} `}>
+            <PriceChangeField value={coin.price_change_percentage_24h} />
+            {/* {formatPercent(coin.price_change_percentage_24h)} */}
           </li>
           <li className={styles.marketCap}>{formatDollar(coin.market_cap, 12)}</li>
           <li className={styles.watch}>

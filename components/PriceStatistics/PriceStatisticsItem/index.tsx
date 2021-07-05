@@ -27,9 +27,9 @@ export const PriceStatisticsItem: React.FC<PropsType> = ({ title, value, subTitl
       <div className={styles.col}>
         {value && (
           <Typography variant="mediumText">
-            {value === '∞'
-              ? '∞'
-              : !!!parseFloat(value.slice(value.includes('-') ? 2 : 1))
+            {value === '∞' || value.includes('#')
+              ? value
+              : !!!parseFloat(value.slice(value.includes('-') ? 2 : value.includes('$') ? 1 : 0))
               ? '--'
               : value}
           </Typography>

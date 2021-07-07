@@ -5,14 +5,14 @@ type PropsType = {
   children: string | React.ReactNode;
   color?: 'primary' | 'secondary';
   className?: string;
-  withPadding?: boolean;
+  fullWidth?: boolean;
   onClick?: ((event: React.MouseEvent<HTMLButtonElement>) => void) | undefined;
 };
 export const Button: React.FC<PropsType> = ({
   children,
   color = 'primary',
   className,
-  withPadding = true,
+  fullWidth,
   onClick,
 }) => {
   return (
@@ -21,7 +21,7 @@ export const Button: React.FC<PropsType> = ({
       className={`
       ${styles.button}
       ${color === 'primary' ? styles.primary : styles.secondary}
-      ${withPadding ? styles.withPadding : ''}
+      ${fullWidth ? styles.fullWidth : ''}
       ${className}
       `}
     >

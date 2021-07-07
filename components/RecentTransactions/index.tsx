@@ -50,7 +50,6 @@ export const RecentTransactions: React.FC<PropsType> = ({ simplified, withPaddin
   return (
     <Card
       title={currency ? `Balance: 6.10537 BTC` : 'Recent transactions'}
-      button={simplified ? undefined : { name: 'View portfolio', href: '/' }}
       withPadding={withPadding}
     >
       <div>

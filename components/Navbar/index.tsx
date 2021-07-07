@@ -45,9 +45,9 @@ export const Navbar: React.FC<PropsType> = ({ children }) => {
       <div className={styles.content}>
         <nav className={styles.navContainer}>
           <NavItem icon={homeIcon} href="home" active={active} />
+          <NavItem icon={educationIcon} href="education" active={active} />
           <NavItem icon={portfolioIcon} href="portfolio" active={active} />
           <NavItem icon={marketIcon} href="market" active={active} />
-          <NavItem icon={educationIcon} href="education" active={active} />
         </nav>
         <div className={styles.childrenContainer}>{children}</div>
       </div>

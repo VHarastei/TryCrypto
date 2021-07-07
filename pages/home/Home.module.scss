@@ -1,9 +1,37 @@
 @import 'styles/theme.scss';
 
-.miniPortfolio {
-  display: flex;
-  gap: 24px;
-}
+// .miniPortfolio {
+//   display: flex;
+//   gap: 24px;
+// }
 // .miniPortfolio > * + * {
 //   margin-left: 24px;  //or gap: 24px;
 // }
+.inviteUrl {
+  font-size: 18px;
+  border: 1px solid $gray;
+  border-radius: 8px;
+  padding: 16px;
+  margin: 16px 0px;
+}
+.educationContainer {
+  display: flex;
+  gap: 24px;
+  .education {
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+    .educationCurrency {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+      .educationCurrencyName {
+        margin: 0px 8px;
+      }
+    }
+    .educationBtn {
+      align-self: flex-end;
+      margin-top: 16px;
+    }
+  }
+}

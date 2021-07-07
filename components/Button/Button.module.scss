@@ -4,15 +4,16 @@
   color: white;
   font-size: 20px;
   font-weight: 500;
-  border-radius: 4px;
+  border-radius: 8px;
   cursor: pointer;
   transition: 0.2s;
   outline: none;
   border: 0;
-  padding: 0px;
+  padding: 8px 16px;
 }
-.withPadding {
-  padding: 7px 14px;
+.fullWidth {
+  padding: 16px;
+  width: 100%;
 }
 .primary {
   background-color: $primary;

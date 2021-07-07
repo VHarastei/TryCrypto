@@ -12,24 +12,26 @@ type PropsType = {
   };
   className?: string;
   withPadding?: boolean;
+  transparent?: boolean;
 };
 
-export const Card: React.FC<PropsType> = ({ children, title, button, withPadding, className }) => {
+export const Card: React.FC<PropsType> = ({
+  children,
+  title,
+  withPadding,
+  transparent,
+  className,
+}) => {
   const Title = title;
 
   return (
-    <div className={`${styles.container} ${className}`}>
+    <div className={`${transparent ? styles.transparent : ''} ${styles.container} ${className}`}>
       <div>
-        <div className={`${styles.title} ${withPadding ? '' : ''}`}>
+        <div className={`${styles.title} ${transparent ? styles.transparentTitle : ''}`}>
           {typeof title === 'string' ? <Typography variant="title">{title}</Typography> : <Title />}
         </div>
         <div className={`${withPadding ? styles.withPadding : ''}`}>{children}</div>
       </div>
-      {button && (
-        <div className={styles.button}>
-          <Button color="secondary">{button.name}</Button>
-        </div>
-      )}
     </div>
   );
 };

@@ -3,8 +3,9 @@ import styles from './Paper.module.scss';
 
 type PropsType = {
   children: React.ReactNode;
+  className?: string;
 };
 
-export const Paper: React.FC<PropsType> = ({ children }) => {
-  return <div className={styles.container}>{children}</div>;
+export const Paper: React.FC<PropsType> = ({ children, className }) => {
+  return <div className={`${styles.container} ${className}`}>{children}</div>;
 };

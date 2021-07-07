@@ -1,0 +1,13 @@
+@import 'styles/theme.scss';
+
+.container {
+  display: flex;
+  justify-content: space-between;
+  .chartContainer {
+    display: flex;
+    .chart {
+      height: 200px;
+      width: 200px;
+    }
+  }
+}

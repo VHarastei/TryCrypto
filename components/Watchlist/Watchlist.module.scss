@@ -2,6 +2,7 @@
 
 .container {
   display: flex;
+  gap: 24px;
 }
 .miniChart {
   min-width: 300px;
@@ -10,17 +11,19 @@
   padding-bottom: 0px;
   flex-shrink: 2;
   flex-basis: 100%;
-  border-right: 1px solid $gray;
+  //border-right: 1px solid $gray;
   position: relative;
   cursor: pointer;
+  background-color: $backgroundGray;
+  border-radius: 12px;
   .miniChartInfo {
-    margin-bottom: 10px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    img {
-      margin-right: 8px;
+    .miniChartInfoName {
+      margin: 0px 8px;
     }
+    margin-bottom: 6px;
     div {
       display: flex;
       align-items: center;

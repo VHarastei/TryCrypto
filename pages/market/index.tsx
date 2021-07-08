@@ -26,18 +26,18 @@ type PropsType = {
 export default function Market({ data, coinsList, currentPage }: PropsType) {
   const [searchCoinsIds, setSearchCoinsIds] = React.useState<string[]>([]);
   const [searchCoinName, setSearchCoinName] = React.useState<string>('');
-  const [foundedCoins, setFoundedCoins] = React.useState<TableCoin[] | undefined>(undefined);
+  const [foundCoins, setFoundCoins] = React.useState<TableCoin[] | undefined>(undefined);
   const [isInvalidCoinName, setIsInvalidCoinName] = React.useState(false);
   const debouncedSearch: string[] = useDebounce(searchCoinsIds, 1500);
 
-  let { data: fnddCoins } = useSWR<TableCoin[]>(
+  let { data: fndCoins } = useSWR<TableCoin[]>(
     debouncedSearch.length ? MarketApi.getTableDataUrl(1, debouncedSearch) : null,
     fetcher
   );
 
   useEffect(() => {
-    if (fnddCoins) setFoundedCoins(fnddCoins);
-  }, [fnddCoins]);
+    if (fndCoins) setFoundCoins(fndCoins);
+  }, [fndCoins]);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
@@ -45,7 +45,7 @@ export default function Market({ data, coinsList, currentPage }: PropsType) {
     setSearchCoinName(val);
     if (!val) {
       setIsInvalidCoinName(false);
-      setFoundedCoins(undefined);
+      setFoundCoins(undefined);
     }
     let srchCoinIds: string[] = [];
     coinsList.forEach((coin) => {
@@ -63,7 +63,7 @@ export default function Market({ data, coinsList, currentPage }: PropsType) {
 
   const handleRemoveCoinName = () => {
     setSearchCoinName('');
-    setFoundedCoins(undefined);
+    setFoundCoins(undefined);
     setIsInvalidCoinName(false);
   };
   return (
@@ -78,7 +78,7 @@ export default function Market({ data, coinsList, currentPage }: PropsType) {
                 value={searchCoinName}
                 onChange={handleSearch}
               />
-              {searchCoinName && !isInvalidCoinName && !fnddCoins ? (
+              {searchCoinName && !isInvalidCoinName && !fndCoins ? (
                 <Image
                   className={styles.searchBarFieldRemove}
                   src={loadingIcon}
@@ -107,15 +107,15 @@ export default function Market({ data, coinsList, currentPage }: PropsType) {
                 Try again with a different term.
               </Typography>
             </div>
-          ) : foundedCoins ? (
-            <SortableTable data={foundedCoins} />
+          ) : foundCoins ? (
+            <SortableTable data={foundCoins} isSearchResult />
           ) : (
             <MarketTable data={data} currentPage={currentPage} />
           )}
         </Paper>
-        <div>
+        {/* <div>
           <RecentTransactions simplified withPadding />
-        </div>
+        </div> */}
       </ContentLayout>
     </Layout>
   );

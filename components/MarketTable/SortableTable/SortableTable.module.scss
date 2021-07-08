@@ -44,26 +44,38 @@
       border-right: solid 5px transparent;
     }
   }
+  .watch {
+    text-align: center;
+    flex-basis: 3%;
+    justify-content: center;
+  }
+  .ordNum {
+    text-align: left;
+    flex-basis: 5%;
+  }
   .name {
     text-align: left;
-    flex-basis: 35%;
+    flex-basis: 34%;
   }
   .current_price {
     text-align: left;
-    flex-basis: 18.3%;
+    flex-basis: 11.6%;
   }
   .price_change_percentage_24h {
     text-align: left;
-    flex-basis: 18.3%;
+    flex-basis: 11.6%;
+  }
+  .price_change_percentage_7d_in_currency {
+    text-align: left;
+    flex-basis: 11.6%;
   }
   .market_cap {
     text-align: left;
-    flex-basis: 20.3%;
+    flex-basis: 20.6%;
   }
-  .watch {
-    text-align: center;
-    flex-basis: 7%;
+  .sparkline {
     justify-content: center;
+    flex-basis: 16%;
   }
 }
 
@@ -91,25 +103,37 @@
       color: $gray;
     }
   }
+  .watch {
+    text-align: left;
+    flex-basis: 3%;
+    // justify-content: center;
+  }
+  .ordNum {
+    text-align: left;
+    flex-basis: 5%;
+  }
   .name {
     text-align: left;
-    flex-basis: 35%;
+    flex-basis: 34%;
   }
   .price {
     text-align: left;
-    flex-basis: 18.3%;
+    flex-basis: 11.6%;
   }
   .change {
     text-align: left;
-    flex-basis: 18.3%;
+    flex-basis: 11.6%;
   }
   .marketCap {
     text-align: left;
-    flex-basis: 20.3%;
+    flex-basis: 20.6%;
   }
-  .watch {
+  .sparkline {
     text-align: center;
-    flex-basis: 7%;
-    justify-content: center;
+    flex-basis: 16%;
   }
+}
+.foundQuantity {
+  display: flex;
+  padding: 16px;
 }

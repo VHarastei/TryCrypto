@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './Typography.module.scss';
 
 type PropsType = {
-  children: string | string[];
+  children: string | string[] | number;
   variant?: 'title' | 'regularText' | 'mediumText' | 'thinText';
   color?: 'gray' | 'white' | 'green' | 'red';
   fw?: 'fw-300' | 'fw-400' | 'fw-500' | 'fw-600' | 'fw-700' | 'fw-800';

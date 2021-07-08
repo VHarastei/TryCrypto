@@ -23,7 +23,7 @@ export const MarketTable: React.FC<PropsType> = React.memo((props) => {
 
   const { pagination, showing } = createPagination({
     numberOfItems: 6120,
-    itemsPerPage: 100,
+    itemsPerPage: 50,
     numberOfButtons: 5,
     currentPage,
   });
@@ -34,7 +34,7 @@ export const MarketTable: React.FC<PropsType> = React.memo((props) => {
   };
   return (
     <div>
-      <SortableTable data={data} />
+      <SortableTable data={data} currentPage={currentPage} />
       {data.length && (
         <div className={styles.paginationContainer}>
           <div className={styles.showing}>{`Showing ${showing} out of 6120`}</div>

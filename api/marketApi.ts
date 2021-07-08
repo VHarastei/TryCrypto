@@ -1,13 +1,16 @@
 import { instance } from 'api';
 
 export type TableCoin = {
+  ordNum: number;
   id: string;
   symbol: string;
   name: string;
   image: string;
   current_price: number;
   price_change_percentage_24h: number;
+  price_change_percentage_7d_in_currency: number;
   market_cap: number;
+  sparkline_in_7d: { price: number[] };
 };
 
 export type TableConfig = {
@@ -16,7 +19,13 @@ export type TableConfig = {
 };
 
 export type Direction = 'asc' | 'desc';
-export type Key = 'name' | 'current_price' | 'price_change_percentage_24h' | 'market_cap';
+export type Key =
+  | 'ordNum'
+  | 'name'
+  | 'current_price'
+  | 'price_change_percentage_24h'
+  | 'price_change_percentage_7d_in_currency'
+  | 'market_cap';
 
 export type ListCoin = Pick<TableCoin, 'id' | 'symbol' | 'name'>;
 
@@ -32,7 +41,7 @@ export const MarketApi = {
     return () =>
       `coins/markets?vs_currency=usd${
         ids ? `&ids=${ids}` : ``
-      }&order=market_cap_desc&per_page=100&page=${page}&sparkline=false`;
+      }&order=market_cap_desc&per_page=50&page=${page}&sparkline=true&price_change_percentage=7d`;
   },
   getCoinsListUrl: () => `coins/list?include_platform=false`,
   getCurrencyDataUrl: (currencyId: string) =>

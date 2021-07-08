@@ -1,4 +1,5 @@
 import { Typography } from 'components/Typography';
+import Link from 'next/link';
 import React from 'react';
 import { VictoryContainer, VictoryPie } from 'victory';
 import styles from './PieChart.module.scss';
@@ -12,7 +13,7 @@ export const PieChart: React.FC<PropsType> = ({ className }) => {
     {
       id: 'usd',
       name: 'USD',
-      amount: 132.11,
+      amount: 132.003241,
       percentageAmount: 34,
     },
     {
@@ -28,8 +29,8 @@ export const PieChart: React.FC<PropsType> = ({ className }) => {
       percentageAmount: 16,
     },
     {
-      id: 'ripple',
-      name: 'Xrp',
+      id: 'ethereum',
+      name: 'Ethereum',
       amount: 12.768444,
       percentageAmount: 15,
     },
@@ -52,8 +53,8 @@ export const PieChart: React.FC<PropsType> = ({ className }) => {
       percentageAmount: 3,
     },
     {
-      id: 'ethereum',
-      name: 'Ethereum',
+      id: 'ripple',
+      name: 'XRP',
       amount: 0.000341,
       percentageAmount: 3,
     },
@@ -83,6 +84,8 @@ export const PieChart: React.FC<PropsType> = ({ className }) => {
     return results;
   }, []);
 
+  const chartColors = ['#f3aa4e', '#6076ff', 'tomato', '#82bb47', '#7b7f82'];
+
   return (
     <div className={styles.container}>
       <div>
@@ -102,15 +105,45 @@ export const PieChart: React.FC<PropsType> = ({ className }) => {
             innerRadius={85}
             padding={0}
             domainPadding={0}
-            colorScale={['#f3aa4e', '#6076FF', 'tomato', '#82BB47', '#7b7f82']}
+            colorScale={chartColors}
             data={chartData}
             containerComponent={<VictoryContainer height={200} width={200} />}
           />
         </div>
-        <div>
+        <div className={styles.chartItemsContainer}>
           {data.map((item, index) => {
-            if (index <= 3) return <div>{item.name}</div>;
-            if (data.length - 1 === index) return <div>Other</div>;
+            if (index <= 3)
+              return (
+                <Link href={`/market/${item.id === 'usd' ? '' : item.id}`} key={item.id}>
+                  <a className={styles.chartItem}>
+                    <div className={styles.chartItemName}>
+                      <div
+                        className={`${styles.chartItemColor} ${
+                          styles[`bg_${chartColors[index].slice(1)}`]
+                        }`}
+                      ></div>
+                      <Typography variant="regularText">{item.name}</Typography>
+                    </div>
+                    <div>
+                      <Typography variant="mediumText">{item.amount}</Typography>
+                    </div>
+                  </a>
+                </Link>
+              );
+            if (data.length - 1 === index)
+              return (
+                <div className={styles.chartItem} key={item.id}>
+                  <div className={styles.chartItemName}>
+                    <div className={`${styles.chartItemColor} ${styles.bg_gray}`}></div>
+                    <Typography variant="regularText">Other</Typography>
+                  </div>
+                  <div></div>
+                </div>
+                // <div className={styles.chartItem} key={item.id}>
+                //   <div className={`${styles.chartItemColor} ${styles.gray}`}></div>
+                //   <Typography variant="regularText">Other</Typography>
+                // </div>
+              );
           })}
         </div>
       </div>

@@ -32,15 +32,15 @@ export default function Home() {
         <Card title="Portfolio balance" withPadding>
           <PieChart />
         </Card>
-        <div>
-          <Card title="Invite a friend and get bonus" withPadding>
-            <Typography variant="regularText" color="gray">
-              Invite a friend and you will both receive $20 when they confirm email
-            </Typography>
-            <div className={styles.inviteUrl}>https://trycrypto.com/invite/sdfr24csfd</div>
-            <Button fullWidth>Copy link</Button>
-          </Card>
-        </div>
+
+        <Card title="Invite a friend and get bonus" withPadding>
+          <Typography variant="regularText" color="gray">
+            Invite a friend and you will both receive $20 when they confirm email and buy crypto for
+            $50 or more
+          </Typography>
+          <div className={styles.inviteUrl}>https://trycrypto.com/invite/sdfr24csfd</div>
+          <Button fullWidth>Copy link</Button>
+        </Card>
       </ContentLayout>
       <Card title="Education" transparent>
         <div className={styles.educationContainer}>

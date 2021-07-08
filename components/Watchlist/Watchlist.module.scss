@@ -3,6 +3,10 @@
 .container {
   display: flex;
   gap: 24px;
+  @media all and (max-width: 1024px) {
+    flex-direction: column;
+    column-gap: 24px;
+  }
 }
 .miniChart {
   min-width: 300px;

@@ -39,12 +39,6 @@ export const Watchlist = () => {
           {data.map((curr: any) => {
             return <MiniChart key={curr.id} currency={curr} />;
           })}
-
-          {/* <Link href={`/market`}>
-            <a className={styles.discoverMore}>
-              <Button color="secondary">Discover more assets</Button>
-            </a>
-          </Link> */}
         </div>
       )}
     </Card>
@@ -79,9 +73,6 @@ const MiniChart: React.FC<MiniChartPropsType> = ({ currency }) => {
               {currency.symbol.toUpperCase()}
             </Typography>
           </div>
-          {/* <Typography fs="fs-16" fw="fw-500" color="gray">
-            1W
-          </Typography> */}
           <Typography fs="fs-24" fw="fw-500">
             {formatDollar(currency.market_data.current_price.usd, 20)}
           </Typography>
@@ -100,20 +91,11 @@ const MiniChart: React.FC<MiniChartPropsType> = ({ currency }) => {
         padding={0}
         domainPadding={{ y: 16 }}
       >
-        {/* <defs>
-          <linearGradient id="gradientStroke" x1="0%" x2="0%" y1="0%" y2="100%">
-            <stop offset="0%" stopColor="#1E93FA" stopOpacity="0.8" />
-            <stop offset="70%" stopColor="#1E93FA" stopOpacity="0" />
-          </linearGradient>
-        </defs> */}
         <VictoryLine
           style={{
             data: {
-              //stroke: color,
-              //strokeWidth: 2,
-              // fill: 'url(#gradientStroke)',
               stroke: currency.market_data.price_change_percentage_7d < 0 ? '#f84960' : '#02c076',
-              strokeWidth: 3,
+              strokeWidth: 2,
             },
           }}
           data={currency.market_data.sparkline_7d.price}

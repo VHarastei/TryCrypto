@@ -17,6 +17,10 @@
 .educationContainer {
   display: flex;
   gap: 24px;
+  @media all and (max-width: 768px) {
+    flex-direction: column;
+    column-gap: 24px;
+  }
   .education {
     display: flex;
     flex-direction: column;

@@ -9,6 +9,8 @@ import { formatPercent } from 'helpers/formatPercent';
 import React, { useEffect, useState } from 'react';
 import useSWR from 'swr';
 import { VictoryAxis, VictoryChart, VictoryLine, VictoryVoronoiContainer } from 'victory';
+import { CustomBrushChart } from './CustomBrushChart';
+import { CustomChart } from './CustomChart';
 import { CustomTooltip } from './CustomTooltip';
 import styles from './MarketChart.module.scss';
 
@@ -16,12 +18,12 @@ type PropsType = {
   currencyId: string;
   marketData: any;
 };
-type ChartDataType = {
-  prices: ChartArrayType[];
-  market_caps: ChartArrayType[];
-  total_volumes: ChartArrayType[];
+export type ChartData = {
+  prices: ChartArray[];
+  market_caps: ChartArray[];
+  total_volumes: ChartArray[];
 };
-type ChartArrayType = {
+export type ChartArray = {
   0: number;
   1: number;
 };
@@ -29,13 +31,20 @@ type ChartArrayType = {
 export const MarketChart: React.FC<PropsType> = ({ currencyId, marketData }) => {
   const [dataInterval, setDataInterval] = useState(intervals[1].value);
   const [chartType, setChartType] = useState<ChartType>('prices');
-  const [chartData, setChartData] = useState<ChartDataType | undefined>(undefined);
+  const [chartData, setChartData] = useState<ChartData | undefined>(undefined);
 
-  const { data } = useSWR<ChartDataType>(
+  const { data } = useSWR<ChartData>(
     MarketApi.getMarketChartUrl(currencyId, dataInterval),
     fetcher,
     { refreshInterval: 30000 }
   );
+
+  // const { data: brushChartData } = useSWR<ChartData>(
+  //   MarketApi.getMarketChartUrl(currencyId, 'max'),
+  //   fetcher,
+  //   { revalidateOnFocus: false, revalidateOnMount: false, revalidateOnReconnect: false }
+  // );
+
   useEffect(() => {
     if (data) setChartData(data);
   }, [data]);
@@ -87,63 +96,9 @@ export const MarketChart: React.FC<PropsType> = ({ currencyId, marketData }) => 
           </div>
         </div>
       </div>
-      <VictoryChart
-        style={{
-          parent: {
-            zIndex: 99,
-          },
-        }}
-        animate={{ duration: 300, onLoad: { duration: 300 } }}
-        width={1000}
-        height={400}
-        padding={{ left: 0, top: 76, bottom: 32, right: 0 }}
-        domainPadding={{ y: 5 }}
-        containerComponent={
-          <VictoryVoronoiContainer
-            labels={() => ` `}
-            style={{ cursor: 'crosshair', zIndex: 99 }}
-            portalZIndex={99}
-            labelComponent={<CustomTooltip />}
-          />
-        }
-      >
-        <VictoryLine
-          style={{
-            data: {
-              stroke: '#f3aa4e',
-              strokeWidth: 2,
-              margin: 0,
-              padding: 0,
-            },
-          }}
-          data={chartData[chartType].map((item) => ({
-            x: item[0],
-            y: item[1],
-          }))}
-        />
-        <VictoryAxis
-          orientation="bottom"
-          style={{
-            axis: {
-              stroke: '#7b7f82',
-              strokeWidth: 1,
-            },
-            tickLabels: {
-              fontSize: 16,
-              fill: '#7b7f82',
-            },
-          }}
-          tickFormat={(x) => {
-            if (+dataInterval <= 1) {
-              return format(x, 'p');
-            }
-            if (dataInterval === 'max') {
-              return format(x, 'MMM y');
-            }
-            return format(x, 'MMM d');
-          }}
-        />
-      </VictoryChart>
+
+      <CustomChart data={chartData[chartType]} dataInterval={dataInterval} />
+      {/* <CustomBrushChart data={brushChartData?.prices} /> */}
     </Paper>
   );
 };
@@ -165,11 +120,11 @@ const ChartSelector: React.FC<ChartSelectorPropsType> = ({ name, isActive, handl
   );
 };
 
-type IntervalsType = {
+type Intervals = {
   name: string;
   value: string;
 };
-const intervals: IntervalsType[] = [
+const intervals: Intervals[] = [
   {
     name: '1H',
     value: '0.0416',
@@ -201,12 +156,12 @@ const intervals: IntervalsType[] = [
 ];
 
 type ChartType = 'prices' | 'market_caps' | 'total_volumes';
-type ChartTypesType = {
+type ChartTypes = {
   name: string;
   value: ChartType;
 };
 
-const chartTypes: ChartTypesType[] = [
+const chartTypes: ChartTypes[] = [
   {
     name: 'Price',
     value: 'prices',

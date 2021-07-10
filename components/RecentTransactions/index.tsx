@@ -2,61 +2,70 @@ import { Card } from 'components/Card';
 import { Typography } from 'components/Typography';
 import { format, parseISO, formatISO } from 'date-fns';
 import Image from 'next/image';
+import { Currency } from 'pages/market/[currencyId]';
 import boughtIcon from 'public/static/bought.svg';
 import soldIcon from 'public/static/sold.png';
 import React from 'react';
 import styles from './RecentTransaction.module.scss';
 
 type PropsType = {
-  simplified?: boolean;
   withPadding?: boolean;
-  currency?: string;
+  currency?: Currency;
 };
 
 type Transaction = {
   date: string;
-  type: 'bought' | 'sold';
-  currency: string;
-  symbol: string;
+  type: 'buy' | 'sell' | 'receive';
+  currencyName: string;
+  currencySymbol: string;
   source: string;
   amount: number;
   price: number;
 };
 
-export const RecentTransactions: React.FC<PropsType> = ({ simplified, withPadding, currency }) => {
+export const RecentTransactions: React.FC<PropsType> = ({ withPadding, currency }) => {
   //request for transactions of actual currency
 
   const transactions: Transaction[] = [
     {
       date: formatISO(Date.now()),
-      type: 'bought',
-      currency: 'Bitcoin',
-      symbol: 'BTC',
+      type: 'receive',
+      currencyName: 'Bitcoin',
+      currencySymbol: 'BTC',
       source: 'education',
-      amount: 5.10533,
+      amount: 5.105334,
       price: 1218.77,
     },
     {
       date: formatISO(Date.now()),
-      type: 'sold',
-      currency: 'Bitcoin',
-      symbol: 'BTC',
+      type: 'buy',
+      currencyName: 'Bitcoin',
+      currencySymbol: 'BTC',
       source: 'market',
-      amount: 1.34132,
+      amount: 0.123414,
+      price: 248.41,
+    },
+    {
+      date: formatISO(Date.now()),
+      type: 'sell',
+      currencyName: 'Bitcoin',
+      currencySymbol: 'BTC',
+      source: 'market',
+      amount: 1.341321,
       price: 3324.12,
     },
   ];
 
   return (
     <Card
-      title={currency ? `Balance: 6.10537 BTC` : 'Recent transactions'}
+      title={currency ? () => <RTTitle currency={currency} /> : 'Recent transactions'}
       withPadding={withPadding}
     >
       <div>
         {currency ? (
           <div>
-            {transactions.map((txn) => {
-              return <Transaction {...txn} />;
+            {transactions.map((txn, index) => {
+              return <Transaction key={txn.date + index} {...txn} />;
             })}
           </div>
         ) : (
@@ -69,11 +78,24 @@ export const RecentTransactions: React.FC<PropsType> = ({ simplified, withPaddin
   );
 };
 
+type RTTitlePropsType = {
+  currency: Currency;
+};
+
+const RTTitle: React.FC<RTTitlePropsType> = ({ currency }) => {
+  return (
+    <div className={styles.rTTitle}>
+      <Typography variant="title">{`Recent ${currency.name} transactions`}</Typography>
+      <Typography variant="title">{`Balance: ${'6.452131'} ${currency.symbol.toLocaleUpperCase()}`}</Typography>
+    </div>
+  );
+};
+
 const Transaction: React.FC<Transaction> = ({
   date,
   type,
-  currency,
-  symbol,
+  currencyName,
+  currencySymbol,
   source,
   amount,
   price,
@@ -85,34 +107,28 @@ const Transaction: React.FC<Transaction> = ({
   return (
     <div className={styles.transactionContainer}>
       <div className={styles.nameContainer}>
+        <div className={styles.actionType}>{type === 'buy' ? 'Buy' : 'Sell'}</div>
         <div className={styles.date}>
           <Typography variant="thinText" color="gray">
             {month}
           </Typography>
           <Typography variant="regularText">{day}</Typography>
         </div>
-        <Image
-          layout="fixed"
-          src={type === 'bought' ? boughtIcon : soldIcon}
-          alt={`transaction type icon`}
-          width={36}
-          height={36}
-        />
         <div>
           <Typography variant="regularText">{`${
-            type === 'bought' ? 'Bought' : 'Sold'
-          } ${currency}`}</Typography>
+            type === 'buy' ? 'Bought' : type === 'receive' ? 'Received' : 'Sold'
+          } ${currencyName}`}</Typography>
           <Typography variant="thinText" color="gray">
-            {`${type === 'bought' ? 'From' : 'To'} ${source}`}
+            {`${type === 'buy' || type === 'receive' ? 'From' : 'To'} ${source}`}
           </Typography>
         </div>
       </div>
       <div className={styles.priceContainer}>
         <Typography variant="regularText">{`${
-          type === 'bought' ? '+' : '-'
-        }${amount} ${symbol}`}</Typography>
+          type === 'buy' ? '+' : '-'
+        }${amount} ${currencySymbol}`}</Typography>
         <Typography variant="thinText" color="gray">
-          {`${type === 'bought' ? '+' : '-'}$${price} `}
+          {`${type === 'buy' ? '+' : '-'}$${price} `}
         </Typography>
       </div>
     </div>

@@ -2,53 +2,49 @@
 
 .container {
   display: flex;
-  justify-content: space-between;
-  .chartContainer {
-    display: flex;
-    //align-items: center;
-    margin-left: 16px;
-    .chart {
-      height: 220px;
-      width: 220px;
-    }
-    .chartItemsContainer {
-      margin: 0px 48px;
-      .chartItem {
+  //align-items: center;
+  margin-left: 16px;
+  .chart {
+    height: 220px;
+    width: 220px;
+  }
+  .chartItemsContainer {
+    margin: 0px 48px;
+    .chartItem {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 6px 0px;
+      padding: 2px 8px;
+      border-radius: 8px;
+      &:hover {
+        background-color: $secondary;
+        cursor: pointer;
+      }
+      //letter-spacing: 1px;
+      .chartItemName {
         display: flex;
         align-items: center;
-        justify-content: space-between;
-        margin: 6px 0px;
-        padding: 2px 8px;
-        border-radius: 8px;
-        &:hover {
-          background-color: $secondary;
-          cursor: pointer;
+        margin-right: 16px;
+        .chartItemColor {
+          height: 8px;
+          width: 8px;
+          margin-right: 10px;
         }
-        //letter-spacing: 1px;
-        .chartItemName {
-          display: flex;
-          align-items: center;
-          margin-right: 16px;
-          .chartItemColor {
-            height: 8px;
-            width: 8px;
-            margin-right: 10px;
-          }
-          .bg_f3aa4e {
-            background-color: $primary;
-          }
-          .bg_6076ff {
-            background-color: #6076ff;
-          }
-          .bg_omato {
-            background-color: tomato;
-          }
-          .bg_82bb47 {
-            background-color: #82bb47;
-          }
-          .bg_gray {
-            background-color: $gray;
-          }
+        .bg_f3aa4e {
+          background-color: $primary;
+        }
+        .bg_6076ff {
+          background-color: #6076ff;
+        }
+        .bg_omato {
+          background-color: tomato;
+        }
+        .bg_82bb47 {
+          background-color: #82bb47;
+        }
+        .bg_gray {
+          background-color: $gray;
         }
       }
     }

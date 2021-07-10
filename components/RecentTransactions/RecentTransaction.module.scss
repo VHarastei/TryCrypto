@@ -1,5 +1,10 @@
 @import 'styles/theme.scss';
 
+.rTTitle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 .transactionContainer {
   border-top: 1px solid $gray;
   display: flex;
@@ -14,6 +19,20 @@
 
     .date {
       text-align: center;
+    }
+    .actionType {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 100%;
+      border: 2px solid $primary;
+      color: $primary;
+      font-size: 13px;
+      font-weight: 500;
+      padding: 6px;
+      line-height: 40px;
+      width: 40px;
+      height: 40px;
     }
   }
   .priceContainer {

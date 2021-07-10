@@ -1,14 +1,14 @@
 import { Paper } from 'components/Paper';
+import { Currency } from 'pages/market/[currencyId]';
 import React from 'react';
 import { BuySell } from './BuySell';
 import styles from './BuySellCard.module.scss';
 
 type PropsType = {
-  currency: string;
-  symbol: string;
+  currency: Currency;
 };
 
-export const BuySellCard: React.FC<PropsType> = ({ currency, symbol }) => {
+export const BuySellCard: React.FC<PropsType> = ({ currency }) => {
   const [tab, setTab] = React.useState<'buy' | 'sell'>('buy');
   const handleChangeTab = (newTab: 'buy' | 'sell') => {
     setTab(newTab);
@@ -32,9 +32,9 @@ export const BuySellCard: React.FC<PropsType> = ({ currency, symbol }) => {
       </div>
       <div className={styles.content}>
         {tab === 'buy' ? (
-          <BuySell action="Buy" currency={currency} symbol={symbol} />
+          <BuySell action="Buy" currency={currency} />
         ) : (
-          <BuySell action="Sell" currency={currency} symbol={symbol} />
+          <BuySell action="Sell" currency={currency} />
         )}
       </div>
     </Paper>

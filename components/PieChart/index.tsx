@@ -88,64 +88,54 @@ export const PieChart: React.FC<PropsType> = ({ className }) => {
 
   return (
     <div className={styles.container}>
-      <div>
-        <Typography variant="regularText" color="gray">
-          Account balance:
-        </Typography>
-        <Typography fw="fw-500" fs="fs-24">
-          $53.21
-        </Typography>
+      <div className={styles.chart}>
+        <VictoryPie
+          height={200}
+          width={200}
+          padAngle={5}
+          innerRadius={85}
+          padding={0}
+          domainPadding={0}
+          colorScale={chartColors}
+          data={chartData}
+          containerComponent={<VictoryContainer height={200} width={200} />}
+        />
       </div>
-      <div className={styles.chartContainer}>
-        <div className={styles.chart}>
-          <VictoryPie
-            height={200}
-            width={200}
-            padAngle={5}
-            innerRadius={85}
-            padding={0}
-            domainPadding={0}
-            colorScale={chartColors}
-            data={chartData}
-            containerComponent={<VictoryContainer height={200} width={200} />}
-          />
-        </div>
-        <div className={styles.chartItemsContainer}>
-          {data.map((item, index) => {
-            if (index <= 3)
-              return (
-                <Link href={`/market/${item.id === 'usd' ? '' : item.id}`} key={item.id}>
-                  <a className={styles.chartItem}>
-                    <div className={styles.chartItemName}>
-                      <div
-                        className={`${styles.chartItemColor} ${
-                          styles[`bg_${chartColors[index].slice(1)}`]
-                        }`}
-                      ></div>
-                      <Typography variant="regularText">{item.name}</Typography>
-                    </div>
-                    <div>
-                      <Typography variant="mediumText">{item.amount}</Typography>
-                    </div>
-                  </a>
-                </Link>
-              );
-            if (data.length - 1 === index)
-              return (
-                <div className={styles.chartItem} key={item.id}>
+      <div className={styles.chartItemsContainer}>
+        {data.map((item, index) => {
+          if (index <= 3)
+            return (
+              <Link href={`/market/${item.id === 'usd' ? '' : item.id}`} key={item.id}>
+                <a className={styles.chartItem}>
                   <div className={styles.chartItemName}>
-                    <div className={`${styles.chartItemColor} ${styles.bg_gray}`}></div>
-                    <Typography variant="regularText">Other</Typography>
+                    <div
+                      className={`${styles.chartItemColor} ${
+                        styles[`bg_${chartColors[index].slice(1)}`]
+                      }`}
+                    ></div>
+                    <Typography variant="regularText">{item.name}</Typography>
                   </div>
-                  <div></div>
+                  <div>
+                    <Typography variant="mediumText">{item.amount}</Typography>
+                  </div>
+                </a>
+              </Link>
+            );
+          if (data.length - 1 === index)
+            return (
+              <div className={styles.chartItem} key={item.id}>
+                <div className={styles.chartItemName}>
+                  <div className={`${styles.chartItemColor} ${styles.bg_gray}`}></div>
+                  <Typography variant="regularText">Other</Typography>
                 </div>
-                // <div className={styles.chartItem} key={item.id}>
-                //   <div className={`${styles.chartItemColor} ${styles.gray}`}></div>
-                //   <Typography variant="regularText">Other</Typography>
-                // </div>
-              );
-          })}
-        </div>
+                <div></div>
+              </div>
+              // <div className={styles.chartItem} key={item.id}>
+              //   <div className={`${styles.chartItemColor} ${styles.gray}`}></div>
+              //   <Typography variant="regularText">Other</Typography>
+              // </div>
+            );
+        })}
       </div>
     </div>
   );

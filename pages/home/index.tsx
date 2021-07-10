@@ -30,7 +30,17 @@ export default function Home() {
       />
       <ContentLayout>
         <Card title="Portfolio balance" withPadding>
-          <PieChart />
+          <div className={styles.portfolioBalance}>
+            <div>
+              <Typography variant="regularText" color="gray">
+                Account balance:
+              </Typography>
+              <Typography fw="fw-500" fs="fs-24">
+                $53.21
+              </Typography>
+            </div>
+            <PieChart />
+          </div>
         </Card>
 
         <Card title="Invite a friend and get bonus" withPadding>

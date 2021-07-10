@@ -5,7 +5,7 @@ import { formatDollar } from 'helpers/formatDollar';
 import { useSortableData } from 'hooks/useSortableData';
 import Image from 'next/image';
 import Link from 'next/link';
-import starIcon from 'public/static/star.png';
+import starIcon from 'public/static/star.svg';
 import React, { useEffect } from 'react';
 import { VictoryAxis, VictoryChart, VictoryLine } from 'victory';
 import styles from './SortableTable.module.scss';

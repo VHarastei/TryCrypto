@@ -1,10 +1,11 @@
 @import 'styles/theme.scss';
 
 .header {
-  margin-top: 24px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin-bottom: 30px;
+  margin-top: 6px;
   .nameContainer {
     display: flex;
     align-items: center;
@@ -22,30 +23,48 @@
   .watchlistBtn {
     display: flex;
     align-items: center;
-    span {
-      margin-left: 6px;
-    }
+    padding: 6px;
+    margin-left: 10px;
   }
 }
+// .menu {
+//   display: flex;
+//   border-bottom: 1px solid $gray;
+//   margin-top: 12px;
+//   margin-bottom: 40px;
+
+//   .tab {
+//     padding: 16px 0px;
+//     border-bottom: 3px solid transparent;
+//     border-radius: 1px;
+//     margin-right: 24px;
+//     cursor: pointer;
+//     color: $gray;
+//     font-weight: 500;
+//     font-size: 18px;
+//     transition: 0.2s ease-out;
+//   }
+//   .active {
+//     border-color: white;
+//     color: white;
+//   }
+// }
 .menu {
   display: flex;
-  border-bottom: 1px solid $gray;
-  margin-top: 12px;
-  margin-bottom: 40px;
+
   .tab {
-    padding: 16px 0px;
-    border-bottom: 3px solid transparent;
-    border-radius: 1px;
-    margin-right: 24px;
     cursor: pointer;
     color: $gray;
-    font-weight: 500;
-    font-size: 18px;
+    border-top: 2.5px solid transparent;
+    padding: 2px 24px;
+    padding-top: 8px;
+    font-weight: 400;
+    font-size: 24px;
     transition: 0.2s ease-out;
   }
   .active {
-    border-color: white;
-    color: white;
+    border-color: $primary;
+    color: $primary;
   }
 }
 .aboutCurrency {

@@ -1,0 +1,24 @@
+@import 'styles/theme.scss';
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  .headerItem {
+    margin-right: 200px;
+    .headerItemValueContainer {
+      margin-top: 6px;
+      display: flex;
+      align-items: flex-start;
+      .headerItemValue {
+        font-size: 28px;
+        font-weight: 500;
+        margin-right: 6px;
+      }
+    }
+  }
+  .headerPnls {
+    display: flex;
+  }
+}

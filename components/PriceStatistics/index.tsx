@@ -3,18 +3,18 @@ import { Card } from 'components/Card';
 import { format, parseISO } from 'date-fns';
 import { formatDollar } from 'helpers/formatDollar';
 import { formatPercent } from 'helpers/formatPercent';
+import { Currency } from 'pages/market/[currencyId]';
 import React from 'react';
 import styles from './PriceStatistics.module.scss';
 import { PriceStatisticsGroup } from './PriceStatisticsGroup';
 import { PriceStatisticsItem } from './PriceStatisticsItem';
 
 type PropsType = {
-  currency: string;
-  symbol: string;
+  currency: Currency;
   data: any;
 };
 
-export const PriceStatistics: React.FC<PropsType> = ({ currency, symbol, data }) => {
+export const PriceStatistics: React.FC<PropsType> = ({ currency, data }) => {
   const [show, setShow] = React.useState(false);
 
   const handleChangeShow = () => {
@@ -29,8 +29,8 @@ export const PriceStatistics: React.FC<PropsType> = ({ currency, symbol, data })
   };
 
   return (
-    <Card title={`${currency} Statistics`} withPadding>
-      <PriceStatisticsGroup title={`${currency} Price Today`}>
+    <Card title={`${currency.name} Statistics`} withPadding>
+      <PriceStatisticsGroup title={`${currency.name} Price Today`}>
         <PriceStatisticsItem
           title={'Current price'}
           value={formatDollar(data.current_price.usd, 20)}
@@ -47,7 +47,7 @@ export const PriceStatistics: React.FC<PropsType> = ({ currency, symbol, data })
           value={formatDollar(data.total_volume.usd, 20)}
         />
       </PriceStatisticsGroup>
-      <PriceStatisticsGroup title={`${currency} Market Cap`}>
+      <PriceStatisticsGroup title={`${currency.name} Market Cap`}>
         <PriceStatisticsItem
           title={'Market Cap'}
           value={formatDollar(data.market_cap.usd, 20)}
@@ -60,7 +60,7 @@ export const PriceStatistics: React.FC<PropsType> = ({ currency, symbol, data })
       </PriceStatisticsGroup>
       {show && (
         <div>
-          <PriceStatisticsGroup title={`${currency} Price History`}>
+          <PriceStatisticsGroup title={`${currency.name} Price History`}>
             <PriceStatisticsItem
               title={'All Time High'}
               value={formatDollar(data.ath.usd, 20)}
@@ -104,15 +104,17 @@ export const PriceStatistics: React.FC<PropsType> = ({ currency, symbol, data })
               subValue={formatPercent(data.price_change_percentage_200d_in_currency.usd)}
             />
           </PriceStatisticsGroup>
-          <PriceStatisticsGroup title={`${currency} Supply`}>
+          <PriceStatisticsGroup title={`${currency.name} Supply`}>
             <PriceStatisticsItem
               title={'Circulating Supply'}
-              value={`${formatCurrency(data.circulating_supply)} ${symbol.toUpperCase()}`}
+              value={`${formatCurrency(data.circulating_supply)} ${currency.symbol.toUpperCase()}`}
             />
             <PriceStatisticsItem
               title={'Max Supply'}
               value={
-                data.max_supply ? `${formatCurrency(data.max_supply)} ${symbol.toUpperCase()}` : '∞'
+                data.max_supply
+                  ? `${formatCurrency(data.max_supply)} ${currency.symbol.toUpperCase()}`
+                  : '∞'
               }
             />
           </PriceStatisticsGroup>

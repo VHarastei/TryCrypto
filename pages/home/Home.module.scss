@@ -7,6 +7,10 @@
 // .miniPortfolio > * + * {
 //   margin-left: 24px;  //or gap: 24px;
 // }
+.portfolioBalance {
+  display: flex;
+  justify-content: space-between;
+}
 .inviteUrl {
   font-size: 18px;
   border: 1px solid $gray;

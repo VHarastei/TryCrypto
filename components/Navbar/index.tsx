@@ -1,11 +1,11 @@
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import educationIcon from 'public/static/education.png';
-import homeIcon from 'public/static/home.png';
+import educationIcon from 'public/static/education.svg';
+import homeIcon from 'public/static/home.svg';
 import logoIcon from 'public/static/logo.png';
-import marketIcon from 'public/static/market.png';
-import portfolioIcon from 'public/static/portfolio.png';
-import userIcon from 'public/static/user.png';
+import marketIcon from 'public/static/market.svg';
+import portfolioIcon from 'public/static/portfolio.svg';
+import userIcon from 'public/static/user.svg';
 import backIcon from 'public/static/back.svg';
 import React from 'react';
 import styles from './Navbar.module.scss';

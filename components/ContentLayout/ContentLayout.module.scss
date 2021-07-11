@@ -23,3 +23,19 @@
     }
   }
 }
+.halfs {
+  width: 100%;
+  @media all and (max-width: 1024px) {
+    & > * {
+      min-width: 100%;
+    }
+  }
+  & > * {
+    //first-child
+    max-width: 50%;
+  }
+  & > * + * {
+    //last-child
+    // width: 50%;
+  }
+}

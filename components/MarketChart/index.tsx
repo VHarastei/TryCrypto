@@ -23,10 +23,7 @@ export type ChartData = {
   market_caps: ChartArray[];
   total_volumes: ChartArray[];
 };
-export type ChartArray = {
-  0: number;
-  1: number;
-};
+export type ChartArray = [number, number];
 
 export const MarketChart: React.FC<PropsType> = ({ currencyId, marketData }) => {
   const [dataInterval, setDataInterval] = useState(intervals[1].value);
@@ -38,7 +35,7 @@ export const MarketChart: React.FC<PropsType> = ({ currencyId, marketData }) => 
     fetcher,
     { refreshInterval: 30000 }
   );
-
+  console.log(JSON.stringify(data?.prices));
   // const { data: brushChartData } = useSWR<ChartData>(
   //   MarketApi.getMarketChartUrl(currencyId, 'max'),
   //   fetcher,

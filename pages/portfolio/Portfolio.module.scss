@@ -6,7 +6,11 @@
   justify-content: space-between;
   padding: 16px;
   .headerItem {
-    margin-right: 200px;
+    margin-right: 170px;
+    @media all and (max-width: 1024px) {
+      margin-right: 50px;
+    }
+
     .headerItemValueContainer {
       margin-top: 6px;
       display: flex;

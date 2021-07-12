@@ -10,7 +10,7 @@
     justify-content: center;
     color: $gray;
     .currency {
-      font-size: 30px;
+      font-size: 26px;
       font-weight: 500;
     }
     input::-webkit-outer-spin-button,
@@ -29,9 +29,11 @@
       outline: none;
       font-size: 58px;
       color: $primary;
-      max-width: 230px;
+      //max-width: 240px;
+      width: 100%;
+
       -moz-appearance: textfield;
-      margin-left: 6px;
+      margin: 0px 6px;
     }
   }
   .switchCurrencyContainer {
@@ -88,5 +90,5 @@
   padding: 0;
   padding: 16px;
   width: 100%;
-  margin-bottom: 16px;
+  //margin-bottom: 16px;
 }

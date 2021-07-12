@@ -17,7 +17,7 @@ type PropsType = {
 };
 
 export const BuySell: React.FC<PropsType> = ({ action, currency }) => {
-  const { amount, setAmount, onChange } = useControlAmount(4, 2);
+  const { amount, setAmount, onChange } = useControlAmount(12, 2);
   const [inputCurrency, setInputCurrency] = useState<string | 'USD'>('USD');
 
   const switchInputCurrency = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -25,14 +25,13 @@ export const BuySell: React.FC<PropsType> = ({ action, currency }) => {
     //TODO: convert amount
     setAmount('');
   };
-
   //console.log(parseFloat(amount));
   return (
-    <Paper>
+    <div>
       <div className={styles.inputContainer}>
         <div className={styles.input}>
           <span className={`${styles.currency} ${amount && styles.active}`}>
-            {inputCurrency === 'USD' ? '$' : currency.symbol}
+            {inputCurrency === 'USD' ? '$' : currency.symbol.toUpperCase()}
           </span>
           <input placeholder="0" value={amount} onChange={onChange} />
         </div>
@@ -50,7 +49,7 @@ export const BuySell: React.FC<PropsType> = ({ action, currency }) => {
           <Button color="secondary">Max</Button>
         ) : (
           <Typography variant="thinText" color="gray">
-            You can buy up to 10,000.00
+            Amount is a required
           </Typography>
         )}
       </div>
@@ -79,6 +78,6 @@ export const BuySell: React.FC<PropsType> = ({ action, currency }) => {
         </div>
       </div>
       <Button className={styles.button}>{action}</Button>
-    </Paper>
+    </div>
   );
 };

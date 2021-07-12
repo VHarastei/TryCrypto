@@ -3,13 +3,16 @@
 .container {
   display: flex;
   //align-items: center;
-  margin-left: 16px;
+  width: 100%;
+  justify-content: space-between;
+  //margin: 0px 16px;
   .chart {
     height: 220px;
     width: 220px;
+    //margin: 0px 16px;
   }
   .chartItemsContainer {
-    margin: 0px 48px;
+    //margin-right: 16px;
     .chartItem {
       display: flex;
       align-items: center;

@@ -1,65 +1,16 @@
 import { Typography } from 'components/Typography';
+import { formatPercent } from 'helpers/formatPercent';
 import Link from 'next/link';
+import { Asset } from 'pages/portfolio';
 import React from 'react';
 import { VictoryContainer, VictoryPie } from 'victory';
 import styles from './PieChart.module.scss';
 
 type PropsType = {
-  className?: string;
+  data: Asset[];
 };
 
-export const PieChart: React.FC<PropsType> = ({ className }) => {
-  const data = [
-    {
-      id: 'usd',
-      name: 'USD',
-      amount: 132.003241,
-      percentageAmount: 34,
-    },
-    {
-      id: 'bitcoin',
-      name: 'Bitcoin',
-      amount: 0.002345,
-      percentageAmount: 25,
-    },
-    {
-      id: 'matic-network',
-      name: 'Matic',
-      amount: 5.212464,
-      percentageAmount: 16,
-    },
-    {
-      id: 'ethereum',
-      name: 'Ethereum',
-      amount: 12.768444,
-      percentageAmount: 15,
-    },
-    {
-      id: 'cardano',
-      name: 'Cardano',
-      amount: 1.456784,
-      percentageAmount: 5,
-    },
-    {
-      id: 'solana',
-      name: 'Solana',
-      amount: 0.123545,
-      percentageAmount: 4,
-    },
-    {
-      id: 'dia',
-      name: 'DIA',
-      amount: 0.124556,
-      percentageAmount: 3,
-    },
-    {
-      id: 'ripple',
-      name: 'XRP',
-      amount: 0.000341,
-      percentageAmount: 3,
-    },
-  ];
-
+export const PieChart: React.FC<PropsType> = ({ data }) => {
   type ChartData = {
     x: string;
     y: number;
@@ -70,11 +21,11 @@ export const PieChart: React.FC<PropsType> = ({ className }) => {
     if (index <= 3)
       results.push({
         x: item.name,
-        y: item.percentageAmount,
+        y: item.pricePercentage,
       });
 
     if (index >= 4) {
-      otherCurrencies += item.percentageAmount;
+      otherCurrencies += item.pricePercentage;
       if (data.length - 1 === index)
         results.push({
           x: 'Other',
@@ -113,10 +64,12 @@ export const PieChart: React.FC<PropsType> = ({ className }) => {
                         styles[`bg_${chartColors[index].slice(1)}`]
                       }`}
                     ></div>
-                    <Typography variant="regularText">{item.name}</Typography>
+                    <Typography variant="regularText">{item.symbol.toUpperCase()}</Typography>
                   </div>
                   <div>
-                    <Typography variant="mediumText">{item.amount}</Typography>
+                    <Typography variant="mediumText">
+                      {formatPercent(item.pricePercentage)}
+                    </Typography>
                   </div>
                 </a>
               </Link>

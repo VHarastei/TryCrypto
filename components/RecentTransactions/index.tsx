@@ -62,7 +62,7 @@ export const RecentTransactions: React.FC<PropsType> = ({ withPadding, currency 
       withPadding={withPadding}
     >
       <div>
-        {currency ? (
+        {transactions ? (
           <div>
             {transactions.map((txn, index) => {
               return <Transaction key={txn.date + index} {...txn} />;
@@ -107,12 +107,14 @@ const Transaction: React.FC<Transaction> = ({
   return (
     <div className={styles.transactionContainer}>
       <div className={styles.nameContainer}>
-        <div className={styles.actionType}>{type === 'buy' ? 'Buy' : 'Sell'}</div>
+        <div className={styles.actionType}>
+          {type === 'buy' ? 'Buy' : type === 'sell' ? 'Sell' : 'Rec'}
+        </div>
         <div className={styles.date}>
-          <Typography variant="thinText" color="gray">
-            {month}
+          <Typography variant="thinText">{month}</Typography>
+          <Typography variant="regularText" color="gray">
+            {day}
           </Typography>
-          <Typography variant="regularText">{day}</Typography>
         </div>
         <div>
           <Typography variant="regularText">{`${

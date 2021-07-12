@@ -1,3 +1,4 @@
+import { BarChart } from 'components/BarChart';
 import { Card } from 'components/Card';
 import { ContentLayout } from 'components/ContentLayout';
 import { Layout } from 'components/Layout';
@@ -6,231 +7,127 @@ import { CustomChart } from 'components/MarketChart/CustomChart';
 import { Paper } from 'components/Paper';
 import { PieChart } from 'components/PieChart';
 import { PriceChangeField } from 'components/PriceChangeField';
+import { RecentTransactions } from 'components/RecentTransactions';
 import { Typography } from 'components/Typography';
-import { format } from 'date-fns';
 import { formatDollar } from 'helpers/formatDollar';
+import Link from 'next/link';
+import { Currency } from 'pages/market/[currencyId]';
 import React from 'react';
-import {
-  VictoryAxis,
-  VictoryBar,
-  VictoryChart,
-  VictoryTheme,
-  VictoryVoronoiContainer,
-} from 'victory';
 import styles from './Portfolio.module.scss';
 
-export default function Portfolio() {
-  const data = {
-    balance: 32.52,
-    yesterdaysPNL: 2.65,
-    yesterdaysPNLChange: 1.21,
-    thirtydaysPNL: -8.12,
-    thirtydaysPNLChange: -3.56,
-  };
+export interface Asset extends Currency {
+  amount: number;
+  pricePercentage: number;
+  price: number;
+}
 
+export default function Portfolio() {
   return (
-    <div>
-      <Layout>
-        <Paper className={styles.header}>
+    <Layout>
+      <Paper className={styles.header}>
+        <div className={styles.headerItem}>
+          <Typography variant="mediumText" color="gray">
+            Estimated Balance
+          </Typography>
+          <div className={styles.headerItemValueContainer}>
+            <span className={styles.headerItemValue}>{formatDollar(data.balance, 20)}</span>
+          </div>
+        </div>
+        <div className={styles.headerPnls}>
           <div className={styles.headerItem}>
             <Typography variant="mediumText" color="gray">
-              Estimated Balance
+              Yesterday's PNL
             </Typography>
             <div className={styles.headerItemValueContainer}>
-              <span className={styles.headerItemValue}>{formatDollar(data.balance, 20)}</span>
+              <span className={styles.headerItemValue}>
+                {`${data.yesterdaysPNL > 0 ? '+' : ''}${formatDollar(data.yesterdaysPNL, 20)}`}
+              </span>
+              <PriceChangeField fs="fs-16" fw="fw-500" value={data.yesterdaysPNLChange} />
             </div>
           </div>
-          <div className={styles.headerPnls}>
-            <div className={styles.headerItem}>
-              <Typography variant="mediumText" color="gray">
-                Yesterday's PNL
-              </Typography>
-              <div className={styles.headerItemValueContainer}>
-                <span className={styles.headerItemValue}>
-                  {`${data.yesterdaysPNL > 0 ? '+' : ''}${formatDollar(data.yesterdaysPNL, 20)}`}
-                </span>
-                <PriceChangeField fs="fs-16" fw="fw-500" value={data.yesterdaysPNLChange} />
-              </div>
-            </div>
-            <div className={styles.headerItem}>
-              <Typography variant="mediumText" color="gray">
-                30 day's PNL
-              </Typography>
-              <div className={styles.headerItemValueContainer}>
-                <span className={styles.headerItemValue}>
-                  {`${data.thirtydaysPNL > 0 ? '+' : ''}${formatDollar(data.thirtydaysPNL, 20)}`}
-                </span>
-                <PriceChangeField fs="fs-16" fw="fw-500" value={data.thirtydaysPNLChange} />
-              </div>
+          <div className={styles.headerItem}>
+            <Typography variant="mediumText" color="gray">
+              30 day's PNL
+            </Typography>
+            <div className={styles.headerItemValueContainer}>
+              <span className={styles.headerItemValue}>
+                {`${data.thirtydaysPNL > 0 ? '+' : ''}${formatDollar(data.thirtydaysPNL, 20)}`}
+              </span>
+              <PriceChangeField fs="fs-16" fw="fw-500" value={data.thirtydaysPNLChange} />
             </div>
           </div>
-        </Paper>
-        <ContentLayout type="halfs">
+        </div>
+      </Paper>
+      <ContentLayout type="halfs">
+        <Card title="Asset Net Worth">
+          <CustomChart data={assetNetWorth} dataInterval={'30'} />
+        </Card>
+        <Card title="Daily PNL">
+          <BarChart />
+        </Card>
+      </ContentLayout>
+      <ContentLayout type="halfs">
+        <div>
+          <Card title="Your Assets">
+            <div className={styles.assetsTable}>
+              <div className={styles.assetsTableHeader}>
+                <Typography className={styles.assetsTableAsset} color="gray">
+                  Asset
+                </Typography>
+                <Typography className={styles.assetsTableAmount} color="gray">
+                  Amount
+                </Typography>
+                <Typography className={styles.assetsTablePrice} color="gray">
+                  Price
+                </Typography>
+              </div>
+              <div>
+                {assets.map((asset) => {
+                  return <AssetsTableRow asset={asset} />;
+                })}
+              </div>
+            </div>
+          </Card>
+        </div>
+        <div className={styles.allocationContainer}>
           <div>
-            <Card title="Asset Net Worth">
-              <CustomChart data={assetNetWorth} dataInterval={'30'} />
+            <Card title="Asset Allocation" withPadding>
+              <PieChart data={assets} />
             </Card>
           </div>
           <div>
-            <Card title="Daily PNL">
-              <VictoryChart
-                animate={{ duration: 300, onLoad: { duration: 300 } }}
-                width={1000}
-                height={400}
-                padding={{ left: 0, top: 32, bottom: 32, right: 0 }}
-                domainPadding={{ x: 50, y: 20 }}
-                containerComponent={
-                  <VictoryVoronoiContainer
-                    voronoiDimension="x"
-                    labels={() => ` `}
-                    portalZIndex={99}
-                    labelComponent={<CustomTooltip />}
-                  />
-                }
-              >
-                <VictoryBar
-                  barWidth={20}
-                  events={[
-                    {
-                      target: 'data',
-                      eventHandlers: {
-                        onMouseEnter: () => [
-                          {
-                            target: 'data',
-                            mutation: () => ({
-                              style: {
-                                stroke: '#ffffff',
-                                fill: (data: any) => (data.datum.y < 0 ? '#f84960' : '#02c076'),
-                                transition: '0.3s',
-                              },
-                            }),
-                          },
-                        ],
-                        onMouseLeave: () => [
-                          {
-                            target: 'data',
-                            mutation: () => ({
-                              style: {
-                                fill: (data: any) => (data.datum.y < 0 ? '#f84960' : '#02c076'),
-                                transition: '0.3s',
-                              },
-                            }),
-                          },
-                        ],
-                      },
-                    },
-                  ]}
-                  style={{
-                    data: {
-                      fill: (data) => (data.datum.y < 0 ? '#f84960' : '#02c076'),
-                      strokeWidth: 2,
-                    },
-                  }}
-                  data={dailyPNL.map((item) => ({
-                    x: item[0],
-                    y: item[1],
-                  }))}
-                />
-                <VictoryAxis
-                  fixLabelOverlap
-                  domainPadding={{ x: 10 }}
-                  offsetY={32}
-                  orientation="bottom"
-                  style={{
-                    axis: {
-                      stroke: '#7b7f82',
-                      strokeWidth: 1,
-                    },
-                    tickLabels: {
-                      fontSize: 16,
-                      fill: '#7b7f82',
-                    },
-                  }}
-                  tickFormat={(x) => format(x, 'MMM d')}
-                />
-              </VictoryChart>
-            </Card>
+            <RecentTransactions />
           </div>
-        </ContentLayout>
-      </Layout>
-    </div>
+        </div>
+      </ContentLayout>
+    </Layout>
   );
 }
 
-const CustomTooltip = (props: any) => {
-  const { x, y, datum } = props;
-
+type AssetsTableRowPropsType = {
+  asset: Asset;
+};
+const AssetsTableRow: React.FC<AssetsTableRowPropsType> = ({ asset }) => {
   return (
-    <foreignObject style={{ pointerEvents: 'none' }} x={x - 50} width="100" height="100%">
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          flexDirection: 'column',
-          position: 'relative',
-          height: `100%`,
-          padding: `4px`,
-          background: 'white',
-          color: 'black',
-          borderRadius: '4px',
-        }}
-      >
-        <div style={{ fontSize: 22, fontWeight: 700 }}>{`${datum.y > 0 ? '+' : ''}${formatDollar(
-          datum.y > 999 ? datum.y.toFixed(0) : datum.y,
-          20
-        )}`}</div>
-        <div style={{ fontSize: 16, fontWeight: 700, color: '#7b7f82' }}>
-          {format(datum.x, 'MMM d')}
+    <Link href={`market/${asset.id}`}>
+      <a className={styles.tableRowContainer}>
+        <div className={styles.assetsTableAsset}>
+          <img src={asset.image} alt={`${asset.symbol} icon`} width={30} height={30} />
+          <div className={styles.assetsTableAssetName}>
+            <Typography variant="regularText">{asset.name}</Typography>
+          </div>
+          <Typography variant="regularText" color="gray">
+            {asset.symbol.toUpperCase()}
+          </Typography>
         </div>
-      </div>
-      <div
-        style={{
-          backgroundColor: 'white',
-          height: 310,
-          width: 30,
-          zIndex: -99,
-          opacity: 0.1,
-          position: 'absolute',
-          left: 35,
-        }}
-      ></div>
-    </foreignObject>
+
+        <Typography className={styles.assetsTableAmount}>{asset.amount}</Typography>
+        <Typography className={styles.assetsTablePrice}>{formatDollar(asset.price, 20)}</Typography>
+      </a>
+    </Link>
   );
 };
 
-const dailyPNL = [
-  [1618250777082, 5.15],
-  [1618354443436, 8.15],
-  [1618457645089, -6.15],
-  [1618561439665, 2.15],
-  [1618665395682, -56.15],
-  [1618768780138, 6.15],
-  [1618872165405, -1.15],
-  [1618976029311, -4.15],
-  [1619079460878, 3.15],
-  [1619183120815, 6.15],
-  [1619286744216, 12.15],
-  [1619390172070, 24.15],
-  [1619494443828, 36.15],
-  [1619597454159, 64.15],
-  [1619601003611, 75.15],
-  [1619704696724, 99.15],
-  [1619808716961, 101.15],
-  [1619912151941, -43.15],
-  [1620015302758, -33.15],
-  [1620119013315, -12.15],
-  [1620222867335, -4.15],
-  [1620326101733, 4.15],
-  [1620429924005, 12.15],
-  [1620533537848, 19.15],
-  [1620637315950, 28.15],
-  [1620740638154, 56.15],
-  [1620844291450, -85.15],
-  [1620947895997, -8.15],
-  [1621051640232, 5.15],
-  [1621154903364, -3.15],
-  [1621258689100, 75.15],
-];
 const assetNetWorth: ChartArray[] = [
   [1626002996433, 32.23635896383309],
   [1626003298251, 32.278343677327044],
@@ -257,4 +154,89 @@ const assetNetWorth: ChartArray[] = [
   [1626009598388, 31.944122060442897],
   [1626009880506, 31.949071470811706],
   [1626010043000, 31.98347751056691],
+];
+
+const data = {
+  balance: 32.52,
+  yesterdaysPNL: 2.65,
+  yesterdaysPNLChange: 1.21,
+  thirtydaysPNL: -8.12,
+  thirtydaysPNLChange: -3.56,
+};
+
+const assets: Asset[] = [
+  {
+    id: 'tether',
+    name: 'USD',
+    symbol: 'usd',
+    image: 'https://s2.coinmarketcap.com/static/img/coins/64x64/825.png',
+    amount: 132.003241,
+    pricePercentage: 34.23,
+    price: 132.01,
+  },
+  {
+    id: 'bitcoin',
+    name: 'Bitcoin',
+    symbol: 'btc',
+    image: 'https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1547033579',
+    amount: 0.002345,
+    pricePercentage: 25.11,
+    price: 112.53,
+  },
+  {
+    id: 'matic-network',
+    name: 'Polygon',
+    symbol: 'matic',
+    image: 'https://assets.coingecko.com/coins/images/4713/large/matic-token-icon.png?1624446912',
+    amount: 102.212464,
+    pricePercentage: 16.01,
+    price: 95.34,
+  },
+  {
+    id: 'ethereum',
+    name: 'Ethereum',
+    symbol: 'eth',
+    image: 'https://assets.coingecko.com/coins/images/279/large/ethereum.png?1595348880',
+    amount: 0.068444,
+    pricePercentage: 15.21,
+    price: 90.24,
+  },
+  {
+    id: 'cardano',
+    name: 'Cardano',
+    symbol: 'ada',
+    image: 'https://assets.coingecko.com/coins/images/975/large/cardano.png?1547034860',
+    amount: 1.456784,
+    pricePercentage: 5.24,
+    price: 34.95,
+  },
+  {
+    id: 'solana',
+    name: 'Solana',
+    symbol: 'sol',
+    image:
+      'https://assets.coingecko.com/coins/images/4128/large/coinmarketcap-solana-200.png?1616489452',
+    amount: 1.023545,
+    pricePercentage: 4.97,
+    price: 31.95,
+  },
+  {
+    id: 'dia-data',
+    name: 'DIA',
+    symbol: 'DIA',
+    image:
+      'https://assets.coingecko.com/coins/images/11955/large/DIA-icon-colour_%281%29.png?1596423488',
+    amount: 15.124556,
+    pricePercentage: 3.42,
+    price: 20.2,
+  },
+  {
+    id: 'ripple',
+    name: 'XRP',
+    symbol: 'xrp',
+    image: 'https://assets.coingecko.com/coins/images/44/large/xrp-symbol-white-128.png?1605778731',
+    amount: 30.000341,
+    pricePercentage: 3.11,
+    price: 15.84,
+  },
 ];

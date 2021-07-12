@@ -26,3 +26,45 @@
     display: flex;
   }
 }
+
+.assetsTable {
+  .assetsTableHeader {
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid $gray;
+  }
+  .assetsTableAsset {
+    flex-basis: 50%;
+    display: flex;
+    align-items: center;
+    .assetsTableAssetName {
+      margin: 0px 10px;
+    }
+  }
+  .assetsTableAmount {
+    flex-basis: 25%;
+    text-align: end;
+  }
+  .assetsTablePrice {
+    flex-basis: 25%;
+    text-align: end;
+  }
+}
+.tableRowContainer {
+  cursor: pointer;
+  padding: 12px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid $gray;
+  &:hover {
+    background-color: $secondary;
+  }
+}
+.allocationContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0px;
+}

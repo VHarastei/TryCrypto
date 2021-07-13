@@ -1,0 +1,2 @@
+npx sequelize-cli model:generate --name Asset --attributes amount:DOUBLE
+npx sequelize-cli seed:generate --name asset

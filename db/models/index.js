@@ -23,8 +23,9 @@ fs.readdirSync(models)
     return file.indexOf('.') !== 0 && file !== basename && file.slice(-3) === '.js';
   })
   .forEach((file) => {
-    /* const model = sequelize["import"](path.join(__dirname, file)); */
-    const model = sequelize['import'](path.join(models, file));
+    if (file === 'index.js') return;
+    const model = require(`db/models/${file}`)(sequelize, Sequelize.DataTypes);
+
     db[model.name] = model;
   });
 

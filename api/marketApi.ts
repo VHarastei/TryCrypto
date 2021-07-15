@@ -1,4 +1,15 @@
-import { instance } from 'api';
+import axios from 'axios';
+
+const instance = axios.create({
+  baseURL: 'https://api.coingecko.com/api/v3/',
+});
+
+export const fetcher = (...urls: string[]) => {
+  const f = (u: string) => instance.get(u).then((r) => r.data);
+  if (urls.length > 1) return Promise.all(urls.map(f));
+
+  return f(urls[0]);
+};
 
 export type TableCoin = {
   ordNum: number;
@@ -30,13 +41,6 @@ export type Key =
 export type ListCoin = Pick<TableCoin, 'id' | 'symbol' | 'name'>;
 
 export const MarketApi = {
-  // getTableData: (page: number = 1): Promise<TableCoin[]> => {
-  //   return instance
-  //     .get(
-  //       `coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=${page}&sparkline=false`
-  //     )
-  //     .then(({ data }) => data);
-  // },
   getTableDataUrl: (page: number = 1, ids?: string[]) => {
     return () =>
       `coins/markets?vs_currency=usd${

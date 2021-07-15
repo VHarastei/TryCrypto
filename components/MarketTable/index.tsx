@@ -1,4 +1,4 @@
-import { fetcher } from 'api';
+import { fetcher } from 'api/marketApi';
 import { MarketApi, TableCoin } from 'api/marketApi';
 import { createPagination } from 'helpers/createPagination';
 import Image from 'next/image';

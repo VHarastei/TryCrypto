@@ -1,15 +1,20 @@
+import { GetServerSidePropsContext } from 'next';
 import axios from 'axios';
+import { userApi } from './userApi';
 
-export const instance = axios.create({
-  baseURL: 'https://api.coingecko.com/api/v3/',
-});
+type ApiReturnType = ReturnType<typeof userApi>;
 
-//export const fetcher = (url: string) => instance.get(url).then((res) => res.data);
-export const fetcher = (...urls: string[]) => {
-  const f = (u: string) => instance.get(u).then((r) => r.data);
+// TODO: Типизировать
+export const Api = (ctx: any): ApiReturnType => {
+  // const cookies = Cookies.get(ctx);
+  // const token = cookies.token;
 
-  if (urls.length > 1) {
-    return Promise.all(urls.map(f));
-  }
-  return f(urls[0]);
+  const instance = axios.create({
+    baseURL: 'http://localhost:3000/api',
+    // headers: {
+    //   Authorization: 'Bearer ' + token,
+    // },
+  });
+
+  return [userApi].reduce((prev, f) => ({ ...prev, ...f(instance) }), {} as ApiReturnType);
 };

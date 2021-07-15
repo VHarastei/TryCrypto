@@ -1,4 +1,4 @@
-import { fetcher } from 'api';
+import { fetcher } from 'api/marketApi';
 import { MarketApi } from 'api/marketApi';
 import { Button } from 'components/Button';
 import { BuySellCard } from 'components/BuySellCard';

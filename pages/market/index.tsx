@@ -1,4 +1,4 @@
-import { fetcher } from 'api';
+import { fetcher } from 'api/marketApi';
 import { ListCoin, MarketApi, TableCoin } from 'api/marketApi';
 import { ContentLayout } from 'components/ContentLayout';
 import { Layout } from 'components/Layout';

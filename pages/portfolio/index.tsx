@@ -1,3 +1,4 @@
+import { Api } from 'api';
 import { BarChart } from 'components/BarChart';
 import { Card } from 'components/Card';
 import { ContentLayout } from 'components/ContentLayout';
@@ -10,9 +11,12 @@ import { PriceChangeField } from 'components/PriceChangeField';
 import { RecentTransactions } from 'components/RecentTransactions';
 import { Typography } from 'components/Typography';
 import { formatDollar } from 'helpers/formatDollar';
+import { GetServerSideProps } from 'next';
 import Link from 'next/link';
 import { Currency } from 'pages/market/[currencyId]';
 import React from 'react';
+import { wrapper } from 'store';
+import { setUserPortfolio } from 'store/slices/userSlice';
 import styles from './Portfolio.module.scss';
 
 export interface Asset extends Currency {
@@ -127,6 +131,21 @@ const AssetsTableRow: React.FC<AssetsTableRowPropsType> = ({ asset }) => {
     </Link>
   );
 };
+
+export const getServerSideProps = wrapper.getServerSideProps((store) => async ({ req, res }) => {
+  try {
+    const data = await Api(req).getUserPortfolio();
+    store.dispatch(setUserPortfolio(data));
+    return {
+      props: {},
+    };
+  } catch (err) {
+    console.log(err);
+    return {
+      props: {},
+    };
+  }
+});
 
 const assetNetWorth: ChartArray[] = [
   [1626002996433, 32.23635896383309],

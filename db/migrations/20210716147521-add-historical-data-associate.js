@@ -3,7 +3,7 @@ module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface
       .addColumn(
-        'assets', // name of Source model
+        'HistoricalData', // name of Source model
         'userId', // name of the key we're adding
         {
           type: Sequelize.INTEGER,
@@ -17,12 +17,12 @@ module.exports = {
       )
       .then(() => {
         return queryInterface.addColumn(
-          'assets', // name of Source model
-          'currencyId', // name of the key we're adding
+          'Balances', // name of Source model
+          'historicalDataId', // name of the key we're adding
           {
-            type: Sequelize.STRING,
+            type: Sequelize.INTEGER,
             references: {
-              model: 'Currencies', // name of Target model
+              model: 'HistoricalData', // name of Target model
               key: 'id', // key in Target model that we're referencing
             },
             onUpdate: 'CASCADE',
@@ -32,12 +32,12 @@ module.exports = {
       })
       .then(() => {
         return queryInterface.addColumn(
-          'transactions', // name of Source model
-          'assetId', // name of the key we're adding
+          'PNLs', // name of Source model
+          'historicalDataId', // name of the key we're adding
           {
             type: Sequelize.INTEGER,
             references: {
-              model: 'assets', // name of Target model
+              model: 'HistoricalData', // name of Target model
               key: 'id', // key in Target model that we're referencing
             },
             onUpdate: 'CASCADE',
@@ -49,19 +49,19 @@ module.exports = {
   down: (queryInterface, Sequelize) => {
     return queryInterface
       .removeColumn(
-        'assets', // name of Source model
+        'HistoricalData', // name of Source model
         'userId' // key we want to remove
       )
       .then(() => {
         queryInterface.removeColumn(
-          'assets', // name of Source model
-          'currencyId' // key we want to remove
+          'Balances', // name of Source model
+          'historicalDataId' // key we want to remove
         );
       })
       .then(() => {
         queryInterface.removeColumn(
-          'transactions', // name of Source model
-          'assetId' // key we want to remove
+          'PNLs', // name of Source model
+          'historicalDataId' // key we want to remove
         );
       });
   },

@@ -1,5 +1,4 @@
 'use strict';
-const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
   const Asset = sequelize.define('Asset', {
@@ -7,8 +6,9 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   Asset.associate = (models) => {
-    Asset.belongsTo(models.User, { foreignKey: 'userId' });
+    Asset.belongsTo(models.User, { as: 'assets', foreignKey: 'userId' });
     Asset.belongsTo(models.Currency, { as: 'currency', foreignKey: 'currencyId' });
+    Asset.hasMany(models.Transaction, { as: 'transactions', foreignKey: 'assetId' });
   };
 
   return Asset;

@@ -1,8 +1,8 @@
 import { Button } from 'components/Button';
 import { Card } from 'components/Card';
 import { format, parseISO } from 'date-fns';
-import { formatDollar } from 'helpers/formatDollar';
-import { formatPercent } from 'helpers/formatPercent';
+import { formatDollar } from 'utils/formatDollar';
+import { formatPercent } from 'utils/formatPercent';
 import { Currency } from 'pages/market/[currencyId]';
 import React from 'react';
 import styles from './PriceStatistics.module.scss';

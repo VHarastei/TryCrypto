@@ -1,5 +1,5 @@
 import { Typography } from 'components/Typography';
-import { formatPercent } from 'helpers/formatPercent';
+import { formatPercent } from 'utils/formatPercent';
 import React from 'react';
 import styles from './PriceChangeField.module.scss';
 

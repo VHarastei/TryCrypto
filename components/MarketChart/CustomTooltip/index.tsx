@@ -1,5 +1,5 @@
 import { format } from 'date-fns';
-import { formatDollar } from 'helpers/formatDollar';
+import { formatDollar } from 'utils/formatDollar';
 
 export const CustomTooltip = (props: any) => {
   const { x, y, datum } = props;

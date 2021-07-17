@@ -1,6 +1,6 @@
 import { fetcher } from 'api/marketApi';
 import { MarketApi, TableCoin } from 'api/marketApi';
-import { createPagination } from 'helpers/createPagination';
+import { createPagination } from 'utils/createPagination';
 import Image from 'next/image';
 import Link from 'next/link';
 import arrowIcon from 'public/static/back.svg';

@@ -1,10 +1,10 @@
 import { Typography } from 'components/Typography';
-import { formatPercent } from 'helpers/formatPercent';
+import { formatPercent } from 'utils/formatPercent';
 import Link from 'next/link';
-import { Asset } from 'pages/portfolio';
 import React from 'react';
 import { VictoryContainer, VictoryPie } from 'victory';
 import styles from './PieChart.module.scss';
+import { Asset } from 'store/slices/userSlice';
 
 type PropsType = {
   data: Asset[];
@@ -20,12 +20,12 @@ export const PieChart: React.FC<PropsType> = ({ data }) => {
   const chartData: ChartData[] = data.reduce((results: ChartData[], item, index) => {
     if (index <= 3)
       results.push({
-        x: item.name,
-        y: item.pricePercentage,
+        x: item.currency.name,
+        y: item.usdValuePercentage,
       });
 
     if (index >= 4) {
-      otherCurrencies += item.pricePercentage;
+      otherCurrencies += item.usdValuePercentage;
       if (data.length - 1 === index)
         results.push({
           x: 'Other',
@@ -56,7 +56,10 @@ export const PieChart: React.FC<PropsType> = ({ data }) => {
         {data.map((item, index) => {
           if (index <= 3)
             return (
-              <Link href={`/market/${item.id === 'usd' ? '' : item.id}`} key={item.id}>
+              <Link
+                href={`/market/${item.currency.id === 'usd' ? '' : item.currency.id}`}
+                key={item.id}
+              >
                 <a className={styles.chartItem}>
                   <div className={styles.chartItemName}>
                     <div
@@ -64,11 +67,13 @@ export const PieChart: React.FC<PropsType> = ({ data }) => {
                         styles[`bg_${chartColors[index].slice(1)}`]
                       }`}
                     ></div>
-                    <Typography variant="regularText">{item.symbol.toUpperCase()}</Typography>
+                    <Typography variant="regularText">
+                      {item.currency.symbol.toUpperCase()}
+                    </Typography>
                   </div>
                   <div>
                     <Typography variant="mediumText">
-                      {formatPercent(item.pricePercentage)}
+                      {formatPercent(item.usdValuePercentage)}
                     </Typography>
                   </div>
                 </a>

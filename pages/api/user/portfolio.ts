@@ -1,61 +1,90 @@
-import { fetcher, MarketApi } from 'api/marketApi';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import nextConnect from 'next-connect';
-import { Currency } from 'pages/market/[currencyId]';
+import { getAssetsMarketData } from 'utils/apiRoutes/getAssetsMarketData';
+import { getTransactions } from 'utils/apiRoutes/getTransactions';
 
 const db = require('db/models/index');
 
-type dbAsset = {
-  id: number;
-  amount: number;
-  currency: Omit<Currency, 'image'>;
-};
-
 const handler = nextConnect().get(async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const dbAssets: dbAsset[] = await db.Asset.findAll({
-      where: { userId: 1 },
-      attributes: { exclude: ['userId', 'currencyId'] },
+    const data = await db.User.findOne({
+      where: { id: 1 },
+      attributes: [],
+      order: [
+        [
+          { model: db.HistoricalData, as: 'historicalData' },
+          { model: db.Balance, as: 'balance' },
+          'date',
+          'ASC',
+        ],
+        [
+          { model: db.HistoricalData, as: 'historicalData' },
+          { model: db.PNL, as: 'PNL' },
+          'date',
+          'ASC',
+        ],
+      ],
       include: [
         {
-          model: db.Currency,
-          as: 'currency',
+          model: db.Asset,
+          as: 'assets',
+          attributes: { exclude: ['userId', 'currencyId'] },
+          include: [{ model: db.Currency, as: 'currency' }],
+        },
+        {
+          model: db.HistoricalData,
+          as: 'historicalData',
+          attributes: { exclude: ['userId'] },
+          include: [
+            {
+              model: db.Balance,
+              as: 'balance',
+              attributes: { exclude: ['id', 'historicalDataId'] },
+            },
+            {
+              model: db.PNL,
+              as: 'PNL',
+              attributes: { exclude: ['id', 'historicalDataId'] },
+            },
+          ],
         },
       ],
     });
-    const assetsMarketData = await Promise.all(
-      dbAssets.map((asset) => {
-        return fetcher(MarketApi.getCurrencyDataUrl(asset.currency.id));
-      })
-    );
+    const { assets, balance } = await getAssetsMarketData(data.assets);
+    const userAssetsId = assets.map((asset) => asset.id);
+    const transactions = await getTransactions(userAssetsId);
 
-    const assets = assetsMarketData.map((mAsset, index) => {
-      return {
-        price: mAsset.market_data.current_price.usd,
-        amount: dbAssets[index].amount,
-        pricePercentage: 0,
-        //price amount ???????????????????????????
-        currency: {
-          id: mAsset.id,
-          name: mAsset.name,
-          symbol: mAsset.symbol,
-          image: mAsset.image.large,
-        },
-      };
-    });
-    let balance = 0;
-    assets.forEach((asset) => (balance += asset.price * asset.amount));
-    assets.forEach((asset, index) => {
-      assets[index].pricePercentage = +(((asset.price * asset.amount) / balance) * 100).toFixed(2);
-    });
+    const calcChange = (a: number, b: number) => +(((b - a) / a) * 100).toFixed(2);
 
-    console.log(assets, balance);
-    // const currencyData = await fetcher(MarketApi.getCurrencyDataUrl('bitcoin'));
-    // console.log(currencyData);
+    const yesterdaysPNL = {
+      usdValue: data.historicalData.PNL[data.historicalData.PNL.length - 1].usdValue,
+      usdValueChangePercetage: calcChange(
+        data.historicalData.balance[data.historicalData.balance.length - 2].usdValue,
+        data.historicalData.balance[data.historicalData.balance.length - 1].usdValue
+      ),
+    };
+    const thirtydaysPNL = {
+      usdValue: +(
+        data.historicalData.balance[data.historicalData.balance.length - 1].usdValue -
+        data.historicalData.balance[0].usdValue
+      ).toFixed(2),
+      usdValueChangePercetage: calcChange(
+        data.historicalData.balance[0].usdValue,
+        data.historicalData.balance[data.historicalData.balance.length - 1].usdValue
+      ),
+    };
+
     res.statusCode = 200;
     res.json({
       status: 'success',
-      data: dbAssets,
+      data: {
+        balance,
+        assets,
+        transactions,
+        yesterdaysPNL,
+        thirtydaysPNL,
+        historicalData: data.historicalData,
+      },
     });
   } catch (err) {
     console.log(err);

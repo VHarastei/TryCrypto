@@ -5,7 +5,7 @@ import { Card } from 'components/Card';
 import { Preloader } from 'components/Preloader';
 import { PriceChangeField } from 'components/PriceChangeField';
 import { Typography } from 'components/Typography';
-import { formatDollar } from 'helpers/formatDollar';
+import { formatDollar } from 'utils/formatDollar';
 import Link from 'next/link';
 import React from 'react';
 import useSWR from 'swr';

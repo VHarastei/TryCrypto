@@ -1,7 +1,7 @@
 import { Key, TableCoin } from 'api/marketApi';
 import { PriceChangeField } from 'components/PriceChangeField';
 import { Typography } from 'components/Typography';
-import { formatDollar } from 'helpers/formatDollar';
+import { formatDollar } from 'utils/formatDollar';
 import { useSortableData } from 'hooks/useSortableData';
 import Image from 'next/image';
 import Link from 'next/link';

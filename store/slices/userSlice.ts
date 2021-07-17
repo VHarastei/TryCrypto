@@ -3,16 +3,47 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { HYDRATE } from 'next-redux-wrapper';
 import { RootState } from 'store';
 
-type PortfolioCurrency = Omit<Currency, 'image'>;
-
-type PortfolioAsset = {
+export type Asset = {
   id: number;
   amount: number;
-  currency: PortfolioCurrency;
+  usdValue: number;
+  usdValuePercentage: number;
+  currencyPrice: number;
+  currency: Currency;
+};
+
+export type Transaction = {
+  id: number;
+  date: string;
+  source: 'market' | 'education';
+  type: 'buy' | 'sell' | 'receive';
+  usdValue: number;
+  amount: number;
+  asset: Pick<Asset, 'amount' | 'currency'>;
+};
+
+export type HistoricalDataItem = {
+  date: string;
+  usdValue: number;
+};
+
+export type HistoricalData = {
+  balance: HistoricalDataItem[];
+  PNL: HistoricalDataItem[];
+};
+
+export type PNL = {
+  usdValue: number;
+  usdValueChangePercetage: number;
 };
 
 export type UserPortfolio = {
-  assets: PortfolioAsset[];
+  balance: number;
+  assets: Asset[];
+  transactions: Transaction[];
+  yesterdaysPNL: PNL;
+  thirtydaysPNL: PNL;
+  historicalData: HistoricalData;
 };
 
 export type UserSliceState = {

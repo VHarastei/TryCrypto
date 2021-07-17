@@ -6,55 +6,31 @@ import { Currency } from 'pages/market/[currencyId]';
 import boughtIcon from 'public/static/bought.svg';
 import soldIcon from 'public/static/sold.png';
 import React from 'react';
+import { Transaction } from 'store/slices/userSlice';
 import styles from './RecentTransaction.module.scss';
 
 type PropsType = {
   withPadding?: boolean;
   currency?: Currency;
+  transactions?: Transaction[];
 };
 
-type Transaction = {
-  date: string;
-  type: 'buy' | 'sell' | 'receive';
-  currencyName: string;
-  currencySymbol: string;
-  source: string;
-  amount: number;
-  price: number;
-};
+// type Transaction = {
+//   date: string;
+//   type: 'buy' | 'sell' | 'receive';
+//   currencyName: string;
+//   currencySymbol: string;
+//   source: string;
+//   amount: number;
+//   price: number;
+// };
 
-export const RecentTransactions: React.FC<PropsType> = ({ withPadding, currency }) => {
+export const RecentTransactions: React.FC<PropsType> = ({
+  transactions,
+  withPadding,
+  currency,
+}) => {
   //request for transactions of actual currency
-
-  const transactions: Transaction[] = [
-    {
-      date: formatISO(Date.now()),
-      type: 'receive',
-      currencyName: 'Bitcoin',
-      currencySymbol: 'BTC',
-      source: 'education',
-      amount: 5.105334,
-      price: 1218.77,
-    },
-    {
-      date: formatISO(Date.now()),
-      type: 'buy',
-      currencyName: 'Bitcoin',
-      currencySymbol: 'BTC',
-      source: 'market',
-      amount: 0.123414,
-      price: 248.41,
-    },
-    {
-      date: formatISO(Date.now()),
-      type: 'sell',
-      currencyName: 'Bitcoin',
-      currencySymbol: 'BTC',
-      source: 'market',
-      amount: 1.341321,
-      price: 3324.12,
-    },
-  ];
 
   return (
     <Card
@@ -65,7 +41,7 @@ export const RecentTransactions: React.FC<PropsType> = ({ withPadding, currency 
         {transactions ? (
           <div>
             {transactions.map((txn, index) => {
-              return <Transaction key={txn.date + index} {...txn} />;
+              return <TransactionItem key={txn.id} {...txn} />;
             })}
           </div>
         ) : (
@@ -91,14 +67,13 @@ const RTTitle: React.FC<RTTitlePropsType> = ({ currency }) => {
   );
 };
 
-const Transaction: React.FC<Transaction> = ({
+const TransactionItem: React.FC<Transaction> = ({
   date,
   type,
-  currencyName,
-  currencySymbol,
   source,
   amount,
-  price,
+  usdValue,
+  asset,
 }) => {
   const parsedDate = parseISO(date);
   const month = format(parsedDate, 'MMM').toUpperCase();
@@ -119,7 +94,7 @@ const Transaction: React.FC<Transaction> = ({
         <div>
           <Typography variant="regularText">{`${
             type === 'buy' ? 'Bought' : type === 'receive' ? 'Received' : 'Sold'
-          } ${currencyName}`}</Typography>
+          } ${asset.currency.name}`}</Typography>
           <Typography variant="thinText" color="gray">
             {`${type === 'buy' || type === 'receive' ? 'From' : 'To'} ${source}`}
           </Typography>
@@ -128,9 +103,9 @@ const Transaction: React.FC<Transaction> = ({
       <div className={styles.priceContainer}>
         <Typography variant="regularText">{`${
           type === 'buy' ? '+' : '-'
-        }${amount} ${currencySymbol}`}</Typography>
+        }${amount} ${asset.currency.symbol.toUpperCase()}`}</Typography>
         <Typography variant="thinText" color="gray">
-          {`${type === 'buy' ? '+' : '-'}$${price} `}
+          {`${type === 'buy' ? '-' : '+'}$${usdValue} `}
         </Typography>
       </div>
     </div>

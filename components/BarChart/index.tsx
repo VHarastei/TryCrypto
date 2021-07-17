@@ -1,5 +1,5 @@
 import { format } from 'date-fns';
-import { formatDollar } from 'helpers/formatDollar';
+import { formatDollar } from 'utils/formatDollar';
 import React from 'react';
 import { VictoryAxis, VictoryBar, VictoryChart, VictoryVoronoiContainer } from 'victory';
 

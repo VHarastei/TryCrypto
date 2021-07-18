@@ -21,8 +21,8 @@ import styles from './Portfolio.module.scss';
 export default function Portfolio() {
   const data = useSelector(selectUserPortfolio);
 
-  if (!data) return <div>nema</div>;
-  console.log(new Date(data?.historicalData.balance[0].date).getTime());
+  //if (!data) return <div>nema</div>;
+  //console.log(new Date(data?.historicalData.balance[0].date).getTime());
 
   return (
     <Layout>
@@ -158,7 +158,7 @@ const AssetsTableRow: React.FC<AssetsTableRowPropsType> = ({ asset }) => {
 
 export const getServerSideProps = wrapper.getServerSideProps((store) => async ({ req, res }) => {
   try {
-    const data = await Api(req).getUserPortfolio();
+    const data = await Api().getUserPortfolio();
     store.dispatch(setUserPortfolio(data));
     return {
       props: {},

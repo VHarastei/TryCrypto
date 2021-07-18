@@ -1,21 +1,30 @@
 import { Banner } from 'components/Banner';
+import { Button } from 'components/Button';
 import { Card } from 'components/Card';
 import { ContentLayout } from 'components/ContentLayout';
 import { Layout } from 'components/Layout';
-import { RecentTransactions } from 'components/RecentTransactions';
+import { Paper } from 'components/Paper';
+import { PieChart } from 'components/PieChart';
 import { Typography } from 'components/Typography';
 import { Watchlist } from 'components/Watchlist';
-import React from 'react';
-import styles from './Home.module.scss';
-import btcIcon from 'public/static/btc.png';
 import Image from 'next/image';
-import { Button } from 'components/Button';
-import { Paper } from 'components/Paper';
-import { VictoryPie } from 'victory';
-import { PieChart } from 'components/PieChart';
-import { Asset } from 'pages/portfolio';
+import btcIcon from 'public/static/btc.png';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectUserPortfolio } from 'store/selectors';
+import { fetchUserAssets } from 'store/slices/userSlice';
+import { formatDollar } from 'utils/formatDollar';
+import styles from './Home.module.scss';
 
 export default function Home() {
+  const portfolio = useSelector(selectUserPortfolio);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (!portfolio.assets.length) {
+      dispatch(fetchUserAssets());
+    }
+  }, []);
+
   return (
     <Layout>
       <Banner
@@ -37,10 +46,10 @@ export default function Home() {
                 Account balance:
               </Typography>
               <Typography fw="fw-500" fs="fs-24">
-                $53.21
+                {formatDollar(portfolio.balance, 20)}
               </Typography>
             </div>
-            <PieChart data={assets} />
+            <PieChart data={portfolio.assets} />
           </div>
         </Card>
 
@@ -117,80 +126,3 @@ export default function Home() {
     </Layout>
   );
 }
-
-const assets: Asset[] = [
-  {
-    id: 'usd',
-    name: 'USD',
-    symbol: 'usd',
-    image: 'https://s2.coinmarketcap.com/static/img/coins/64x64/825.png',
-    amount: 132.003241,
-    pricePercentage: 34.23,
-    price: 132.01,
-  },
-  {
-    id: 'bitcoin',
-    name: 'Bitcoin',
-    symbol: 'btc',
-    image: 'https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1547033579',
-    amount: 0.002345,
-    pricePercentage: 25.11,
-    price: 112.53,
-  },
-  {
-    id: 'matic-network',
-    name: 'Polygon',
-    symbol: 'matic',
-    image: 'https://assets.coingecko.com/coins/images/4713/large/matic-token-icon.png?1624446912',
-    amount: 102.212464,
-    pricePercentage: 16.01,
-    price: 95.34,
-  },
-  {
-    id: 'ethereum',
-    name: 'Ethereum',
-    symbol: 'eth',
-    image: 'https://assets.coingecko.com/coins/images/279/large/ethereum.png?1595348880',
-    amount: 0.068444,
-    pricePercentage: 15.21,
-    price: 90.24,
-  },
-  {
-    id: 'cardano',
-    name: 'Cardano',
-    symbol: 'ada',
-    image: 'https://assets.coingecko.com/coins/images/975/large/cardano.png?1547034860',
-    amount: 1.456784,
-    pricePercentage: 5.24,
-    price: 34.95,
-  },
-  {
-    id: 'solana',
-    name: 'Solana',
-    symbol: 'sol',
-    image:
-      'https://assets.coingecko.com/coins/images/4128/large/coinmarketcap-solana-200.png?1616489452',
-    amount: 1.023545,
-    pricePercentage: 4.97,
-    price: 31.95,
-  },
-  {
-    id: 'dia-data',
-    name: 'DIA',
-    symbol: 'DIA',
-    image:
-      'https://assets.coingecko.com/coins/images/11955/large/DIA-icon-colour_%281%29.png?1596423488',
-    amount: 15.124556,
-    pricePercentage: 3.42,
-    price: 20.2,
-  },
-  {
-    id: 'ripple',
-    name: 'XRP',
-    symbol: 'xrp',
-    image: 'https://assets.coingecko.com/coins/images/44/large/xrp-symbol-white-128.png?1605778731',
-    amount: 30.000341,
-    pricePercentage: 3.11,
-    price: 15.84,
-  },
-];

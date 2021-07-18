@@ -5,7 +5,7 @@ import { userApi } from './userApi';
 type ApiReturnType = ReturnType<typeof userApi>;
 
 // TODO: Типизировать
-export const Api = (ctx: any): ApiReturnType => {
+export const Api = (): ApiReturnType => {
   // const cookies = Cookies.get(ctx);
   // const token = cookies.token;
 

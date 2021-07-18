@@ -1,13 +1,13 @@
 import { fetcher, MarketApi } from 'api/marketApi';
 import { Currency } from 'pages/market/[currencyId]';
 
-type dbAsset = {
+export type DbAsset = {
   id: number;
   amount: number;
   currency: Omit<Currency, 'image'>;
 };
 
-export const getAssetsMarketData = async (dbAssets: dbAsset[]) => {
+export const getAssetsMarketData = async (dbAssets: DbAsset[]) => {
   // const dbAssets: dbAsset[] = await db.Asset.findAll({
   //   where: { userId: 1 },
   //   attributes: { exclude: ['userId', 'currencyId'] },

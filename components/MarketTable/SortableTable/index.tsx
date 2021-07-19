@@ -131,7 +131,6 @@ type TableRowPropsType = {
 };
 
 export const TableRow: React.FC<TableRowPropsType> = React.memo(({ coin }) => {
-  console.log('render');
   return (
     <Link href={`/market/${coin.id}`}>
       <a>

@@ -1,15 +1,13 @@
-import { fetcher } from 'api/marketApi';
-import { MarketApi } from 'api/marketApi';
+import { fetcher, MarketApi } from 'api/marketApi';
 import { Button } from 'components/Button';
 import { BuySellCard } from 'components/BuySellCard';
 import { Card } from 'components/Card';
 import { ContentLayout } from 'components/ContentLayout';
 import { Layout } from 'components/Layout';
 import { MarketChart } from 'components/MarketChart';
-import { Paper } from 'components/Paper';
+import { MarketTransactions } from 'components/MarketTransactions';
 import { Preloader } from 'components/Preloader';
 import { PriceStatistics } from 'components/PriceStatistics';
-import { RecentTransactions } from 'components/RecentTransactions';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import starIcon from 'public/static/star.svg';
@@ -117,7 +115,7 @@ export default function CurrencyPage() {
         ) : (
           <ContentLayout>
             <div>
-              <RecentTransactions currency={currency} />
+              <MarketTransactions currency={currency} />
             </div>
             <div>
               <BuySellCard currency={currency} />

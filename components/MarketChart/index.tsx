@@ -35,7 +35,6 @@ export const MarketChart: React.FC<PropsType> = ({ currencyId, marketData }) => 
     fetcher,
     { refreshInterval: 30000 }
   );
-  console.log(JSON.stringify(data?.prices));
   // const { data: brushChartData } = useSWR<ChartData>(
   //   MarketApi.getMarketChartUrl(currencyId, 'max'),
   //   fetcher,

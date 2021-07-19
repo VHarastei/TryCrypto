@@ -4,6 +4,13 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { HYDRATE } from 'next-redux-wrapper';
 import { RootState } from 'store';
 
+export enum LoadingState {
+  LOADED = 'LOADED',
+  LOADING = 'LOADING',
+  ERROR = 'ERROR',
+  NEVER = 'NEVER',
+}
+
 export type Asset = {
   id: number;
   amount: number;
@@ -53,7 +60,10 @@ export interface MarketAsset extends Omit<Asset, 'usdValuePercentage' | 'currenc
 
 export type UserSliceState = {
   portfolio: UserPortfolio;
-  marketAsset: MarketAsset | null;
+  marketAsset: {
+    data: MarketAsset | null;
+    loadingState: LoadingState;
+  };
 };
 
 const initialState: UserSliceState = {
@@ -65,7 +75,10 @@ const initialState: UserSliceState = {
     thirtydaysPNL: { usdValue: 0, usdValueChangePercetage: 0 },
     historicalData: { balance: [], PNL: [] },
   },
-  marketAsset: null,
+  marketAsset: {
+    data: null,
+    loadingState: LoadingState.NEVER,
+  },
 };
 
 export const fetchUserAssets = createAsyncThunk<{ assets: Asset[]; balance: number } | undefined>(
@@ -79,16 +92,13 @@ export const fetchUserAssets = createAsyncThunk<{ assets: Asset[]; balance: numb
     }
   }
 );
-export const fetchUserMarketAsset = createAsyncThunk<
-  { assets: Asset[]; balance: number } | undefined
->('user/fetchUserMarketAsset', async () => {
-  try {
-    const assets = await Api().getUserAssets();
-    return assets;
-  } catch (error) {
-    console.log('user/fetchUserAssets', error);
+export const fetchUserMarketAsset = createAsyncThunk<MarketAsset, string>(
+  'user/fetchUserMarketAsset',
+  async (currencyId) => {
+    const asset = await Api().getUserMarketAsset(currencyId);
+    return asset;
   }
-});
+);
 
 export const userSlice = createSlice({
   name: 'user',
@@ -107,6 +117,17 @@ export const userSlice = createSlice({
           state.portfolio.balance = action.payload.balance;
         }
       )
+      .addCase(fetchUserMarketAsset.pending.type, (state) => {
+        state.marketAsset.data = null;
+        state.marketAsset.loadingState = LoadingState.LOADING;
+      })
+      .addCase(fetchUserMarketAsset.fulfilled.type, (state, action: PayloadAction<MarketAsset>) => {
+        state.marketAsset.data = action.payload;
+        state.marketAsset.loadingState = LoadingState.LOADED;
+      })
+      .addCase(fetchUserMarketAsset.rejected.type, (state) => {
+        state.marketAsset.loadingState = LoadingState.ERROR;
+      })
       .addCase(HYDRATE as any, (state, action: PayloadAction<RootState>) => {
         state.portfolio = action.payload.user.portfolio;
       }),

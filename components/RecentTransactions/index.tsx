@@ -1,46 +1,22 @@
 import { Card } from 'components/Card';
 import { Typography } from 'components/Typography';
-import { format, parseISO, formatISO } from 'date-fns';
-import Image from 'next/image';
-import { Currency } from 'pages/market/[currencyId]';
-import boughtIcon from 'public/static/bought.svg';
-import soldIcon from 'public/static/sold.png';
+import { format, parseISO } from 'date-fns';
 import React from 'react';
 import { Transaction } from 'store/slices/userSlice';
 import styles from './RecentTransaction.module.scss';
 
 type PropsType = {
   withPadding?: boolean;
-  currency?: Currency;
   transactions?: Transaction[];
 };
 
-// type Transaction = {
-//   date: string;
-//   type: 'buy' | 'sell' | 'receive';
-//   currencyName: string;
-//   currencySymbol: string;
-//   source: string;
-//   amount: number;
-//   price: number;
-// };
-
-export const RecentTransactions: React.FC<PropsType> = ({
-  transactions,
-  withPadding,
-  currency,
-}) => {
-  //request for transactions of actual currency
-
+export const RecentTransactions: React.FC<PropsType> = ({ transactions, withPadding }) => {
   return (
-    <Card
-      title={currency ? () => <RTTitle currency={currency} /> : 'Recent transactions'}
-      withPadding={withPadding}
-    >
+    <Card title={'Recent transactions'} withPadding={withPadding}>
       <div>
         {transactions ? (
           <div>
-            {transactions.map((txn, index) => {
+            {transactions.map((txn) => {
               return <TransactionItem key={txn.id} {...txn} />;
             })}
           </div>
@@ -54,20 +30,7 @@ export const RecentTransactions: React.FC<PropsType> = ({
   );
 };
 
-type RTTitlePropsType = {
-  currency: Currency;
-};
-
-const RTTitle: React.FC<RTTitlePropsType> = ({ currency }) => {
-  return (
-    <div className={styles.rTTitle}>
-      <Typography variant="title">{`Recent ${currency.name} transactions`}</Typography>
-      <Typography variant="title">{`Balance: ${'6.452131'} ${currency.symbol.toLocaleUpperCase()}`}</Typography>
-    </div>
-  );
-};
-
-const TransactionItem: React.FC<Transaction> = ({
+export const TransactionItem: React.FC<Transaction> = ({
   date,
   type,
   source,

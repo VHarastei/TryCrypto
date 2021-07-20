@@ -13,13 +13,14 @@ import Link from 'next/link';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { wrapper } from 'store';
-import { selectUserPortfolio } from 'store/selectors';
-import { Asset, setUserPortfolio } from 'store/slices/userSlice';
+import { selectUserAssets, selectUserPortfolio } from 'store/selectors';
+import { Asset, setUserAssets, setUserPortfolio } from 'store/slices/userSlice';
 import { formatDollar } from 'utils/formatDollar';
 import styles from './Portfolio.module.scss';
 
 export default function Portfolio() {
   const data = useSelector(selectUserPortfolio);
+  const assets = useSelector(selectUserAssets);
 
   //if (!data) return <div>nema</div>;
   //console.log(new Date(data?.historicalData.balance[0].date).getTime());
@@ -103,7 +104,7 @@ export default function Portfolio() {
                 </Typography>
               </div>
               <div>
-                {data.assets.map((asset) => {
+                {assets.map((asset) => {
                   return <AssetsTableRow asset={asset} />;
                 })}
               </div>
@@ -113,11 +114,11 @@ export default function Portfolio() {
         <div className={styles.allocationContainer}>
           <div>
             <Card title="Asset Allocation" withPadding>
-              <PieChart data={data.assets} />
+              <PieChart data={assets} />
             </Card>
           </div>
           <div>
-            <RecentTransactions transactions={data.transactions} />
+            <RecentTransactions transactions={data.recentTransactions} />
           </div>
         </div>
       </ContentLayout>
@@ -159,7 +160,9 @@ const AssetsTableRow: React.FC<AssetsTableRowPropsType> = ({ asset }) => {
 export const getServerSideProps = wrapper.getServerSideProps((store) => async ({ req, res }) => {
   try {
     const data = await Api().getUserPortfolio();
-    store.dispatch(setUserPortfolio(data));
+    const { assets, ...portfolio } = data;
+    store.dispatch(setUserPortfolio(portfolio));
+    store.dispatch(setUserAssets(assets));
     return {
       props: {},
     };

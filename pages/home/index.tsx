@@ -20,9 +20,7 @@ export default function Home() {
   const portfolio = useSelector(selectUserPortfolio);
   const dispatch = useDispatch();
   useEffect(() => {
-    if (!portfolio.assets.length) {
-      dispatch(fetchUserAssets());
-    }
+    dispatch(fetchUserAssets());
   }, []);
 
   return (

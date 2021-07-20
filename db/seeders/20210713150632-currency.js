@@ -18,6 +18,11 @@ module.exports = {
         name: 'Cardano',
         symbol: 'ada',
       },
+      {
+        id: 'tether',
+        name: 'Tether',
+        symbol: 'usdt',
+      },
     ]);
   },
 

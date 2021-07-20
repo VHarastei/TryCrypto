@@ -1,23 +1,31 @@
+import { Transaction } from '../../store/slices/userSlice';
 import { fetcher, MarketApi } from 'api/marketApi';
 import { Currency } from 'pages/market/[currencyId]';
+const db = require('db/models/index');
 
 export type DbAsset = {
   id: number;
   amount: number;
   currency: Omit<Currency, 'image'>;
+  transactions: Transaction[];
 };
 
-export const getAssetsMarketData = async (dbAssets: DbAsset[]) => {
-  // const dbAssets: dbAsset[] = await db.Asset.findAll({
-  //   where: { userId: 1 },
-  //   attributes: { exclude: ['userId', 'currencyId'] },
-  //   include: [
-  //     {
-  //       model: db.Currency,
-  //       as: 'currency',
-  //     },
-  //   ],
-  // });
+export const getAssets = async (userId: number) => {
+  const dbAssets: DbAsset[] = await db.Asset.findAll({
+    where: { userId },
+    attributes: { exclude: ['userId', 'currencyId'] },
+    include: [
+      {
+        model: db.Currency,
+        as: 'currency',
+      },
+      // {
+      //   model: db.Transaction,
+      //   as: 'transactions',
+      //   attributes: { exclude: ['assetId'] },
+      // },
+    ],
+  });
   const assetsMarketData = await Promise.all(
     dbAssets.map((asset) => {
       return fetcher(MarketApi.getCurrencyDataUrl(asset.currency.id));
@@ -37,6 +45,8 @@ export const getAssetsMarketData = async (dbAssets: DbAsset[]) => {
         symbol: mAsset.symbol,
         image: mAsset.image.large,
       },
+      //transactions: dbAssets[index].transactions,
+      transactions: [],
     };
   });
   let balance = 0;

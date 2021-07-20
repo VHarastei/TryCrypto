@@ -1,6 +1,6 @@
 const db = require('db/models/index');
 
-export const getTransactions = async (assetsId: number | number[]) => {
+export const getRecentTransactions = async (assetsId: number | number[]) => {
   const transactions = await db.Transaction.findAll({
     where: { assetId: assetsId },
     attributes: { exclude: ['assetId'] },

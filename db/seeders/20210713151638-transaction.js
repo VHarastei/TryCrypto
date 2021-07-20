@@ -35,6 +35,14 @@ module.exports = {
         usdValue: 503.11,
         amount: 430.004352,
       },
+      {
+        assetId: 3,
+        date: '2021-06-07 00:01:00',
+        source: 'market',
+        type: 'buy',
+        usdValue: 56.53,
+        amount: 56.313241,
+      },
     ]);
   },
 

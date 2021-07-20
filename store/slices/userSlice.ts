@@ -18,6 +18,7 @@ export type Asset = {
   usdValuePercentage: number;
   currencyPrice: number;
   currency: Currency;
+  transactions: Transaction[];
 };
 
 export type Transaction = {
@@ -29,6 +30,10 @@ export type Transaction = {
   amount: number;
   asset: Pick<Asset, 'amount' | 'currency'>;
 };
+
+export interface RecentTransaction extends Transaction {
+  asset: Pick<Asset, 'amount' | 'currency'>;
+}
 
 export type HistoricalDataItem = {
   date: string;
@@ -47,38 +52,44 @@ export type PNL = {
 
 export type UserPortfolio = {
   balance: number;
-  assets: Asset[];
-  transactions: Transaction[];
+  recentTransactions: RecentTransaction[];
   yesterdaysPNL: PNL;
   thirtydaysPNL: PNL;
   historicalData: HistoricalData;
 };
 
-export interface MarketAsset extends Omit<Asset, 'usdValuePercentage' | 'currencyPrice'> {
-  transactions: Omit<Transaction, 'asset'>[];
-}
+// export interface MarketAsset extends Omit<Asset, 'usdValuePercentage' | 'currencyPrice'> {
+//   transactions: Omit<Transaction, 'asset'>[];
+// }
 
 export type UserSliceState = {
   portfolio: UserPortfolio;
-  marketAsset: {
-    data: MarketAsset | null;
+  assets: {
+    items: Asset[];
     loadingState: LoadingState;
   };
+  // marketAsset: {
+  //   data: MarketAsset | null;
+  //   loadingState: LoadingState;
+  // };
 };
 
 const initialState: UserSliceState = {
   portfolio: {
     balance: 0,
-    assets: [],
-    transactions: [],
+    recentTransactions: [],
     yesterdaysPNL: { usdValue: 0, usdValueChangePercetage: 0 },
     thirtydaysPNL: { usdValue: 0, usdValueChangePercetage: 0 },
     historicalData: { balance: [], PNL: [] },
   },
-  marketAsset: {
-    data: null,
+  assets: {
+    items: [],
     loadingState: LoadingState.NEVER,
   },
+  // marketAsset: {
+  //   data: null,
+  //   loadingState: LoadingState.NEVER,
+  // },
 };
 
 export const fetchUserAssets = createAsyncThunk<{ assets: Asset[]; balance: number } | undefined>(
@@ -92,13 +103,15 @@ export const fetchUserAssets = createAsyncThunk<{ assets: Asset[]; balance: numb
     }
   }
 );
-export const fetchUserMarketAsset = createAsyncThunk<MarketAsset, string>(
-  'user/fetchUserMarketAsset',
+export const fetchUserAsset = createAsyncThunk<Asset, string>(
+  'user/fetchUserAsset',
   async (currencyId) => {
-    const asset = await Api().getUserMarketAsset(currencyId);
+    const asset = await Api().getUserAsset(currencyId);
     return asset;
   }
 );
+
+//createAssetTransaction
 
 export const userSlice = createSlice({
   name: 'user',
@@ -107,31 +120,38 @@ export const userSlice = createSlice({
     setUserPortfolio: (state, action: PayloadAction<UserPortfolio>) => {
       state.portfolio = action.payload;
     },
+    setUserAssets: (state, action: PayloadAction<Asset[]>) => {
+      state.assets.items = action.payload;
+    },
   },
   extraReducers: (builder) =>
     builder
       .addCase(
         fetchUserAssets.fulfilled.type,
         (state, action: PayloadAction<{ assets: Asset[]; balance: number }>) => {
-          state.portfolio.assets = action.payload.assets;
+          state.assets.items = action.payload.assets;
           state.portfolio.balance = action.payload.balance;
         }
       )
-      .addCase(fetchUserMarketAsset.pending.type, (state) => {
-        state.marketAsset.data = null;
-        state.marketAsset.loadingState = LoadingState.LOADING;
+      .addCase(fetchUserAsset.pending.type, (state) => {
+        state.assets.loadingState = LoadingState.LOADING;
       })
-      .addCase(fetchUserMarketAsset.fulfilled.type, (state, action: PayloadAction<MarketAsset>) => {
-        state.marketAsset.data = action.payload;
-        state.marketAsset.loadingState = LoadingState.LOADED;
+      .addCase(fetchUserAsset.fulfilled.type, (state, action: PayloadAction<Asset>) => {
+        const currentAssetIndex = state.assets.items.findIndex(
+          (a) => a.currency.id === action.payload.currency.id
+        );
+        //if (currentAssetIndex === -1) state.assets.items.push(action.payload);
+        state.assets.items[currentAssetIndex] = action.payload;
+        state.assets.loadingState = LoadingState.LOADED;
       })
-      .addCase(fetchUserMarketAsset.rejected.type, (state) => {
-        state.marketAsset.loadingState = LoadingState.ERROR;
+      .addCase(fetchUserAsset.rejected.type, (state) => {
+        state.assets.loadingState = LoadingState.ERROR;
       })
       .addCase(HYDRATE as any, (state, action: PayloadAction<RootState>) => {
         state.portfolio = action.payload.user.portfolio;
+        state.assets = action.payload.user.assets;
       }),
 });
 
-export const { setUserPortfolio } = userSlice.actions;
+export const { setUserPortfolio, setUserAssets } = userSlice.actions;
 export const userReducer = userSlice.reducer;

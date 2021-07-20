@@ -1,3 +1,4 @@
+import { Api } from 'api';
 import { fetcher, MarketApi } from 'api/marketApi';
 import { Button } from 'components/Button';
 import { BuySellCard } from 'components/BuySellCard';
@@ -12,6 +13,8 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import starIcon from 'public/static/star.svg';
 import React from 'react';
+import { wrapper } from 'store';
+import { setUserAssets, setUserPortfolio } from 'store/slices/userSlice';
 import useSWR from 'swr';
 import styles from './Market.module.scss';
 
@@ -126,3 +129,18 @@ export default function CurrencyPage() {
     </Layout>
   );
 }
+
+export const getServerSideProps = wrapper.getServerSideProps((store) => async ({ req, res }) => {
+  try {
+    const data = await Api().getUserAssets();
+    store.dispatch(setUserAssets(data.assets));
+    return {
+      props: {},
+    };
+  } catch (err) {
+    console.log(err);
+    return {
+      props: {},
+    };
+  }
+});

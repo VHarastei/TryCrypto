@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import nextConnect from 'next-connect';
-import { getAssetsMarketData } from 'utils/apiRoutes/getAssetsMarketData';
-import { getTransactions } from 'utils/apiRoutes/getTransactions';
+import { getAssets } from 'utils/apiRoutes/getAssets';
+import { getRecentTransactions } from 'utils/apiRoutes/getRecentTransactions';
 
 const db = require('db/models/index');
 
@@ -25,12 +25,12 @@ const handler = nextConnect().get(async (req: NextApiRequest, res: NextApiRespon
         ],
       ],
       include: [
-        {
-          model: db.Asset,
-          as: 'assets',
-          attributes: { exclude: ['userId', 'currencyId'] },
-          include: [{ model: db.Currency, as: 'currency' }],
-        },
+        // {
+        //   model: db.Asset,
+        //   as: 'assets',
+        //   attributes: { exclude: ['userId', 'currencyId'] },
+        //   include: [{ model: db.Currency, as: 'currency' }],
+        // },
         {
           model: db.HistoricalData,
           as: 'historicalData',
@@ -50,9 +50,9 @@ const handler = nextConnect().get(async (req: NextApiRequest, res: NextApiRespon
         },
       ],
     });
-    const { assets, balance } = await getAssetsMarketData(data.assets);
+    const { assets, balance } = await getAssets(1);
     const userAssetsId = assets.map((asset) => asset.id);
-    const transactions = await getTransactions(userAssetsId);
+    const recentTransactions = await getRecentTransactions(userAssetsId);
 
     const calcChange = (a: number, b: number) => +(((b - a) / a) * 100).toFixed(2);
 
@@ -80,7 +80,7 @@ const handler = nextConnect().get(async (req: NextApiRequest, res: NextApiRespon
       data: {
         balance,
         assets,
-        transactions,
+        recentTransactions,
         yesterdaysPNL,
         thirtydaysPNL,
         historicalData: data.historicalData,

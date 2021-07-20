@@ -11,10 +11,6 @@
   border: 0;
   padding: 8px 16px;
 }
-.fullWidth {
-  padding: 16px;
-  width: 100%;
-}
 .primary {
   background-color: $primary;
   &:hover {
@@ -26,4 +22,15 @@
   &:hover {
     background-color: #35373d;
   }
+}
+.disabled {
+  cursor: default;
+  background-color: $gray;
+  &:hover {
+    background-color: $gray;
+  }
+}
+.fullWidth {
+  padding: 16px;
+  width: 100%;
 }

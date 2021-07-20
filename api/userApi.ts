@@ -1,6 +1,9 @@
-import { MarketAsset } from './../store/slices/userSlice';
 import { AxiosInstance } from 'axios';
 import { Asset, UserPortfolio } from 'store/slices/userSlice';
+
+interface UserPortfolioWithAssets extends UserPortfolio {
+  assets: Asset[];
+}
 
 export const userApi = (instance: AxiosInstance) => {
   return {
@@ -8,13 +11,13 @@ export const userApi = (instance: AxiosInstance) => {
     //   const { data } = await instance.get('/auth/me');
     //   return data;
     // },
-    getUserPortfolio: (): Promise<UserPortfolio> => {
+    getUserPortfolio: (): Promise<UserPortfolioWithAssets> => {
       return instance.get('/user/portfolio').then(({ data }) => data.data);
     },
     getUserAssets: (): Promise<{ assets: Asset[]; balance: number }> => {
       return instance.get('/user/assets').then(({ data }) => data.data);
     },
-    getUserMarketAsset: (currencyId: string): Promise<MarketAsset> => {
+    getUserAsset: (currencyId: string): Promise<Asset> => {
       return instance.get(`/user/assets/${currencyId}`).then(({ data }) => data.data);
     },
   };

@@ -6,6 +6,7 @@ type PropsType = {
   color?: 'primary' | 'secondary';
   className?: string;
   fullWidth?: boolean;
+  disabled?: boolean;
   onClick?: ((event: React.MouseEvent<HTMLButtonElement>) => void) | undefined;
 };
 export const Button: React.FC<PropsType> = ({
@@ -13,15 +14,18 @@ export const Button: React.FC<PropsType> = ({
   color = 'primary',
   className,
   fullWidth,
+  disabled,
   onClick,
 }) => {
   return (
     <button
       onClick={onClick}
+      disabled={disabled}
       className={`
       ${styles.button}
       ${color === 'primary' ? styles.primary : styles.secondary}
-      ${fullWidth ? styles.fullWidth : ''}
+      ${fullWidth && styles.fullWidth}
+      ${disabled && styles.disabled}
       ${className}
       `}
     >

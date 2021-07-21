@@ -23,6 +23,9 @@ module.exports = {
       amount: {
         type: Sequelize.DOUBLE,
       },
+      total: {
+        type: Sequelize.DOUBLE,
+      },
     });
   },
   down: async (queryInterface, Sequelize) => {

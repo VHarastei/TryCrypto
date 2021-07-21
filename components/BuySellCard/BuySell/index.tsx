@@ -7,6 +7,7 @@ import swapIcon from 'public/static/swap.svg';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectUserAsset } from 'store/selectors';
+import { Transaction } from 'store/slices/userSlice';
 import styles from './BuySell.module.scss';
 
 type PropsType = {
@@ -25,9 +26,21 @@ export const BuySell: React.FC<PropsType> = ({ action, currency }) => {
   };
 
   const asset = useSelector(selectUserAsset(currency.id));
-
+  const usdtAsset = useSelector(selectUserAsset('tether'));
+  //console.log(asset);
   const handleCreateTransaction = () => {
-    if (!asset) return;
+    if (!asset || !usdtAsset) return;
+    const date = new Date().toISOString();
+    const transaction = {
+      date: `${date.substr(0, 10)} ${date.substr(11, 8)}`,
+      source: 'market',
+      type: action.toLowerCase(),
+      usdValue: +amount * asset.currencyPrice, // take price form props
+      amount: +amount,
+      total: +amount * asset.currencyPrice * usdtAsset.currencyPrice,
+      assetId: asset.id,
+    };
+    console.log(transaction);
   };
   return (
     <div>

@@ -28,6 +28,7 @@ export type Transaction = {
   type: 'buy' | 'sell' | 'receive';
   usdValue: number;
   amount: number;
+  total: number;
   asset: Pick<Asset, 'amount' | 'currency'>;
 };
 

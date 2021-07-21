@@ -9,6 +9,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       usdValue: DataTypes.DOUBLE,
       amount: DataTypes.DOUBLE,
+      total: DataTypes.DOUBLE,
     },
     {
       timestamps: false,

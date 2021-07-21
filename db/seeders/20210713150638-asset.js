@@ -18,7 +18,7 @@ module.exports = {
         updatedAt: '1970-01-01 00:00:01',
       },
       {
-        amount: 56.313241,
+        amount: 506.313241,
         currencyId: 'tether',
         userId: 1,
         createdAt: '1970-01-01 00:00:01',

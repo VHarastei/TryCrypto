@@ -11,13 +11,14 @@ import Image from 'next/image';
 import btcIcon from 'public/static/btc.png';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectUserPortfolio } from 'store/selectors';
+import { selectUserAssets, selectUserPortfolio } from 'store/selectors';
 import { fetchUserAssets } from 'store/slices/userSlice';
 import { formatDollar } from 'utils/formatDollar';
 import styles from './Home.module.scss';
 
 export default function Home() {
   const portfolio = useSelector(selectUserPortfolio);
+  const assets = useSelector(selectUserAssets);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(fetchUserAssets());
@@ -47,7 +48,7 @@ export default function Home() {
                 {formatDollar(portfolio.balance, 20)}
               </Typography>
             </div>
-            <PieChart data={portfolio.assets} />
+            <PieChart data={assets} />
           </div>
         </Card>
 

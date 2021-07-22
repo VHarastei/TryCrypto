@@ -1,8 +1,9 @@
 import { Api } from './../../api/index';
 import { Currency } from './../../pages/market/[currencyId]';
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, isAnyOf, PayloadAction } from '@reduxjs/toolkit';
 import { HYDRATE } from 'next-redux-wrapper';
 import { RootState } from 'store';
+import { CreateTransactionPayload } from 'api/userApi';
 
 export enum LoadingState {
   LOADED = 'LOADED',
@@ -93,15 +94,11 @@ const initialState: UserSliceState = {
   // },
 };
 
-export const fetchUserAssets = createAsyncThunk<{ assets: Asset[]; balance: number } | undefined>(
+export const fetchUserAssets = createAsyncThunk<{ assets: Asset[]; balance: number }>(
   'user/fetchUserAssets',
   async () => {
-    try {
-      const assets = await Api().getUserAssets();
-      return assets;
-    } catch (error) {
-      console.log('user/fetchUserAssets', error);
-    }
+    const assets = await Api().getUserAssets();
+    return assets;
   }
 );
 export const fetchUserAsset = createAsyncThunk<Asset, string>(
@@ -111,6 +108,14 @@ export const fetchUserAsset = createAsyncThunk<Asset, string>(
     return asset;
   }
 );
+
+export const fetchCreateTransaction = createAsyncThunk<
+  Asset,
+  { currencyId: string; payload: CreateTransactionPayload }
+>('user/fetchCreateTransaction', async ({ currencyId, payload }) => {
+  const asset = await Api().createTransaction(currencyId, payload);
+  return asset;
+});
 
 //createAssetTransaction
 
@@ -127,6 +132,15 @@ export const userSlice = createSlice({
   },
   extraReducers: (builder) =>
     builder
+      .addCase(fetchCreateTransaction.fulfilled.type, (state, action: PayloadAction<Asset>) => {
+        const currentAssetIndex = state.assets.items.findIndex(
+          (a) => a.currency.id === action.payload.currency.id
+        );
+        console.log('currentAssetIndex', currentAssetIndex);
+        if (currentAssetIndex === -1) state.assets.items.push(action.payload);
+        state.assets.items[currentAssetIndex] = action.payload;
+        state.assets.loadingState = LoadingState.LOADED;
+      })
       .addCase(
         fetchUserAssets.fulfilled.type,
         (state, action: PayloadAction<{ assets: Asset[]; balance: number }>) => {
@@ -134,6 +148,17 @@ export const userSlice = createSlice({
           state.portfolio.balance = action.payload.balance;
         }
       )
+      // .addMatcher<any>(
+      //   isAnyOf<any>(fetchUserAsset.fulfilled.type, fetchCreateTransaction.fulfilled.type),
+      //   (state, action: PayloadAction<Asset>) => {
+      //     const currentAssetIndex = state.assets.items.findIndex(
+      //       (a) => a.currency.id === action.payload.currency.id
+      //     );
+      //     //if (currentAssetIndex === -1) state.assets.items.push(action.payload);
+      //     state.assets.items[currentAssetIndex] = action.payload;
+      //     state.assets.loadingState = LoadingState.LOADED;
+      //   }
+      // )
       .addCase(fetchUserAsset.pending.type, (state) => {
         state.assets.loadingState = LoadingState.LOADING;
       })

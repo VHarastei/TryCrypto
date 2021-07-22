@@ -1,3 +1,4 @@
+import { Button } from 'components/Button';
 import { Paper } from 'components/Paper';
 import { Currency } from 'pages/market/[currencyId]';
 import React from 'react';
@@ -6,37 +7,48 @@ import styles from './BuySellCard.module.scss';
 
 type PropsType = {
   currency: Currency;
+  currentPrice: number;
 };
 
-export const BuySellCard: React.FC<PropsType> = ({ currency }) => {
-  const [tab, setTab] = React.useState<'buy' | 'sell'>('buy');
-  const handleChangeTab = (newTab: 'buy' | 'sell') => {
-    setTab(newTab);
+export type BuySellType = 'buy' | 'sell';
+
+export const BuySellCard: React.FC<PropsType> = ({ currency, currentPrice }) => {
+  const [action, setAction] = React.useState<BuySellType>('buy');
+  const handleChangeAction = (newAction: BuySellType) => {
+    setAction(newAction);
   };
 
   return (
-    <Paper>
-      <div className={styles.tabs}>
+    <Paper className={styles.container}>
+      <div className={styles.actionsContainer}>
         <div
-          onClick={() => handleChangeTab('buy')}
-          className={`${styles.tab} ${styles.buyTab} ${tab === 'buy' ? styles.active : ''}`}
+          onClick={() => handleChangeAction('buy')}
+          className={`${styles.action} ${styles.actionBuy} ${
+            action === 'buy' && styles.actionBuyActive
+          }`}
         >
-          Buy
+          BUY
+        </div>
+        <div className={styles.actionDivider}>
+          <div className={styles.actionDividerOuter}>
+            <div
+              className={
+                action === 'buy' ? styles.actionDividerInnerBuy : styles.actionDividerInnerSell
+              }
+            ></div>
+          </div>
         </div>
         <div
-          onClick={() => handleChangeTab('sell')}
-          className={`${styles.tab} ${styles.sellTab} ${tab === 'sell' ? styles.active : ''}`}
+          onClick={() => handleChangeAction('sell')}
+          className={`${styles.action} ${styles.actionSell} ${
+            action === 'sell' && styles.actionSellActive
+          }`}
         >
-          Sell
+          SELL
         </div>
       </div>
-      <div className={styles.content}>
-        {tab === 'buy' ? (
-          <BuySell action="Buy" currency={currency} />
-        ) : (
-          <BuySell action="Sell" currency={currency} />
-        )}
-      </div>
+
+      <BuySell action={action} currency={currency} currentPrice={currentPrice} />
     </Paper>
   );
 };

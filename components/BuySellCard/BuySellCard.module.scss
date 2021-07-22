@@ -1,39 +1,71 @@
 @import 'styles/theme.scss';
 
-.tabs {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-
-  .tab {
-    width: 100%;
-    padding: 20px;
-    font-size: 24px;
-    font-weight: 400;
-    border-top: 2px solid transparent;
-    background-color: #1e2124;
-    cursor: pointer;
-    color: $gray;
-    text-align: center;
-  }
-  .buyTab {
-    border-top-left-radius: 12px;
-  }
-  .sellTab {
-    border-top-right-radius: 12px;
-  }
-  .active {
-    //border-top-left-radius: 12px;
-    border-color: $primary;
-    background-color: transparent;
-    color: $primary;
-  }
-}
-
-.content {
+.container {
   padding: 16px;
-  padding-top: 40px;
-}
-.active {
-  color: $primary;
+
+  .actionsContainer {
+    display: flex;
+    align-items: center;
+    background-color: $secondary;
+    border-radius: 6px;
+    margin-bottom: 16px;
+    .action {
+      padding: 10px 16px;
+      background-color: $secondary;
+      width: 100%;
+      font-size: 20px;
+      font-weight: 500;
+      text-align: center;
+      cursor: pointer;
+    }
+    .actionBuy {
+      border-bottom-left-radius: 6px;
+      border-top-left-radius: 6px;
+    }
+    .actionSell {
+      border-bottom-right-radius: 6px;
+      border-top-right-radius: 6px;
+    }
+    .actionBuyActive {
+      background-color: $green;
+    }
+    .actionSellActive {
+      background-color: $red;
+    }
+    .actionDivider {
+      height: 46.1px;
+      width: 46px;
+      padding: 16px;
+      background-color: $secondary;
+      position: relative;
+      .actionDividerOuter {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        width: 46px;
+        height: 46.1px;
+        overflow: hidden;
+      }
+      .actionDividerInnerBuy {
+        transform: rotate(45deg);
+        background-color: $green;
+        width: 70px;
+        height: 50px;
+        top: -10px;
+        left: -40px;
+        position: relative;
+        border-radius: 6px;
+      }
+      .actionDividerInnerSell {
+        transform: rotate(135deg);
+        background-color: $red;
+        width: 70px;
+        height: 50px;
+        top: -10px;
+        left: 8px;
+        position: relative;
+        border-radius: 6px;
+      }
+    }
+  }
 }

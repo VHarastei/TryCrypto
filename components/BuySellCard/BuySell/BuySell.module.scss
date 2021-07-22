@@ -1,55 +1,41 @@
 @import 'styles/theme.scss';
 
-.inputContainer {
+.assetInfo {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  .input {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: $gray;
-    .currency {
-      font-size: 26px;
-      font-weight: 500;
-    }
-    input::-webkit-outer-spin-button,
-    input::-webkit-inner-spin-button {
-      -webkit-appearance: none;
-      margin: 0;
-    }
-    input {
-      display: flex;
-      background-color: transparent;
-      padding: 0px;
-      margin: 0px;
-      box-shadow: none;
-      border: none;
-      overflow: hidden;
-      outline: none;
-      font-size: 58px;
-      color: $primary;
-      //max-width: 240px;
-      width: 100%;
-
-      -moz-appearance: textfield;
-      margin: 0px 6px;
-    }
-  }
-  .switchCurrencyContainer {
-    text-align: center;
-    .switchCurrency {
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      padding: 4px;
-      margin-bottom: 4px;
-    }
-  }
+  margin-bottom: 2px;
 }
-.inputTextField {
-  text-align: center;
-  margin: 16px;
+
+.inputContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 16px 0px;
+  padding: 0px 8px;
+  border-radius: 6px;
+  background-color: $secondary;
+  border: 1px solid transparent;
+  height: 42px;
+  cursor: default;
+  &:hover {
+    border-color: $primary;
+  }
+
+  .input {
+    width: 100%;
+    height: 100%;
+    margin: 0px 10px;
+    background-color: transparent;
+    box-shadow: none;
+    border: none;
+    overflow: hidden;
+    outline: none;
+    color: white;
+    font-size: 16px;
+    padding-top: 4px;
+    text-align: end;
+  }
 }
 
 .infoContainer {
@@ -85,3 +71,54 @@
     }
   }
 }
+// .inputContainer {
+//   display: flex;
+//   align-items: center;
+//   justify-content: space-between;
+//   .input {
+//     display: flex;
+//     align-items: center;
+//     justify-content: center;
+//     color: $gray;
+//     .currency {
+//       font-size: 26px;
+//       font-weight: 500;
+//     }
+//     input::-webkit-outer-spin-button,
+//     input::-webkit-inner-spin-button {
+//       -webkit-appearance: none;
+//       margin: 0;
+//     }
+//     input {
+//       display: flex;
+//       background-color: transparent;
+//       padding: 0px;
+//       margin: 0px;
+//       box-shadow: none;
+//       border: none;
+//       overflow: hidden;
+//       outline: none;
+//       font-size: 58px;
+//       color: $primary;
+//       //max-width: 240px;
+//       width: 100%;
+
+//       -moz-appearance: textfield;
+//       margin: 0px 6px;
+//     }
+//   }
+//   .switchCurrencyContainer {
+//     text-align: center;
+//     .switchCurrency {
+//       border-radius: 8px;
+//       display: flex;
+//       align-items: center;
+//       padding: 4px;
+//       margin-bottom: 4px;
+//     }
+//   }
+// }
+// .inputTextField {
+//   text-align: center;
+//   margin: 16px;
+// }

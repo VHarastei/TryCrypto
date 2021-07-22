@@ -5,20 +5,22 @@ import Image from 'next/image';
 import { Currency } from 'pages/market/[currencyId]';
 import swapIcon from 'public/static/swap.svg';
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { selectUserAsset } from 'store/selectors';
-import { Transaction } from 'store/slices/userSlice';
+import { fetchCreateTransaction, Transaction } from 'store/slices/userSlice';
+import { BuySellType } from '..';
 import styles from './BuySell.module.scss';
 
 type PropsType = {
-  action: 'Buy' | 'Sell';
+  action: BuySellType;
   currency: Currency;
+  currentPrice: number;
 };
 
-export const BuySell: React.FC<PropsType> = ({ action, currency }) => {
+export const BuySell: React.FC<PropsType> = ({ action, currency, currentPrice }) => {
   const { amount, setAmount, onChange } = useControlAmount(12, 2);
   const [inputCurrency, setInputCurrency] = useState<string | 'USDT'>('USDT');
-
+  const dispatch = useDispatch();
   const switchInputCurrency = (e: React.MouseEvent<HTMLButtonElement>) => {
     setInputCurrency(() => (inputCurrency === 'USDT' ? currency.symbol : 'USDT'));
     //TODO: convert amount
@@ -29,22 +31,52 @@ export const BuySell: React.FC<PropsType> = ({ action, currency }) => {
   const usdtAsset = useSelector(selectUserAsset('tether'));
   //console.log(asset);
   const handleCreateTransaction = () => {
-    if (!asset || !usdtAsset) return;
+    //!asset || --- isLoading
+    if (!usdtAsset) return;
     const date = new Date().toISOString();
     const transaction = {
       date: `${date.substr(0, 10)} ${date.substr(11, 8)}`,
-      source: 'market',
-      type: action.toLowerCase(),
-      usdValue: +amount * asset.currencyPrice, // take price form props
+      source: 'market' as 'market' | 'education',
+      type: action.toLowerCase() as 'buy' | 'sell',
+      usdValue: +(+amount * currentPrice).toFixed(2), // take price form props
       amount: +amount,
-      total: +amount * asset.currencyPrice * usdtAsset.currencyPrice,
-      assetId: asset.id,
+      total: +(+amount * currentPrice * usdtAsset.currencyPrice).toFixed(6),
+      assetId: asset?.id || null,
     };
     console.log(transaction);
+    dispatch(fetchCreateTransaction({ currencyId: currency.id, payload: transaction }));
   };
+
+  if (!usdtAsset) return null;
+
   return (
     <div>
+      <div>
+        <div className={styles.assetInfo}>
+          <Typography color="gray" fw="fw-500">
+            Available
+          </Typography>
+          <Typography fw="fw-500">{`${
+            usdtAsset.amount
+          } ${usdtAsset.currency.symbol.toUpperCase()}`}</Typography>
+        </div>
+        <div className={styles.assetInfo}>
+          <Typography color="gray" fw="fw-500">
+            Price
+          </Typography>
+          <Typography fw="fw-500">{`${(currentPrice * usdtAsset.currencyPrice).toFixed(
+            2
+          )} ${usdtAsset.currency.symbol.toUpperCase()}`}</Typography>
+        </div>
+      </div>
       <div className={styles.inputContainer}>
+        <Typography color="gray" fw="fw-500">
+          Amount
+        </Typography>
+        <input className={styles.input} />
+        <Typography fw="fw-500">{usdtAsset.currency.symbol.toUpperCase()}</Typography>
+      </div>
+      {/* <div className={styles.inputContainer}>
         <div className={styles.input}>
           <span className={`${styles.currency} ${amount && styles.active}`}>
             {inputCurrency === 'USDT' ? 'USDT' : currency.symbol.toUpperCase()}
@@ -68,7 +100,7 @@ export const BuySell: React.FC<PropsType> = ({ action, currency }) => {
             Amount is a required
           </Typography>
         )}
-      </div>
+      </div> */}
       <div className={styles.infoContainer}>
         <div className={styles.infoItem}>
           <Typography className={styles.actionInfo} variant="regularText" color="gray">
@@ -83,7 +115,7 @@ export const BuySell: React.FC<PropsType> = ({ action, currency }) => {
         </div>
         <div className={styles.infoItem}>
           <Typography className={styles.actionInfo} variant="regularText" color="gray">
-            {action === 'Buy' ? 'Pay with' : 'Get in'}
+            {action === 'buy' ? 'Pay with' : 'Get in'}
           </Typography>
           <div className={styles.currencyInfo}>
             <span>
@@ -98,7 +130,8 @@ export const BuySell: React.FC<PropsType> = ({ action, currency }) => {
           </div>
         </div>
       </div>
-      <Button fullWidth disabled={!!!amount || !asset} onClick={handleCreateTransaction}>
+      <Button fullWidth disabled={!amount} onClick={handleCreateTransaction}>
+        {/* || !asset */}
         {action}
       </Button>
     </div>

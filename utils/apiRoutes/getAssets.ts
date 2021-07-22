@@ -57,6 +57,6 @@ export const getAssets = async (userId: number) => {
       100
     ).toFixed(2);
   });
-
+  assets.sort((a, b) => (a.usdValue > b.usdValue ? -1 : 1));
   return { assets, balance: +balance.toFixed(2) };
 };

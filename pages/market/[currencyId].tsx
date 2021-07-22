@@ -121,7 +121,10 @@ export default function CurrencyPage() {
               <MarketTransactions currency={currency} />
             </div>
             <div>
-              <BuySellCard currency={currency} />
+              <BuySellCard
+                currency={currency}
+                currentPrice={currencyData.market_data.current_price.usd}
+              />
             </div>
           </ContentLayout>
         )}

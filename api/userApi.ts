@@ -1,10 +1,12 @@
 import { AxiosInstance } from 'axios';
-import { Asset, UserPortfolio } from 'store/slices/userSlice';
+import { Asset, UserPortfolio, Transaction } from 'store/slices/userSlice';
 
 interface UserPortfolioWithAssets extends UserPortfolio {
   assets: Asset[];
 }
-
+export interface CreateTransactionPayload extends Omit<Transaction, 'id' | 'asset'> {
+  assetId: number | null;
+}
 export const userApi = (instance: AxiosInstance) => {
   return {
     // getMe: async (): Promise<UserData> => {
@@ -19,6 +21,9 @@ export const userApi = (instance: AxiosInstance) => {
     },
     getUserAsset: (currencyId: string): Promise<Asset> => {
       return instance.get(`/user/assets/${currencyId}`).then(({ data }) => data.data);
+    },
+    createTransaction: (currencyId: string, payload: CreateTransactionPayload): Promise<Asset> => {
+      return instance.post(`/user/assets/${currencyId}`, payload).then(({ data }) => data.data);
     },
   };
 };

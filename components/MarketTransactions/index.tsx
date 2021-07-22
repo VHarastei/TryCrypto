@@ -23,7 +23,6 @@ export const MarketTransactions: React.FC<PropsType> = ({ currency }) => {
   const dispatch = useAppDispatch();
   const asset = useSelector(selectUserAsset(currency.id));
   let transactions;
-  console.log(asset);
   if (asset?.transactions) {
     transactions = asset.transactions.map((txn) => {
       const { transactions, ...rest } = asset;
@@ -37,7 +36,6 @@ export const MarketTransactions: React.FC<PropsType> = ({ currency }) => {
       dispatch(fetchUserAsset(currency.id));
     }
   }, []);
-  console.log(transactions);
   // if (currency) {
   //   dispatch(fetchUserMarketAsset(currency.id))
   //     .unwrap()

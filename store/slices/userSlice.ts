@@ -131,7 +131,7 @@ export const userSlice = createSlice({
     },
   },
   extraReducers: (builder) =>
-    builder
+    builder //TODO: when we make transaction alsa update USDT asset
       .addCase(fetchCreateTransaction.fulfilled.type, (state, action: PayloadAction<Asset>) => {
         const currentAssetIndex = state.assets.items.findIndex(
           (a) => a.currency.id === action.payload.currency.id

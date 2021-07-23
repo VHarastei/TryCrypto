@@ -21,7 +21,6 @@
   &:hover {
     border-color: $primary;
   }
-
   .input {
     width: 100%;
     height: 100%;
@@ -33,8 +32,66 @@
     outline: none;
     color: white;
     font-size: 16px;
-    padding-top: 4px;
+    padding-top: 5px;
     text-align: end;
+  }
+}
+.percentInputsContainer {
+  width: 100%;
+  display: flex;
+  gap: 6px;
+  .percentInput {
+    display: flex;
+    flex-direction: column;
+    width: 25%;
+    align-items: center;
+
+    input {
+      cursor: pointer;
+      outline: none;
+      border: 1px solid $gray;
+      background-color: transparent;
+      width: 100%;
+      height: 16px;
+      border-radius: 6px;
+    }
+    label {
+      color: $gray;
+      font-size: 14px;
+      font-weight: 500;
+    }
+  }
+  .percentInputBuy {
+    &:hover {
+      background-color: $green;
+      border-color: transparent;
+      & ~ label {
+        color: $green;
+      }
+    }
+  }
+  .percentInputBuyActive {
+    background-color: $green !important;
+    border-color: transparent !important;
+    & ~ label {
+      color: $green;
+    }
+  }
+  .percentInputSell {
+    &:hover {
+      background-color: $red;
+      border-color: transparent;
+      & ~ label {
+        color: $red;
+      }
+    }
+  }
+  .percentInputSellActive {
+    background-color: $red !important;
+    border-color: transparent !important;
+    & ~ label {
+      color: $red;
+    }
   }
 }
 
@@ -69,6 +126,20 @@
         transform: rotate(180deg);
       }
     }
+  }
+}
+.actionBuyActive {
+  background-color: $green;
+  &:hover {
+    background-color: $green;
+    opacity: 0.8;
+  }
+}
+.actionSellActive {
+  background-color: $red;
+  &:hover {
+    background-color: $red;
+    opacity: 0.8;
   }
 }
 // .inputContainer {

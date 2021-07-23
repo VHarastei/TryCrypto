@@ -1,10 +1,10 @@
 import { Button } from 'components/Button';
 import { Typography } from 'components/Typography';
-import { useControlAmount } from 'hooks/useControlAmount';
+import { useControlInput } from 'hooks/useControlInput';
 import Image from 'next/image';
 import { Currency } from 'pages/market/[currencyId]';
 import swapIcon from 'public/static/swap.svg';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectUserAsset } from 'store/selectors';
 import { fetchCreateTransaction, Transaction } from 'store/slices/userSlice';
@@ -18,18 +18,31 @@ type PropsType = {
 };
 
 export const BuySell: React.FC<PropsType> = ({ action, currency, currentPrice }) => {
-  const { amount, setAmount, onChange } = useControlAmount(12, 2);
-  const [inputCurrency, setInputCurrency] = useState<string | 'USDT'>('USDT');
   const dispatch = useDispatch();
-  const switchInputCurrency = (e: React.MouseEvent<HTMLButtonElement>) => {
-    setInputCurrency(() => (inputCurrency === 'USDT' ? currency.symbol : 'USDT'));
-    //TODO: convert amount
-    setAmount('');
+  const asset = useSelector(selectUserAsset(currency.id));
+  let assetAmount = asset?.amount || 0;
+  const usdtAsset = useSelector(selectUserAsset('tether'));
+  if (!usdtAsset) return null;
+
+  const precision = currentPrice > 0.01 ? { amount: 6, total: 2 } : { amount: 0, total: 8 };
+  const { value: amount, onChange: onChangeAmount } = useControlInput(20, precision.amount);
+  const { value: total, onChange: onChangeTotal } = useControlInput(20, precision.total);
+
+  useEffect(() => {
+    handleSetAmount('');
+  }, [action]);
+
+  const handleSetAmount = (val: string) => {
+    onChangeAmount(val);
+    const newTotal = +val * currentPrice;
+    onChangeTotal(newTotal > 0 ? newTotal.toFixed(precision.total) : '');
+  };
+  const handleSetTotal = (val: string) => {
+    onChangeTotal(val);
+    const newAmount = +val / currentPrice;
+    onChangeAmount(newAmount > 0 ? newAmount.toFixed(precision.amount) : '');
   };
 
-  const asset = useSelector(selectUserAsset(currency.id));
-  const usdtAsset = useSelector(selectUserAsset('tether'));
-  //console.log(asset);
   const handleCreateTransaction = () => {
     //!asset || --- isLoading
     if (!usdtAsset) return;
@@ -47,8 +60,6 @@ export const BuySell: React.FC<PropsType> = ({ action, currency, currentPrice })
     dispatch(fetchCreateTransaction({ currencyId: currency.id, payload: transaction }));
   };
 
-  if (!usdtAsset) return null;
-
   return (
     <div>
       <div>
@@ -56,16 +67,18 @@ export const BuySell: React.FC<PropsType> = ({ action, currency, currentPrice })
           <Typography color="gray" fw="fw-500">
             Available
           </Typography>
-          <Typography fw="fw-500">{`${
-            usdtAsset.amount
-          } ${usdtAsset.currency.symbol.toUpperCase()}`}</Typography>
+          <Typography fw="fw-500">
+            {action === 'buy'
+              ? `${usdtAsset.amount} ${usdtAsset.currency.symbol.toUpperCase()}`
+              : `${assetAmount.toFixed(precision.amount)} ${currency.symbol.toUpperCase()}`}
+          </Typography>
         </div>
         <div className={styles.assetInfo}>
           <Typography color="gray" fw="fw-500">
             Price
           </Typography>
           <Typography fw="fw-500">{`${(currentPrice * usdtAsset.currencyPrice).toFixed(
-            2
+            precision.total
           )} ${usdtAsset.currency.symbol.toUpperCase()}`}</Typography>
         </div>
       </div>
@@ -73,38 +86,56 @@ export const BuySell: React.FC<PropsType> = ({ action, currency, currentPrice })
         <Typography color="gray" fw="fw-500">
           Amount
         </Typography>
-        <input className={styles.input} />
+        <input
+          className={styles.input}
+          value={amount}
+          onChange={(e) => handleSetAmount(e.target.value)}
+        />
+        <Typography fw="fw-500">{currency.symbol.toUpperCase()}</Typography>
+      </div>
+
+      <div className={styles.percentInputsContainer}>
+        {[25, 50, 75, 100].map((item) => {
+          if (action === 'buy')
+            return (
+              <PercentInput
+                precentage={item}
+                action={action}
+                currentAmount={total}
+                amount={usdtAsset.amount}
+                precision={precision.total}
+                onClick={handleSetTotal}
+              />
+            );
+          else
+            return (
+              <PercentInput
+                precentage={item}
+                action={action}
+                currentAmount={amount}
+                amount={assetAmount}
+                precision={precision.amount}
+                onClick={handleSetAmount}
+              />
+            );
+        })}
+      </div>
+
+      <div className={styles.inputContainer}>
+        <Typography color="gray" fw="fw-500">
+          Total
+        </Typography>
+        <input
+          className={styles.input}
+          value={total}
+          onChange={(e) => handleSetTotal(e.target.value)}
+        />
         <Typography fw="fw-500">{usdtAsset.currency.symbol.toUpperCase()}</Typography>
       </div>
-      {/* <div className={styles.inputContainer}>
-        <div className={styles.input}>
-          <span className={`${styles.currency} ${amount && styles.active}`}>
-            {inputCurrency === 'USDT' ? 'USDT' : currency.symbol.toUpperCase()}
-          </span>
-          <input placeholder="0" value={amount} onChange={onChange} />
-        </div>
-        <div className={styles.switchCurrencyContainer}>
-          <Button onClick={switchInputCurrency} color="secondary" className={styles.switchCurrency}>
-            <Image layout="fixed" src={swapIcon} alt={`swap icon`} width={28} height={28} />
-          </Button>
-          <Typography variant="thinText" color="gray">
-            {inputCurrency === 'USDT' ? currency.symbol.toUpperCase() : 'USDT'}
-          </Typography>
-        </div>
-      </div>
-      <div className={styles.inputTextField}>
-        {amount ? (
-          <Button color="secondary">Max</Button>
-        ) : (
-          <Typography variant="thinText" color="gray">
-            Amount is a required
-          </Typography>
-        )}
-      </div> */}
       <div className={styles.infoContainer}>
         <div className={styles.infoItem}>
           <Typography className={styles.actionInfo} variant="regularText" color="gray">
-            {action}
+            {action === 'buy' ? 'Buy' : 'Sell'}
           </Typography>
           <div className={styles.currencyInfo}>
             <span>
@@ -130,10 +161,51 @@ export const BuySell: React.FC<PropsType> = ({ action, currency, currentPrice })
           </div>
         </div>
       </div>
-      <Button fullWidth disabled={!amount} onClick={handleCreateTransaction}>
+      <Button
+        fullWidth
+        disabled={!amount}
+        className={action === 'buy' ? styles.actionBuyActive : styles.actionSellActive}
+        onClick={handleCreateTransaction}
+      >
         {/* || !asset */}
-        {action}
+        {action.toUpperCase()}
       </Button>
+    </div>
+  );
+};
+
+type PercentInputPropsType = {
+  precentage: number;
+  currentAmount: string;
+  amount: number;
+  precision: number;
+  action: BuySellType;
+  onClick: (val: string) => void;
+};
+
+const PercentInput: React.FC<PercentInputPropsType> = ({
+  precentage,
+  currentAmount,
+  amount,
+  precision,
+  action,
+  onClick,
+}) => {
+  const newAmount = (amount * (precentage / 100)).toFixed(precision);
+  return (
+    <div className={styles.percentInput}>
+      <input
+        className={`${action === 'buy' ? styles.percentInputBuy : styles.percentInputSell} ${
+          +newAmount <= +currentAmount
+            ? action === 'buy'
+              ? styles.percentInputBuyActive
+              : styles.percentInputSellActive
+            : ''
+        }`}
+        type="button"
+        onClick={() => onClick(newAmount)}
+      />
+      <label>{`${precentage}%`}</label>
     </div>
   );
 };

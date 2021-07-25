@@ -15,23 +15,23 @@ type PropsType = {
   transparent?: boolean;
 };
 
-export const Card: React.FC<PropsType> = ({
-  children,
-  title,
-  withPadding,
-  transparent,
-  className,
-}) => {
-  const Title = title;
+export const Card: React.FC<PropsType> = React.memo(
+  ({ children, title, withPadding, transparent, className }) => {
+    const Title = title;
 
-  return (
-    <div className={`${transparent ? styles.transparent : ''} ${styles.container} ${className}`}>
-      <div>
-        <div className={`${styles.title} ${transparent ? styles.transparentTitle : ''}`}>
-          {typeof title === 'string' ? <Typography variant="title">{title}</Typography> : <Title />}
+    return (
+      <div className={`${transparent ? styles.transparent : ''} ${styles.container} ${className}`}>
+        <div>
+          <div className={`${styles.title} ${transparent ? styles.transparentTitle : ''}`}>
+            {typeof title === 'string' ? (
+              <Typography variant="title">{title}</Typography>
+            ) : (
+              <Title />
+            )}
+          </div>
+          <div className={`${withPadding ? styles.withPadding : ''}`}>{children}</div>
         </div>
-        <div className={`${withPadding ? styles.withPadding : ''}`}>{children}</div>
       </div>
-    </div>
-  );
-};
+    );
+  }
+);

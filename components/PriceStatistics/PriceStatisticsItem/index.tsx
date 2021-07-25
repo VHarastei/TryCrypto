@@ -10,45 +10,47 @@ type PropsType = {
   subValue?: string;
 };
 
-export const PriceStatisticsItem: React.FC<PropsType> = ({ title, value, subTitle, subValue }) => {
-  return (
-    <div className={styles.container}>
-      <div className={styles.col}>
-        <Typography variant="regularText" color="gray">
-          {title}
-        </Typography>
-        {subTitle && (
-          <div className={styles.subTitle}>
-            <span></span>
-            {subTitle}
-          </div>
-        )}
-      </div>
-      <div className={styles.col}>
-        {value && (
-          <Typography variant="mediumText">
-            {value === '∞' || value.includes('#')
-              ? value
-              : !!!parseFloat(value.slice(value.includes('-') ? 2 : value.includes('$') ? 1 : 0))
-              ? '--'
-              : value}
+export const PriceStatisticsItem: React.FC<PropsType> = React.memo(
+  ({ title, value, subTitle, subValue }) => {
+    return (
+      <div className={styles.container}>
+        <div className={styles.col}>
+          <Typography variant="regularText" color="gray">
+            {title}
           </Typography>
-        )}
-        {subValue && (
-          <div
-            className={`${styles.subValue} ${
-              subValue && !!!parseFloat(subValue)
-                ? ''
-                : parseFloat(subValue) > 0
-                ? styles.green
-                : styles.red
-            } `}
-          >
-            <span></span>
-            {!!!parseFloat(subValue) ? '--' : subValue}
-          </div>
-        )}
+          {subTitle && (
+            <div className={styles.subTitle}>
+              <span></span>
+              {subTitle}
+            </div>
+          )}
+        </div>
+        <div className={styles.col}>
+          {value && (
+            <Typography variant="mediumText">
+              {value === '∞' || value.includes('#')
+                ? value
+                : !!!parseFloat(value.slice(value.includes('-') ? 2 : value.includes('$') ? 1 : 0))
+                ? '--'
+                : value}
+            </Typography>
+          )}
+          {subValue && (
+            <div
+              className={`${styles.subValue} ${
+                subValue && !!!parseFloat(subValue)
+                  ? ''
+                  : parseFloat(subValue) > 0
+                  ? styles.green
+                  : styles.red
+              } `}
+            >
+              <span></span>
+              {!!!parseFloat(subValue) ? '--' : subValue}
+            </div>
+          )}
+        </div>
       </div>
-    </div>
-  );
-};
+    );
+  }
+);

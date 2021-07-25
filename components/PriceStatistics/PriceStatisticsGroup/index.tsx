@@ -7,11 +7,11 @@ type PropsType = {
   children: React.ReactNode;
 };
 
-export const PriceStatisticsGroup: React.FC<PropsType> = ({ title, children }) => {
+export const PriceStatisticsGroup: React.FC<PropsType> = React.memo(({ title, children }) => {
   return (
     <div className={styles.container}>
       <div className={styles.title}>{title}</div>
       {children}
     </div>
   );
-};
+});

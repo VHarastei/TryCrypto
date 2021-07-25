@@ -1,7 +1,8 @@
 import { format } from 'date-fns';
+import React from 'react';
 import { formatDollar } from 'utils/formatDollar';
 
-export const CustomTooltip = (props: any) => {
+export const CustomTooltip = React.memo((props: any) => {
   const { x, y, datum } = props;
 
   return (
@@ -49,4 +50,4 @@ export const CustomTooltip = (props: any) => {
       </div>
     </foreignObject>
   );
-};
+});

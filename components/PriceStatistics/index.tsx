@@ -14,7 +14,7 @@ type PropsType = {
   data: any;
 };
 
-export const PriceStatistics: React.FC<PropsType> = ({ currency, data }) => {
+export const PriceStatistics: React.FC<PropsType> = React.memo(({ currency, data }) => {
   const [show, setShow] = React.useState(false);
 
   const handleChangeShow = () => {
@@ -126,4 +126,4 @@ export const PriceStatistics: React.FC<PropsType> = ({ currency, data }) => {
       </Button>
     </Card>
   );
-};
+});

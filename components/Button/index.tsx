@@ -9,27 +9,22 @@ type PropsType = {
   disabled?: boolean;
   onClick?: ((event: React.MouseEvent<HTMLButtonElement>) => void) | undefined;
 };
-export const Button: React.FC<PropsType> = ({
-  children,
-  color = 'primary',
-  className,
-  fullWidth,
-  disabled,
-  onClick,
-}) => {
-  return (
-    <button
-      onClick={onClick}
-      disabled={disabled}
-      className={`
+export const Button: React.FC<PropsType> = React.memo(
+  ({ children, color = 'primary', className, fullWidth, disabled, onClick }) => {
+    return (
+      <button
+        onClick={onClick}
+        disabled={disabled}
+        className={`
       ${styles.button}
       ${color === 'primary' ? styles.primary : styles.secondary}
       ${fullWidth && styles.fullWidth}
       ${disabled && styles.disabled}
       ${className}
       `}
-    >
-      {children}
-    </button>
-  );
-};
+      >
+        {children}
+      </button>
+    );
+  }
+);

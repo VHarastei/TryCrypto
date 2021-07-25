@@ -18,7 +18,7 @@ type PropsType = {
   currency: Currency;
 };
 
-export const MarketTransactions: React.FC<PropsType> = ({ currency }) => {
+export const MarketTransactions: React.FC<PropsType> = React.memo(({ currency }) => {
   //request for transactions of actual currency
   const dispatch = useAppDispatch();
   const asset = useSelector(selectUserAsset(currency.id));
@@ -83,7 +83,7 @@ export const MarketTransactions: React.FC<PropsType> = ({ currency }) => {
       </div>
     </Card>
   );
-};
+});
 
 type RTTitlePropsType = {
   currency: Currency;
@@ -91,14 +91,16 @@ type RTTitlePropsType = {
   usdValue?: number;
 };
 
-const RTTitle: React.FC<RTTitlePropsType> = ({ currency, amount = 0, usdValue = 0.0 }) => {
-  return (
-    <div className={styles.rTTitle}>
-      <Typography variant="title">{`${currency.name} transactions`}</Typography>
-      <Typography variant="title">{`Balance: ${amount} ${currency.symbol.toLocaleUpperCase()} (${formatDollar(
-        usdValue,
-        20
-      )})`}</Typography>
-    </div>
-  );
-};
+const RTTitle: React.FC<RTTitlePropsType> = React.memo(
+  ({ currency, amount = 0, usdValue = 0.0 }) => {
+    return (
+      <div className={styles.rTTitle}>
+        <Typography variant="title">{`${currency.name} transactions`}</Typography>
+        <Typography variant="title">{`Balance: ${amount} ${currency.symbol.toLocaleUpperCase()} (${formatDollar(
+          usdValue,
+          20
+        )})`}</Typography>
+      </div>
+    );
+  }
+);

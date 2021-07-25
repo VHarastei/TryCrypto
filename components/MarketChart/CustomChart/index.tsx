@@ -9,7 +9,7 @@ type PropsType = {
   dataInterval: string;
 };
 
-export const CustomChart: React.FC<PropsType> = ({ data, dataInterval }) => {
+export const CustomChart: React.FC<PropsType> = React.memo(({ data, dataInterval }) => {
   return (
     <VictoryChart
       animate={{ duration: 300, onLoad: { duration: 300 } }}
@@ -68,4 +68,4 @@ export const CustomChart: React.FC<PropsType> = ({ data, dataInterval }) => {
       />
     </VictoryChart>
   );
-};
+});

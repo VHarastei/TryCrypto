@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import nextConnect from 'next-connect';
-import { getAssets } from 'utils/apiRoutes/getAssets';
+import { getAssetsMarketData } from 'utils/apiRoutes/getAssetsMarketData';
 import { getRecentTransactions } from 'utils/apiRoutes/getRecentTransactions';
 
 const db = require('db/models/index');
@@ -25,12 +25,12 @@ const handler = nextConnect().get(async (req: NextApiRequest, res: NextApiRespon
         ],
       ],
       include: [
-        // {
-        //   model: db.Asset,
-        //   as: 'assets',
-        //   attributes: { exclude: ['userId', 'currencyId'] },
-        //   include: [{ model: db.Currency, as: 'currency' }],
-        // },
+        {
+          model: db.Asset,
+          as: 'assets',
+          attributes: { exclude: ['userId', 'currencyId'] },
+          include: [{ model: db.Currency, as: 'currency' }],
+        },
         {
           model: db.HistoricalData,
           as: 'historicalData',
@@ -50,7 +50,8 @@ const handler = nextConnect().get(async (req: NextApiRequest, res: NextApiRespon
         },
       ],
     });
-    const { assets, balance } = await getAssets(1);
+
+    const { assets, balance } = await getAssetsMarketData(data.assets);
     const userAssetsId = assets.map((asset) => asset.id);
     const recentTransactions = await getRecentTransactions(userAssetsId);
 

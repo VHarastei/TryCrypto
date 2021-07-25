@@ -110,21 +110,18 @@ type TableHeaderItemPropsType = {
   getClassName: (name: Key) => string;
 };
 
-const TableHeaderItem: React.FC<TableHeaderItemPropsType> = ({
-  name,
-  itemKey,
-  requestSort,
-  getClassName,
-}) => {
-  return (
-    <li className={styles[itemKey]} onClick={() => requestSort(itemKey)}>
-      <Typography variant="thinText" color="gray">
-        {name}
-      </Typography>
-      <span className={`${styles.sort} ${styles[getClassName(itemKey)]}`}></span>
-    </li>
-  );
-};
+const TableHeaderItem: React.FC<TableHeaderItemPropsType> = React.memo(
+  ({ name, itemKey, requestSort, getClassName }) => {
+    return (
+      <li className={styles[itemKey]} onClick={() => requestSort(itemKey)}>
+        <Typography variant="thinText" color="gray">
+          {name}
+        </Typography>
+        <span className={`${styles.sort} ${styles[getClassName(itemKey)]}`}></span>
+      </li>
+    );
+  }
+);
 
 type TableRowPropsType = {
   coin: TableCoin;

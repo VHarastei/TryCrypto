@@ -67,55 +67,46 @@ export default function Market({ data, coinsList, currentPage }: PropsType) {
   };
   return (
     <Layout>
-      <ContentLayout>
-        <Paper>
-          <div className={styles.searchBar}>
-            <div className={styles.searchBarField}>
-              <Image layout="fixed" src={searchIcon} alt="Search icon" width={28} height={28} />
-              <input
-                placeholder="Search coin name"
-                value={searchCoinName}
-                onChange={handleSearch}
+      <Paper>
+        <div className={styles.searchBar}>
+          <div className={styles.searchBarField}>
+            <Image layout="fixed" src={searchIcon} alt="Search icon" width={28} height={28} />
+            <input placeholder="Search coin name" value={searchCoinName} onChange={handleSearch} />
+            {searchCoinName && !isInvalidCoinName && !fndCoins ? (
+              <Image
+                className={styles.searchBarFieldRemove}
+                src={loadingIcon}
+                alt="Search icon"
+                width={24}
+                height={24}
               />
-              {searchCoinName && !isInvalidCoinName && !fndCoins ? (
+            ) : (
+              searchCoinName && (
                 <Image
+                  onClick={handleRemoveCoinName}
                   className={styles.searchBarFieldRemove}
-                  src={loadingIcon}
-                  alt="Search icon"
+                  src={closeIcon}
+                  alt="Remove icon"
                   width={24}
                   height={24}
                 />
-              ) : (
-                searchCoinName && (
-                  <Image
-                    onClick={handleRemoveCoinName}
-                    className={styles.searchBarFieldRemove}
-                    src={closeIcon}
-                    alt="Remove icon"
-                    width={24}
-                    height={24}
-                  />
-                )
-              )}
-            </div>
+              )
+            )}
           </div>
-          {isInvalidCoinName ? (
-            <div className={styles.notFound}>
-              <Typography variant="regularText">We couldn't find that asset</Typography>
-              <Typography variant="thinText" color="gray">
-                Try again with a different term.
-              </Typography>
-            </div>
-          ) : foundCoins ? (
-            <SortableTable data={foundCoins} isSearchResult />
-          ) : (
-            <MarketTable data={data} currentPage={currentPage} />
-          )}
-        </Paper>
-        {/* <div>
-          <RecentTransactions simplified withPadding />
-        </div> */}
-      </ContentLayout>
+        </div>
+        {isInvalidCoinName ? (
+          <div className={styles.notFound}>
+            <Typography variant="regularText">We couldn't find that asset</Typography>
+            <Typography variant="thinText" color="gray">
+              Try again with a different term.
+            </Typography>
+          </div>
+        ) : foundCoins ? (
+          <SortableTable data={foundCoins} isSearchResult />
+        ) : (
+          <MarketTable data={data} currentPage={currentPage} />
+        )}
+      </Paper>
     </Layout>
   );
 }

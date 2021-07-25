@@ -18,6 +18,7 @@
   border: 1px solid transparent;
   height: 42px;
   cursor: default;
+  position: relative;
   &:hover {
     border-color: $primary;
   }
@@ -34,6 +35,36 @@
     font-size: 16px;
     padding-top: 5px;
     text-align: end;
+  }
+}
+.inputContainerError {
+  border-color: $red;
+  &:hover {
+    border-color: $red;
+  }
+  &:after {
+    position: absolute;
+    text-align: end;
+    background: $gray;
+    border-radius: 6px;
+    color: #fff;
+    content: attr(title);
+    bottom: 55px;
+    right: 0;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 6px 8px;
+    height: 20px;
+    line-height: 20px;
+  }
+  &:before {
+    position: absolute;
+    border: solid;
+    border-color: $gray transparent;
+    border-width: 8px 6px 0 6px;
+    content: '';
+    right: 10%;
+    bottom: 47px;
   }
 }
 .percentInputsContainer {
@@ -131,65 +162,19 @@
 .actionBuyActive {
   background-color: $green;
   &:hover {
-    background-color: $green;
-    opacity: 0.8;
+    background-color: #0be994;
   }
 }
 .actionSellActive {
   background-color: $red;
   &:hover {
-    background-color: $red;
-    opacity: 0.8;
+    background-color: #f7314b;
   }
 }
-// .inputContainer {
-//   display: flex;
-//   align-items: center;
-//   justify-content: space-between;
-//   .input {
-//     display: flex;
-//     align-items: center;
-//     justify-content: center;
-//     color: $gray;
-//     .currency {
-//       font-size: 26px;
-//       font-weight: 500;
-//     }
-//     input::-webkit-outer-spin-button,
-//     input::-webkit-inner-spin-button {
-//       -webkit-appearance: none;
-//       margin: 0;
-//     }
-//     input {
-//       display: flex;
-//       background-color: transparent;
-//       padding: 0px;
-//       margin: 0px;
-//       box-shadow: none;
-//       border: none;
-//       overflow: hidden;
-//       outline: none;
-//       font-size: 58px;
-//       color: $primary;
-//       //max-width: 240px;
-//       width: 100%;
-
-//       -moz-appearance: textfield;
-//       margin: 0px 6px;
-//     }
-//   }
-//   .switchCurrencyContainer {
-//     text-align: center;
-//     .switchCurrency {
-//       border-radius: 8px;
-//       display: flex;
-//       align-items: center;
-//       padding: 4px;
-//       margin-bottom: 4px;
-//     }
-//   }
-// }
-// .inputTextField {
-//   text-align: center;
-//   margin: 16px;
-// }
+.isLoadingBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  margin: -4.5px;
+}

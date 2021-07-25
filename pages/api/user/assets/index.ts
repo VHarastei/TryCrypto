@@ -1,12 +1,23 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import nextConnect from 'next-connect';
-import { getAssets } from 'utils/apiRoutes/getAssets';
+import { getAssetsMarketData } from 'utils/apiRoutes/getAssetsMarketData';
 
 const db = require('db/models/index');
 
 const handler = nextConnect().get(async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const { assets, balance } = await getAssets(1);
+    const dbAssets = await db.Asset.findAll({
+      where: { userId: 1 },
+      attributes: { exclude: ['userId', 'currencyId'] },
+      include: [
+        {
+          model: db.Currency,
+          as: 'currency',
+        },
+      ],
+    });
+
+    const { assets, balance } = await getAssetsMarketData(dbAssets);
 
     res.statusCode = 200;
     res.json({

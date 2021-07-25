@@ -9,7 +9,7 @@ type PropsType = {
   active: string;
 };
 
-export const NavItem: React.FC<PropsType> = ({ icon, href, active }) => {
+export const NavItem: React.FC<PropsType> = React.memo(({ icon, href, active }) => {
   return (
     <Link href={`/${href}`}>
       <a className={styles.navItem}>
@@ -20,4 +20,4 @@ export const NavItem: React.FC<PropsType> = ({ icon, href, active }) => {
       </a>
     </Link>
   );
-};
+});

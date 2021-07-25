@@ -3,7 +3,7 @@ import { formatDollar } from 'utils/formatDollar';
 import React from 'react';
 import { VictoryAxis, VictoryBar, VictoryChart, VictoryVoronoiContainer } from 'victory';
 
-export const BarChart = () => {
+export const BarChart = React.memo(() => {
   return (
     <VictoryChart
       animate={{ duration: 300, onLoad: { duration: 300 } }}
@@ -82,9 +82,9 @@ export const BarChart = () => {
       />
     </VictoryChart>
   );
-};
+});
 
-const CustomTooltip = ({ x, datum }: any) => {
+const CustomTooltip = React.memo(({ x, datum }: any) => {
   return (
     <foreignObject style={{ pointerEvents: 'none' }} x={x - 50} width="100" height="100%">
       <div
@@ -121,7 +121,7 @@ const CustomTooltip = ({ x, datum }: any) => {
       ></div>
     </foreignObject>
   );
-};
+});
 
 const dailyPNL = [
   [1618250777082, 5.15],

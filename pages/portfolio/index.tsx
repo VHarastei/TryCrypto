@@ -129,7 +129,7 @@ export default function Portfolio() {
 type AssetsTableRowPropsType = {
   asset: Asset;
 };
-const AssetsTableRow: React.FC<AssetsTableRowPropsType> = ({ asset }) => {
+const AssetsTableRow: React.FC<AssetsTableRowPropsType> = React.memo(({ asset }) => {
   return (
     <Link href={`market/${asset.currency.id}`}>
       <a className={styles.tableRowContainer}>
@@ -155,7 +155,7 @@ const AssetsTableRow: React.FC<AssetsTableRowPropsType> = ({ asset }) => {
       </a>
     </Link>
   );
-};
+});
 
 export const getServerSideProps = wrapper.getServerSideProps((store) => async ({ req, res }) => {
   try {

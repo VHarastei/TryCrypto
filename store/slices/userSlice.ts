@@ -1,3 +1,4 @@
+import { FetchAssetTransactionsPayload } from './../../api/userApi';
 import { Api } from './../../api/index';
 import { Currency } from './../../pages/market/[currencyId]';
 import { createAsyncThunk, createSlice, isAnyOf, PayloadAction } from '@reduxjs/toolkit';
@@ -19,7 +20,7 @@ export type Asset = {
   usdValuePercentage: number;
   currencyPrice: number;
   currency: Currency;
-  transactions: Transaction[];
+  transactions: PaginatedTransactions;
 };
 
 export type Transaction = {
@@ -31,6 +32,14 @@ export type Transaction = {
   amount: number;
   total: number;
   asset: Pick<Asset, 'amount' | 'currency'>;
+};
+
+export type PaginatedTransactions = {
+  totalItems: number | null;
+  totalPages: number | null;
+  currentPage: number | null;
+  items: Transaction[];
+  loadingState: LoadingState;
 };
 
 export interface RecentTransaction extends Transaction {
@@ -70,10 +79,6 @@ export type UserSliceState = {
     items: Asset[];
     loadingState: LoadingState;
   };
-  // marketAsset: {
-  //   data: MarketAsset | null;
-  //   loadingState: LoadingState;
-  // };
 };
 
 const initialState: UserSliceState = {
@@ -109,12 +114,20 @@ export const fetchUserAsset = createAsyncThunk<Asset, string>(
   }
 );
 
+export const fetchAssetTransactions = createAsyncThunk<
+  PaginatedTransactions,
+  FetchAssetTransactionsPayload
+>('user/fetchUserAsset', async (payload) => {
+  const transactions = await Api().getAssetTransactions(payload);
+  return transactions;
+});
+
 export const fetchCreateTransaction = createAsyncThunk<
-  Asset,
+  Asset[],
   { currencyId: string; payload: CreateTransactionPayload }
 >('user/fetchCreateTransaction', async ({ currencyId, payload }) => {
-  const asset = await Api().createTransaction(currencyId, payload);
-  return asset;
+  const updatedAssets = await Api().createTransaction(currencyId, payload);
+  return updatedAssets;
 });
 
 //createAssetTransaction
@@ -131,15 +144,20 @@ export const userSlice = createSlice({
     },
   },
   extraReducers: (builder) =>
-    builder //TODO: when we make transaction alsa update USDT asset
-      .addCase(fetchCreateTransaction.fulfilled.type, (state, action: PayloadAction<Asset>) => {
-        const currentAssetIndex = state.assets.items.findIndex(
-          (a) => a.currency.id === action.payload.currency.id
-        );
-        console.log('currentAssetIndex', currentAssetIndex);
-        if (currentAssetIndex === -1) state.assets.items.push(action.payload);
-        state.assets.items[currentAssetIndex] = action.payload;
+    builder
+      .addCase(fetchCreateTransaction.fulfilled.type, (state, action: PayloadAction<Asset[]>) => {
+        action.payload.forEach((asset) => {
+          const assetIndex = state.assets.items.findIndex(
+            (a) => a.currency.id === asset.currency.id
+          );
+          if (assetIndex === -1) state.assets.items.push(asset);
+          state.assets.items[assetIndex] = asset;
+        });
+
         state.assets.loadingState = LoadingState.LOADED;
+      })
+      .addCase(fetchCreateTransaction.pending.type, (state) => {
+        state.assets.loadingState = LoadingState.LOADING;
       })
       .addCase(
         fetchUserAssets.fulfilled.type,
@@ -148,17 +166,6 @@ export const userSlice = createSlice({
           state.portfolio.balance = action.payload.balance;
         }
       )
-      // .addMatcher<any>(
-      //   isAnyOf<any>(fetchUserAsset.fulfilled.type, fetchCreateTransaction.fulfilled.type),
-      //   (state, action: PayloadAction<Asset>) => {
-      //     const currentAssetIndex = state.assets.items.findIndex(
-      //       (a) => a.currency.id === action.payload.currency.id
-      //     );
-      //     //if (currentAssetIndex === -1) state.assets.items.push(action.payload);
-      //     state.assets.items[currentAssetIndex] = action.payload;
-      //     state.assets.loadingState = LoadingState.LOADED;
-      //   }
-      // )
       .addCase(fetchUserAsset.pending.type, (state) => {
         state.assets.loadingState = LoadingState.LOADING;
       })
@@ -166,7 +173,6 @@ export const userSlice = createSlice({
         const currentAssetIndex = state.assets.items.findIndex(
           (a) => a.currency.id === action.payload.currency.id
         );
-        //if (currentAssetIndex === -1) state.assets.items.push(action.payload);
         state.assets.items[currentAssetIndex] = action.payload;
         state.assets.loadingState = LoadingState.LOADED;
       })
@@ -181,3 +187,9 @@ export const userSlice = createSlice({
 
 export const { setUserPortfolio, setUserAssets } = userSlice.actions;
 export const userReducer = userSlice.reducer;
+
+// .addMatcher<any>(
+//   isAnyOf<any>(fetchUserAsset.fulfilled.type, fetchCreateTransaction.fulfilled.type),
+//   (state, action: PayloadAction<Asset>) => {
+//   }
+// )

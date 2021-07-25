@@ -1,15 +1,17 @@
 import { Button } from 'components/Button';
+import { Preloader } from 'components/Preloader';
 import { Typography } from 'components/Typography';
-import { useControlInput } from 'hooks/useControlInput';
+import { useControlBuySell } from 'hooks/useControlBuySell';
 import Image from 'next/image';
 import { Currency } from 'pages/market/[currencyId]';
-import swapIcon from 'public/static/swap.svg';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectUserAsset } from 'store/selectors';
-import { fetchCreateTransaction, Transaction } from 'store/slices/userSlice';
+import { selectUserAsset, selectUserAssetsIsLoading } from 'store/selectors';
+import { fetchCreateTransaction } from 'store/slices/userSlice';
 import { BuySellType } from '..';
 import styles from './BuySell.module.scss';
+import loadingIcon from 'public/static/loadingMini.svg';
+import { useAppDispatch } from 'store';
 
 type PropsType = {
   action: BuySellType;
@@ -17,47 +19,52 @@ type PropsType = {
   currentPrice: number;
 };
 
-export const BuySell: React.FC<PropsType> = ({ action, currency, currentPrice }) => {
-  const dispatch = useDispatch();
+export type BuySellPrecision = {
+  amount: number;
+  total: number;
+};
+
+export const BuySell: React.FC<PropsType> = React.memo(({ action, currency, currentPrice }) => {
+  const dispatch = useAppDispatch();
   const asset = useSelector(selectUserAsset(currency.id));
+  const isLoading = useSelector(selectUserAssetsIsLoading);
   let assetAmount = asset?.amount || 0;
+
   const usdtAsset = useSelector(selectUserAsset('tether'));
   if (!usdtAsset) return null;
 
-  const precision = currentPrice > 0.01 ? { amount: 6, total: 2 } : { amount: 0, total: 8 };
-  const { value: amount, onChange: onChangeAmount } = useControlInput(20, precision.amount);
-  const { value: total, onChange: onChangeTotal } = useControlInput(20, precision.total);
+  const { amount, total, handleSetAmount, handleSetTotal, handleClear, precision } =
+    useControlBuySell(action, currentPrice);
 
+  const [error, setError] = useState(false);
   useEffect(() => {
-    handleSetAmount('');
-  }, [action]);
-
-  const handleSetAmount = (val: string) => {
-    onChangeAmount(val);
-    const newTotal = +val * currentPrice;
-    onChangeTotal(newTotal > 0 ? newTotal.toFixed(precision.total) : '');
-  };
-  const handleSetTotal = (val: string) => {
-    onChangeTotal(val);
-    const newAmount = +val / currentPrice;
-    onChangeAmount(newAmount > 0 ? newAmount.toFixed(precision.amount) : '');
-  };
+    if (action === 'buy') {
+      +total > +usdtAsset.amount.toFixed(precision.total) ? setError(true) : setError(false);
+    } else {
+      +amount > +assetAmount.toFixed(precision.amount) || assetAmount === 0
+        ? setError(true)
+        : setError(false);
+    }
+  }, [amount, total]);
 
   const handleCreateTransaction = () => {
     //!asset || --- isLoading
-    if (!usdtAsset) return;
+    if (!usdtAsset || error) return;
     const date = new Date().toISOString();
     const transaction = {
       date: `${date.substr(0, 10)} ${date.substr(11, 8)}`,
       source: 'market' as 'market' | 'education',
       type: action.toLowerCase() as 'buy' | 'sell',
-      usdValue: +(+amount * currentPrice).toFixed(2), // take price form props
+      usdValue: +(+amount * currentPrice).toFixed(2),
       amount: +amount,
       total: +(+amount * currentPrice * usdtAsset.currencyPrice).toFixed(6),
       assetId: asset?.id || null,
     };
-    console.log(transaction);
-    dispatch(fetchCreateTransaction({ currencyId: currency.id, payload: transaction }));
+    dispatch(fetchCreateTransaction({ currencyId: currency.id, payload: transaction }))
+      //.unwrap()
+      .then(() => {
+        handleClear();
+      });
   };
 
   return (
@@ -82,7 +89,12 @@ export const BuySell: React.FC<PropsType> = ({ action, currency, currentPrice })
           )} ${usdtAsset.currency.symbol.toUpperCase()}`}</Typography>
         </div>
       </div>
-      <div className={styles.inputContainer}>
+      <div
+        title={`Max Amount ${assetAmount}`}
+        className={`${styles.inputContainer} ${
+          action === 'sell' && error && styles.inputContainerError
+        }`}
+      >
         <Typography color="gray" fw="fw-500">
           Amount
         </Typography>
@@ -121,7 +133,12 @@ export const BuySell: React.FC<PropsType> = ({ action, currency, currentPrice })
         })}
       </div>
 
-      <div className={styles.inputContainer}>
+      <div
+        title="Your balance is not enough"
+        className={`${styles.inputContainer} ${
+          action === 'buy' && error && styles.inputContainerError
+        }`}
+      >
         <Typography color="gray" fw="fw-500">
           Total
         </Typography>
@@ -163,17 +180,21 @@ export const BuySell: React.FC<PropsType> = ({ action, currency, currentPrice })
       </div>
       <Button
         fullWidth
-        disabled={!amount}
+        disabled={!amount || error || isLoading}
         className={action === 'buy' ? styles.actionBuyActive : styles.actionSellActive}
         onClick={handleCreateTransaction}
       >
-        {/* || !asset */}
-        {action.toUpperCase()}
+        {isLoading ? (
+          <div className={styles.isLoadingBtn}>
+            <Image src={loadingIcon} height={32} width={32} />
+          </div>
+        ) : (
+          action[0].toUpperCase() + action.slice(1)
+        )}
       </Button>
     </div>
   );
-};
-
+});
 type PercentInputPropsType = {
   precentage: number;
   currentAmount: string;
@@ -183,29 +204,24 @@ type PercentInputPropsType = {
   onClick: (val: string) => void;
 };
 
-const PercentInput: React.FC<PercentInputPropsType> = ({
-  precentage,
-  currentAmount,
-  amount,
-  precision,
-  action,
-  onClick,
-}) => {
-  const newAmount = (amount * (precentage / 100)).toFixed(precision);
-  return (
-    <div className={styles.percentInput}>
-      <input
-        className={`${action === 'buy' ? styles.percentInputBuy : styles.percentInputSell} ${
-          +newAmount <= +currentAmount
-            ? action === 'buy'
-              ? styles.percentInputBuyActive
-              : styles.percentInputSellActive
-            : ''
-        }`}
-        type="button"
-        onClick={() => onClick(newAmount)}
-      />
-      <label>{`${precentage}%`}</label>
-    </div>
-  );
-};
+const PercentInput: React.FC<PercentInputPropsType> = React.memo(
+  ({ precentage, currentAmount, amount, precision, action, onClick }) => {
+    const newAmount = (amount * (precentage / 100)).toFixed(precision);
+    return (
+      <div className={styles.percentInput}>
+        <input
+          className={`${action === 'buy' ? styles.percentInputBuy : styles.percentInputSell} ${
+            +newAmount <= +currentAmount
+              ? action === 'buy'
+                ? styles.percentInputBuyActive
+                : styles.percentInputSellActive
+              : ''
+          }`}
+          type="button"
+          onClick={() => onClick(newAmount)}
+        />
+        <label>{`${precentage}%`}</label>
+      </div>
+    );
+  }
+);

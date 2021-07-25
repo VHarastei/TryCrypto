@@ -10,7 +10,7 @@ type PropsType = {
   data: Asset[];
 };
 
-export const PieChart: React.FC<PropsType> = ({ data }) => {
+export const PieChart: React.FC<PropsType> = React.memo(({ data }) => {
   type ChartData = {
     x: string;
     y: number;
@@ -86,7 +86,7 @@ export const PieChart: React.FC<PropsType> = ({ data }) => {
                   <div className={`${styles.chartItemColor} ${styles.bg_gray}`}></div>
                   <Typography variant="regularText">Other</Typography>
                 </div>
-                <div></div>
+                <Typography variant="mediumText">{formatPercent(otherCurrencies)}</Typography>
               </div>
               // <div className={styles.chartItem} key={item.id}>
               //   <div className={`${styles.chartItemColor} ${styles.gray}`}></div>
@@ -97,4 +97,4 @@ export const PieChart: React.FC<PropsType> = ({ data }) => {
       </div>
     </div>
   );
-};
+});

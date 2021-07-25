@@ -1,5 +1,5 @@
 import { AxiosInstance } from 'axios';
-import { Asset, UserPortfolio, Transaction } from 'store/slices/userSlice';
+import { Asset, UserPortfolio, Transaction, PaginatedTransactions } from 'store/slices/userSlice';
 
 interface UserPortfolioWithAssets extends UserPortfolio {
   assets: Asset[];
@@ -7,6 +7,12 @@ interface UserPortfolioWithAssets extends UserPortfolio {
 export interface CreateTransactionPayload extends Omit<Transaction, 'id' | 'asset'> {
   assetId: number | null;
 }
+export type FetchAssetTransactionsPayload = {
+  currencyId: string;
+  size?: number;
+  page?: number;
+};
+
 export const userApi = (instance: AxiosInstance) => {
   return {
     // getMe: async (): Promise<UserData> => {
@@ -22,7 +28,19 @@ export const userApi = (instance: AxiosInstance) => {
     getUserAsset: (currencyId: string): Promise<Asset> => {
       return instance.get(`/user/assets/${currencyId}`).then(({ data }) => data.data);
     },
-    createTransaction: (currencyId: string, payload: CreateTransactionPayload): Promise<Asset> => {
+    getAssetTransactions: ({
+      currencyId,
+      size = 7,
+      page = 1,
+    }: FetchAssetTransactionsPayload): Promise<PaginatedTransactions> => {
+      return instance
+        .get(`/user/assets/${currencyId}?size=${size}&page=${page}`)
+        .then(({ data }) => data.data);
+    },
+    createTransaction: (
+      currencyId: string,
+      payload: CreateTransactionPayload
+    ): Promise<Asset[]> => {
       return instance.post(`/user/assets/${currencyId}`, payload).then(({ data }) => data.data);
     },
   };

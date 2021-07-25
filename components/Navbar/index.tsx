@@ -16,7 +16,7 @@ type PropsType = {
   children: React.ReactNode;
 };
 
-export const Navbar: React.FC<PropsType> = ({ children }) => {
+export const Navbar: React.FC<PropsType> = React.memo(({ children }) => {
   const router = useRouter();
   const path = router.pathname.split('/');
   const active = path[1];
@@ -53,4 +53,4 @@ export const Navbar: React.FC<PropsType> = ({ children }) => {
       </div>
     </div>
   );
-};
+});

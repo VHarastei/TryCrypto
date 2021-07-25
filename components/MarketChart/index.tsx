@@ -25,7 +25,7 @@ export type ChartData = {
 };
 export type ChartArray = [number, number];
 
-export const MarketChart: React.FC<PropsType> = ({ currencyId, marketData }) => {
+export const MarketChart: React.FC<PropsType> = React.memo(({ currencyId, marketData }) => {
   const [dataInterval, setDataInterval] = useState(intervals[1].value);
   const [chartType, setChartType] = useState<ChartType>('prices');
   const [chartData, setChartData] = useState<ChartData | undefined>(undefined);
@@ -97,7 +97,7 @@ export const MarketChart: React.FC<PropsType> = ({ currencyId, marketData }) => 
       {/* <CustomBrushChart data={brushChartData?.prices} /> */}
     </Paper>
   );
-};
+});
 
 type ChartSelectorPropsType = {
   name: string;
@@ -105,16 +105,18 @@ type ChartSelectorPropsType = {
   handleSelectChart: () => void;
 };
 
-const ChartSelector: React.FC<ChartSelectorPropsType> = ({ name, isActive, handleSelectChart }) => {
-  return (
-    <div
-      className={`${styles.chartSelector} ${isActive ? styles.chartSelectorActive : ''}`}
-      onClick={handleSelectChart}
-    >
-      {name}
-    </div>
-  );
-};
+const ChartSelector: React.FC<ChartSelectorPropsType> = React.memo(
+  ({ name, isActive, handleSelectChart }) => {
+    return (
+      <div
+        className={`${styles.chartSelector} ${isActive ? styles.chartSelectorActive : ''}`}
+        onClick={handleSelectChart}
+      >
+        {name}
+      </div>
+    );
+  }
+);
 
 type Intervals = {
   name: string;

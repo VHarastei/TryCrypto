@@ -10,6 +10,9 @@
   outline: none;
   border: 0;
   padding: 8px 16px;
+  // display: flex;
+  // align-items: center;
+  // justify-content: center;
 }
 .primary {
   background-color: $primary;
@@ -25,7 +28,7 @@
 }
 .disabled {
   cursor: default;
-  background-color: $gray;
+  background-color: $gray !important;
   &:hover {
     background-color: $gray;
   }

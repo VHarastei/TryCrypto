@@ -14,7 +14,8 @@ export const selectUserAsset = (currencyId: string): Selector<Asset | undefined>
     [(state: RootState) => state.user.assets.items.find((a) => a.currency.id === currencyId)],
     (asset) => asset
   );
-
+export const selectUserAssetsIsLoading = (state: RootState) =>
+  state.user.assets.loadingState === LoadingState.LOADING;
 // export const selectUserMarketAsset = (state: RootState) => state.user.marketAsset.data;
 // export const selectUserMarketAssetIsLoading = (state: RootState) =>
 //   state.user.marketAsset.loadingState === LoadingState.LOADING;

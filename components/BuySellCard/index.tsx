@@ -12,7 +12,7 @@ type PropsType = {
 
 export type BuySellType = 'buy' | 'sell';
 
-export const BuySellCard: React.FC<PropsType> = ({ currency, currentPrice }) => {
+export const BuySellCard: React.FC<PropsType> = React.memo(({ currency, currentPrice }) => {
   const [action, setAction] = React.useState<BuySellType>('buy');
   const handleChangeAction = (newAction: BuySellType) => {
     setAction(newAction);
@@ -51,4 +51,4 @@ export const BuySellCard: React.FC<PropsType> = ({ currency, currentPrice }) => 
       <BuySell action={action} currency={currency} currentPrice={currentPrice} />
     </Paper>
   );
-};
+});

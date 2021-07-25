@@ -7,7 +7,7 @@ type PropsType = {
   children: React.ReactNode;
 };
 
-export const Layout: React.FC<PropsType> = ({ children }) => {
+export const Layout: React.FC<PropsType> = React.memo(({ children }) => {
   return (
     <div className={styles.container}>
       <Navbar>
@@ -15,4 +15,4 @@ export const Layout: React.FC<PropsType> = ({ children }) => {
       </Navbar>
     </div>
   );
-};
+});

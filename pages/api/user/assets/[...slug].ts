@@ -51,11 +51,10 @@ const handler = nextConnect()
     }
   })
   .get('api/user/assets/:slug/transactions', async (req: NextApiRequest, res: NextApiResponse) => {
-    //this route will return paginated asset transactions
     try {
       const { assetId, size, page } = req.query as { assetId: string; size: string; page: string };
+      const currencyId = req.query.slug[0];
       const { limit, offset } = getPagination(size, page);
-
       // const asset = await db.Asset.findOne({
       //   where: { userId: 1, currencyId },
       //   attributes: ['id'],
@@ -79,16 +78,12 @@ const handler = nextConnect()
       });
 
       const data = getPaginatedData(transactions, page, limit);
-      console.log(limit, offset);
       res.status(200).json({
         status: 'success',
-        // data: {
-        //   totalItems: asset.transactions.length,
-        //   totalPages: 1,
-        //   currentPage: 1,
-        //   items: asset.transactions,
-        // },
-        data,
+        data: {
+          currencyId,
+          transactions: data,
+        },
       });
     } catch (err) {
       console.log(err);
@@ -102,7 +97,8 @@ const handler = nextConnect()
     try {
       const userId = 1;
       const data = req.body;
-      const { currencyId } = req.query as { currencyId: string };
+      const currencyId = req.query.slug[0];
+      console.log(currencyId);
 
       //TODO: add transaction state: for example: pending, fullfilled, rejected
       const usdtAsset = await db.Asset.findOne({ where: { userId, currencyId: 'tether' } });

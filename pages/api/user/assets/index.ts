@@ -9,12 +9,7 @@ const handler = nextConnect().get(async (req: NextApiRequest, res: NextApiRespon
     const dbAssets = await db.Asset.findAll({
       where: { userId: 1 },
       attributes: { exclude: ['userId', 'currencyId'] },
-      include: [
-        {
-          model: db.Currency,
-          as: 'currency',
-        },
-      ],
+      include: [{ model: db.Currency, as: 'currency' }],
     });
 
     const { assets, balance } = await getAssetsMarketData(dbAssets);

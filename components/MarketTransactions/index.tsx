@@ -1,4 +1,5 @@
 import { unwrapResult } from '@reduxjs/toolkit';
+import { Button } from 'components/Button';
 import { Card } from 'components/Card';
 import { Preloader } from 'components/Preloader';
 import { TransactionItem } from 'components/RecentTransactions';
@@ -9,7 +10,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useAppDispatch } from 'store';
 import { selectUserAsset } from 'store/selectors';
-import { fetchUserAsset } from 'store/slices/userSlice';
+import { fetchAssetTransactions, fetchUserAsset } from 'store/slices/userSlice';
 
 import { formatDollar } from 'utils/formatDollar';
 import styles from './MarketTransactions.module.scss';
@@ -19,23 +20,35 @@ type PropsType = {
 };
 
 export const MarketTransactions: React.FC<PropsType> = React.memo(({ currency }) => {
-  //request for transactions of actual currency
   const dispatch = useAppDispatch();
+  const [page, setPage] = useState(1);
+
   const asset = useSelector(selectUserAsset(currency.id));
   let transactions;
-  if (asset?.transactions) {
-    transactions = asset.transactions.map((txn) => {
+  if (asset?.transactions.items) {
+    transactions = asset.transactions.items.map((txn) => {
       const { transactions, ...rest } = asset;
       return { ...txn, asset: rest };
     });
   }
-
   useEffect(() => {
     // if (!isError) dispatch(fetchUserAsset(currency.id))
     if (asset) {
       dispatch(fetchUserAsset(currency.id));
     }
   }, []);
+
+  const handleLoadMore = () => {
+    if (asset) {
+      setPage((prev) => prev + 1);
+
+      //console.log({ currencyId: currency.id, page, size: 7, assetId: `${asset.id}` });
+      dispatch(
+        fetchAssetTransactions({ currencyId: currency.id, page, size: 7, assetId: `${asset.id}` })
+      ); // TODO: make assetId UUID!!!
+    }
+  };
+
   // if (currency) {
   //   dispatch(fetchUserMarketAsset(currency.id))
   //     .unwrap()
@@ -60,7 +73,6 @@ export const MarketTransactions: React.FC<PropsType> = React.memo(({ currency })
       title={() => (
         <RTTitle currency={currency} amount={asset?.amount} usdValue={asset?.usdValue} />
       )}
-      // withPadding={withPadding}
     >
       <div>
         {transactions ? (
@@ -69,6 +81,11 @@ export const MarketTransactions: React.FC<PropsType> = React.memo(({ currency })
               {transactions.map((txn) => {
                 return <TransactionItem key={txn.id} {...txn} />;
               })}
+              <div className={styles.btnContainer}>
+                <Button color="secondary" onClick={handleLoadMore}>
+                  Load more
+                </Button>
+              </div>
             </div>
           ) : (
             <div>

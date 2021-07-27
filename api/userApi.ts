@@ -9,6 +9,7 @@ export interface CreateTransactionPayload extends Omit<Transaction, 'id' | 'asse
 }
 export type FetchAssetTransactionsPayload = {
   currencyId: string;
+  assetId: string;
   size?: number;
   page?: number;
 };
@@ -30,11 +31,15 @@ export const userApi = (instance: AxiosInstance) => {
     },
     getAssetTransactions: ({
       currencyId,
+      assetId,
       size = 7,
       page = 1,
-    }: FetchAssetTransactionsPayload): Promise<PaginatedTransactions> => {
+    }: FetchAssetTransactionsPayload): Promise<{
+      currencyId: string;
+      transactions: PaginatedTransactions;
+    }> => {
       return instance
-        .get(`/user/assets/${currencyId}?size=${size}&page=${page}`)
+        .get(`/user/assets/${currencyId}/transactions?assetId=${assetId}&size=${size}&page=${page}`)
         .then(({ data }) => data.data);
     },
     createTransaction: (

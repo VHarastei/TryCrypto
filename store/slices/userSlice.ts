@@ -106,6 +106,7 @@ export const fetchUserAssets = createAsyncThunk<{ assets: Asset[]; balance: numb
     return assets;
   }
 );
+
 export const fetchUserAsset = createAsyncThunk<Asset, string>(
   'user/fetchUserAsset',
   async (currencyId) => {
@@ -114,20 +115,20 @@ export const fetchUserAsset = createAsyncThunk<Asset, string>(
   }
 );
 
-export const fetchAssetTransactions = createAsyncThunk<
-  PaginatedTransactions,
-  FetchAssetTransactionsPayload
->('user/fetchUserAsset', async (payload) => {
-  const transactions = await Api().getAssetTransactions(payload);
-  return transactions;
-});
-
 export const fetchCreateTransaction = createAsyncThunk<
   Asset[],
   { currencyId: string; payload: CreateTransactionPayload }
 >('user/fetchCreateTransaction', async ({ currencyId, payload }) => {
   const updatedAssets = await Api().createTransaction(currencyId, payload);
   return updatedAssets;
+});
+
+export const fetchAssetTransactions = createAsyncThunk<
+  { currencyId: string; transactions: PaginatedTransactions },
+  FetchAssetTransactionsPayload
+>('user/fetchAssetTransactions', async (payload) => {
+  const transactions = await Api().getAssetTransactions(payload);
+  return transactions;
 });
 
 //createAssetTransaction
@@ -170,10 +171,12 @@ export const userSlice = createSlice({
         state.assets.loadingState = LoadingState.LOADING;
       })
       .addCase(fetchUserAsset.fulfilled.type, (state, action: PayloadAction<Asset>) => {
-        const currentAssetIndex = state.assets.items.findIndex(
+        const assetIndex = state.assets.items.findIndex(
           (a) => a.currency.id === action.payload.currency.id
         );
-        state.assets.items[currentAssetIndex] = action.payload;
+        state.assets.items[assetIndex] = action.payload;
+        // state.assets.items[assetIndex].transactions.items =
+        //   action.payload.transactions.items;
         state.assets.loadingState = LoadingState.LOADED;
       })
       .addCase(fetchUserAsset.rejected.type, (state) => {
@@ -182,7 +185,26 @@ export const userSlice = createSlice({
       .addCase(HYDRATE as any, (state, action: PayloadAction<RootState>) => {
         state.portfolio = action.payload.user.portfolio;
         state.assets = action.payload.user.assets;
-      }),
+      })
+      .addCase(
+        fetchAssetTransactions.fulfilled.type,
+        (
+          state,
+          action: PayloadAction<
+            Omit<{ currencyId: string; transactions: PaginatedTransactions }, 'loadingState'>
+          >
+        ) => {
+          const assetIndex = state.assets.items.findIndex(
+            (a) => a.currency.id === action.payload.currencyId
+          );
+          state.assets.items[assetIndex].transactions.items = [
+            ...state.assets.items[assetIndex].transactions.items,
+            ...action.payload.transactions.items,
+          ];
+          state.assets.items[assetIndex].transactions.currentPage =
+            action.payload.transactions.currentPage;
+        }
+      ),
 });
 
 export const { setUserPortfolio, setUserAssets } = userSlice.actions;

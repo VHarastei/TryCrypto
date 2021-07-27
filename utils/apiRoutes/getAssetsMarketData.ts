@@ -10,14 +10,14 @@ export type DbAsset = {
   transactions: Transaction[];
 };
 
-export const getAssetsMarketData = async (dbAssets: DbAsset[]) => {
+export const getAssetsMarketData = async (dbAssets: any) => {
   const assetsMarketData = await Promise.all(
-    dbAssets.map((asset) => {
+    dbAssets.map((asset: any) => {
       return fetcher(MarketApi.getCurrencyDataUrl(asset.currency.id));
     })
   );
 
-  const assets = assetsMarketData.map((mAsset, index) => {
+  const assets = assetsMarketData.map((mAsset: any, index) => {
     return {
       id: dbAssets[index].id,
       amount: dbAssets[index].amount,
@@ -30,7 +30,12 @@ export const getAssetsMarketData = async (dbAssets: DbAsset[]) => {
         symbol: mAsset.symbol,
         image: mAsset.image.large,
       },
-      transactions: dbAssets[index].transactions || [],
+      transactions: dbAssets[index].transactions || {
+        totalItems: null,
+        totalPages: null,
+        currentPage: null,
+        items: [],
+      },
       //transactions: [],
     };
   });

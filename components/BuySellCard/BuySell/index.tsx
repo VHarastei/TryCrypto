@@ -111,6 +111,7 @@ export const BuySell: React.FC<PropsType> = React.memo(({ action, currency, curr
           if (action === 'buy')
             return (
               <PercentInput
+                key={item}
                 precentage={item}
                 action={action}
                 currentAmount={total}

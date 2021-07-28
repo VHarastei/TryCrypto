@@ -23,4 +23,5 @@ const store = configureStore({
 export type AppDispatch = typeof store.dispatch;
 export const useAppDispatch = () => useDispatch<AppDispatch>();
 
-export const wrapper = createWrapper<Store<RootState>>(makeStore, { debug: true });
+export const wrapper = createWrapper<Store<RootState>>(makeStore);
+//{ debug: true }

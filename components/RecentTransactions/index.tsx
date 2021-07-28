@@ -1,6 +1,8 @@
+import { Button } from 'components/Button';
 import { Card } from 'components/Card';
 import { Typography } from 'components/Typography';
 import { format, parseISO } from 'date-fns';
+import Link from 'next/link';
 import React from 'react';
 import { Transaction } from 'store/slices/userSlice';
 import styles from './RecentTransaction.module.scss';
@@ -20,6 +22,11 @@ export const RecentTransactions: React.FC<PropsType> = React.memo(
               {transactions.map((txn) => {
                 return <TransactionItem key={txn.id} {...txn} />;
               })}
+              <Link href="/portfolio/transactionHistory">
+                <a className={styles.btnContainer}>
+                  <Button color="secondary">See transaction history</Button>
+                </a>
+              </Link>
             </div>
           ) : (
             <Typography variant="regularText">

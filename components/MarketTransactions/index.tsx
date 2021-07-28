@@ -1,17 +1,14 @@
-import { unwrapResult } from '@reduxjs/toolkit';
 import { Button } from 'components/Button';
 import { Card } from 'components/Card';
 import { Preloader } from 'components/Preloader';
 import { TransactionItem } from 'components/RecentTransactions';
 import { Typography } from 'components/Typography';
-import { format, parseISO } from 'date-fns';
 import { Currency } from 'pages/market/[currencyId]';
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useAppDispatch } from 'store';
 import { selectUserAsset } from 'store/selectors';
 import { fetchAssetTransactions, fetchUserAsset } from 'store/slices/userSlice';
-
 import { formatDollar } from 'utils/formatDollar';
 import styles from './MarketTransactions.module.scss';
 
@@ -81,11 +78,13 @@ export const MarketTransactions: React.FC<PropsType> = React.memo(({ currency })
               {transactions.map((txn) => {
                 return <TransactionItem key={txn.id} {...txn} />;
               })}
-              <div className={styles.btnContainer}>
-                <Button color="secondary" onClick={handleLoadMore}>
-                  Load more
-                </Button>
-              </div>
+              {asset?.transactions.totalPages && asset.transactions.totalPages > page ? (
+                <div className={styles.btnContainer}>
+                  <Button color="secondary" onClick={handleLoadMore}>
+                    Load more
+                  </Button>
+                </div>
+              ) : null}
             </div>
           ) : (
             <div>

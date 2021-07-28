@@ -11,9 +11,13 @@ export const createPagination = ({
   currentPage,
   numberOfButtons,
 }: createPaginationType) => {
-  let showing = `${currentPage === 1 ? currentPage : itemsPerPage * (currentPage - 1) + 1} - ${
+  const items = `${currentPage === 1 ? currentPage : itemsPerPage * (currentPage - 1) + 1} - ${
     itemsPerPage * currentPage
   }`;
+  let showing = {
+    items: items,
+    total: numberOfItems,
+  };
 
   const numberOfPages = Math.ceil(numberOfItems / itemsPerPage);
 
@@ -52,7 +56,7 @@ export const createPagination = ({
 
   const leftButtons = calculLeft(calculRight().rest()).array;
   const rightButtons = calculRight(calculLeft().rest()).array;
-
+  console.log([...leftButtons, currentPage, ...rightButtons]);
   return {
     pagination: [...leftButtons, currentPage, ...rightButtons],
     showing,

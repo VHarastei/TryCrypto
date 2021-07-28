@@ -35,16 +35,12 @@ export type Transaction = {
 };
 
 export type PaginatedTransactions = {
-  totalItems: number | null;
-  totalPages: number | null;
-  currentPage: number | null;
+  totalItems: number;
+  totalPages: number;
+  currentPage: number;
   items: Transaction[];
   loadingState: LoadingState;
 };
-
-export interface RecentTransaction extends Transaction {
-  asset: Pick<Asset, 'amount' | 'currency'>;
-}
 
 export type HistoricalDataItem = {
   date: string;
@@ -63,15 +59,12 @@ export type PNL = {
 
 export type UserPortfolio = {
   balance: number;
-  recentTransactions: RecentTransaction[];
+  recentTransactions: Transaction[];
   yesterdaysPNL: PNL;
   thirtydaysPNL: PNL;
   historicalData: HistoricalData;
+  transactionHistory: PaginatedTransactions;
 };
-
-// export interface MarketAsset extends Omit<Asset, 'usdValuePercentage' | 'currencyPrice'> {
-//   transactions: Omit<Transaction, 'asset'>[];
-// }
 
 export type UserSliceState = {
   portfolio: UserPortfolio;
@@ -88,15 +81,18 @@ const initialState: UserSliceState = {
     yesterdaysPNL: { usdValue: 0, usdValueChangePercetage: 0 },
     thirtydaysPNL: { usdValue: 0, usdValueChangePercetage: 0 },
     historicalData: { balance: [], PNL: [] },
+    transactionHistory: {
+      currentPage: 0,
+      totalItems: 0,
+      totalPages: 0,
+      items: [],
+      loadingState: LoadingState.NEVER,
+    },
   },
   assets: {
     items: [],
     loadingState: LoadingState.NEVER,
   },
-  // marketAsset: {
-  //   data: null,
-  //   loadingState: LoadingState.NEVER,
-  // },
 };
 
 export const fetchUserAssets = createAsyncThunk<{ assets: Asset[]; balance: number }>(
@@ -142,6 +138,9 @@ export const userSlice = createSlice({
     },
     setUserAssets: (state, action: PayloadAction<Asset[]>) => {
       state.assets.items = action.payload;
+    },
+    setUserTransactionHistory: (state, action: PayloadAction<PaginatedTransactions>) => {
+      state.portfolio.transactionHistory = action.payload;
     },
   },
   extraReducers: (builder) =>
@@ -207,7 +206,7 @@ export const userSlice = createSlice({
       ),
 });
 
-export const { setUserPortfolio, setUserAssets } = userSlice.actions;
+export const { setUserPortfolio, setUserAssets, setUserTransactionHistory } = userSlice.actions;
 export const userReducer = userSlice.reducer;
 
 // .addMatcher<any>(

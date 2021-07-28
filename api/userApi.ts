@@ -7,9 +7,11 @@ interface UserPortfolioWithAssets extends UserPortfolio {
 export interface CreateTransactionPayload extends Omit<Transaction, 'id' | 'asset'> {
   assetId: number | null;
 }
-export type FetchAssetTransactionsPayload = {
+export interface FetchAssetTransactionsPayload extends PaginationPayload {
   currencyId: string;
   assetId: string;
+}
+export type PaginationPayload = {
   size?: number;
   page?: number;
 };
@@ -22,6 +24,14 @@ export const userApi = (instance: AxiosInstance) => {
     // },
     getUserPortfolio: (): Promise<UserPortfolioWithAssets> => {
       return instance.get('/user/portfolio').then(({ data }) => data.data);
+    },
+    getUserTransactionHistory: ({
+      size = 20,
+      page = 0,
+    }: PaginationPayload): Promise<PaginatedTransactions> => {
+      return instance
+        .get(`/user/portfolio/transactionHistory?size=${size}&page=${page}`)
+        .then(({ data }) => data.data);
     },
     getUserAssets: (): Promise<{ assets: Asset[]; balance: number }> => {
       return instance.get('/user/assets').then(({ data }) => data.data);

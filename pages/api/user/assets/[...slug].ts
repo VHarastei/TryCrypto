@@ -10,37 +10,21 @@ const db = require('db/models/index');
 
 const handler = nextConnect()
   .get('api/user/assets/:slug', async (req: NextApiRequest, res: NextApiResponse) => {
-    //this route will return paginated asset transactions
     try {
       const { slug: currencyId } = req.query as { slug: string };
       const asset = await getAssets(1, [currencyId]);
-      // const asset = await db.Asset.findOne({
-      //   where: { userId: 1, currencyId },
-      //   attributes: ['id', 'amount'],
-      //   include: [
-      //     {
-      //       model: db.Currency,
-      //       as: 'currency',
-      //     },
-      //     {
-      //       model: db.Transaction,
-      //       as: 'transactions',
-      //       attributes: { exclude: ['assetId'] },
-      //     },
-      //   ],
-      // });
 
-      if (!asset.length)
+      if (!asset)
         return res.status(404).json({
           status: 'error',
           message: `Asset with ${currencyId} not found`,
         });
 
-      const { assets } = await getAssetsMarketData([asset[0]]);
+      const { assets: assetWithMarketData } = await getAssetsMarketData([asset]);
 
       res.status(200).json({
         status: 'success',
-        data: assets[0],
+        data: assetWithMarketData,
       });
     } catch (err) {
       console.log(err);
@@ -54,21 +38,8 @@ const handler = nextConnect()
     try {
       const { assetId, size, page } = req.query as { assetId: string; size: string; page: string };
       const currencyId = req.query.slug[0];
-      const { limit, offset } = getPagination(size, page);
-      // const asset = await db.Asset.findOne({
-      //   where: { userId: 1, currencyId },
-      //   attributes: ['id'],
-      //   include: [
-      //     {
-      //       model: db.Transaction,
-      //       as: 'transactions',
-      //       attributes: { exclude: ['assetId'] },
-      //       limit,
-      //       offset,
-      //     },
-      //   ],
-      // });
 
+      const { limit, offset } = getPagination(+size, +page);
       const transactions = await db.Transaction.findAndCountAll({
         where: { assetId },
         attributes: { exclude: ['assetId'] },
@@ -77,7 +48,14 @@ const handler = nextConnect()
         offset,
       });
 
-      const data = getPaginatedData(transactions, page, limit);
+      if (!transactions)
+        return res.status(404).json({
+          status: 'error',
+          message: `Transactions for assetId: ${assetId} not found`,
+        });
+
+      const data = getPaginatedData(transactions, +page, limit);
+
       res.status(200).json({
         status: 'success',
         data: {

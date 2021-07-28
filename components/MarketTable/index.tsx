@@ -8,6 +8,7 @@ import React, { useState } from 'react';
 import useSWR from 'swr';
 import styles from './MarketTable.module.scss';
 import { SortableTable } from './SortableTable';
+import { Pagination } from 'components/Pagination';
 
 type PropsType = {
   data: TableCoin[];
@@ -28,54 +29,60 @@ export const MarketTable: React.FC<PropsType> = React.memo((props) => {
     currentPage,
   });
 
-  const handleChangePage = (newPage: number) => () => {
-    setCurrentPage(newPage);
-    window.scrollTo(0, 0);
-  };
+  // const handleChangePage = (newPage: number) => () => {
+  //   setCurrentPage(newPage);
+  //   window.scrollTo(0, 0);
+  // };
   return (
     <div>
       <SortableTable data={data} currentPage={currentPage} />
       {data.length && (
-        <div className={styles.paginationContainer}>
-          <div className={styles.showing}>{`Showing ${showing} out of 6120`}</div>
-          <div className={styles.pagination}>
-            <div
-              color="secondary"
-              onClick={handleChangePage(currentPage - 1)}
-              className={`${styles.paginationArrow} ${
-                pagination[0] === currentPage ? styles.disabledArrow : ''
-              }`}
-            >
-              <Image src={arrowIcon} alt="Arrow icon" width={14} height={14} />
-            </div>
-            {pagination.map((page) => {
-              return (
-                <Link key={page} href={`/market${page === 1 ? '' : `?page=${page}`}`}>
-                  <a>
-                    <div
-                      color="secondary"
-                      onClick={handleChangePage(page)}
-                      className={`${styles.paginationBtn} ${
-                        page === currentPage ? styles.active : ''
-                      }`}
-                    >
-                      {page}
-                    </div>
-                  </a>
-                </Link>
-              );
-            })}
-            <div
-              color="secondary"
-              onClick={handleChangePage(currentPage + 1)}
-              className={`${styles.paginationArrow} ${styles.rotate} ${
-                pagination.reverse()[0] === currentPage ? styles.disabledArrow : ''
-              }`}
-            >
-              <Image src={arrowIcon} alt="Arrow icon" width={14} height={14} />
-            </div>
-          </div>
-        </div>
+        <Pagination
+          currentPage={currentPage}
+          pagination={pagination}
+          showing={showing}
+          setCurrentPage={setCurrentPage}
+        />
+        // <div className={styles.paginationContainer}>
+        //   <div className={styles.showing}>{`Showing ${showing} out of 6120`}</div>
+        //   <div className={styles.pagination}>
+        //     <div
+        //       color="secondary"
+        //       onClick={handleChangePage(currentPage - 1)}
+        //       className={`${styles.paginationArrow} ${
+        //         pagination[0] === currentPage ? styles.disabledArrow : ''
+        //       }`}
+        //     >
+        //       <Image src={arrowIcon} alt="Arrow icon" width={14} height={14} />
+        //     </div>
+        //     {pagination.map((page) => {
+        //       return (
+        //         <Link key={page} href={`/market${page === 1 ? '' : `?page=${page}`}`}>
+        //           <a>
+        //             <div
+        //               color="secondary"
+        //               onClick={handleChangePage(page)}
+        //               className={`${styles.paginationBtn} ${
+        //                 page === currentPage ? styles.active : ''
+        //               }`}
+        //             >
+        //               {page}
+        //             </div>
+        //           </a>
+        //         </Link>
+        //       );
+        //     })}
+        //     <div
+        //       color="secondary"
+        //       onClick={handleChangePage(currentPage + 1)}
+        //       className={`${styles.paginationArrow} ${styles.rotate} ${
+        //         pagination.reverse()[0] === currentPage ? styles.disabledArrow : ''
+        //       }`}
+        //     >
+        //       <Image src={arrowIcon} alt="Arrow icon" width={14} height={14} />
+        //     </div>
+        //   </div>
+        // </div>
       )}
     </div>
   );

@@ -1,0 +1,51 @@
+@import 'styles/theme.scss';
+
+.table {
+  border: 0;
+  border-spacing: 0;
+  border-collapse: initial;
+  width: 100%;
+  text-align: center;
+  .tableHeader {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 24px;
+    margin: 0;
+    border-top: 1px solid $gray;
+    li {
+      list-style: none;
+      text-align: left;
+      flex-basis: 14%;
+    }
+  }
+}
+.tableDate {
+  flex-basis: 18% !important;
+  margin-right: 6px;
+}
+
+.tableRowContainer {
+  display: flex;
+  justify-content: space-between;
+  padding: 16px 24px;
+  border-top: 1px solid $gray;
+  margin: 0;
+
+  &:hover {
+    background-color: $secondary;
+  }
+  li {
+    font-weight: 400;
+    font-size: 18px;
+    list-style: none;
+    text-align: left;
+    flex-basis: 14%;
+  }
+  .tableAsset {
+    cursor: pointer;
+    &:hover {
+      color: $primary;
+      text-decoration: underline;
+    }
+  }
+}

@@ -24,7 +24,11 @@ export const TransactionHistoryTable: React.FC<PropsType> = React.memo(({ data }
         <TableHeaderItem name="Amount" />
         <TableHeaderItem name="USD Value" />
         <TableHeaderItem name="Total" />
-        <TableHeaderItem name="Source" />
+        <li className={styles.tableSource}>
+          <Typography variant="thinText" color="gray">
+            Source
+          </Typography>
+        </li>
       </ul>
 
       <div>
@@ -54,7 +58,7 @@ export const TableRow: React.FC<TableRowPropsType> = React.memo(({ trx }) => {
     <ul className={styles.tableRowContainer}>
       <li className={styles.tableDate}>{format(parseISO(trx.date), 'yyyy-MM-dd hh:mm:ss')}</li>
       <li>
-        <Typography color={trx.type === 'buy' ? 'green' : 'red'}>
+        <Typography color={trx.type === 'sell' ? 'red' : 'green'}>
           {trx.type[0].toUpperCase() + trx.type.slice(1)}
         </Typography>
       </li>
@@ -67,7 +71,7 @@ export const TableRow: React.FC<TableRowPropsType> = React.memo(({ trx }) => {
       <li>{trx.amount}</li>
       <li>{formatDollar(trx.usdValue, 20)}</li>
       <li>{`${trx.total} USDT`}</li>
-      <li>{trx.source[0].toUpperCase() + trx.source.slice(1)}</li>
+      <li className={styles.tableSource}>{trx.source[0].toUpperCase() + trx.source.slice(1)}</li>
     </ul>
   );
 });

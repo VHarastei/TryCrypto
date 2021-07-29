@@ -1,14 +1,8 @@
-import { fetcher } from 'api/marketApi';
-import { MarketApi, TableCoin } from 'api/marketApi';
-import { createPagination } from 'utils/createPagination';
-import Image from 'next/image';
-import Link from 'next/link';
-import arrowIcon from 'public/static/back.svg';
+import { fetcher, MarketApi, TableCoin } from 'api/marketApi';
+import { Pagination } from 'components/Pagination';
 import React, { useState } from 'react';
 import useSWR from 'swr';
-import styles from './MarketTable.module.scss';
 import { SortableTable } from './SortableTable';
-import { Pagination } from 'components/Pagination';
 
 type PropsType = {
   data: TableCoin[];
@@ -21,68 +15,17 @@ export const MarketTable: React.FC<PropsType> = React.memo((props) => {
     initialData: currentPage === props.currentPage ? props.data : [],
     refreshInterval: 30000,
   });
-
-  const { pagination, showing } = createPagination({
-    numberOfItems: 6120,
-    itemsPerPage: 50,
-    numberOfButtons: 5,
-    currentPage,
-  });
-
-  // const handleChangePage = (newPage: number) => () => {
-  //   setCurrentPage(newPage);
-  //   window.scrollTo(0, 0);
-  // };
   return (
     <div>
       <SortableTable data={data} currentPage={currentPage} />
       {data.length && (
         <Pagination
           currentPage={currentPage}
-          pagination={pagination}
-          showing={showing}
+          itemsPerPage={50}
+          numberOfItems={6120}
           setCurrentPage={setCurrentPage}
+          navHref="/market"
         />
-        // <div className={styles.paginationContainer}>
-        //   <div className={styles.showing}>{`Showing ${showing} out of 6120`}</div>
-        //   <div className={styles.pagination}>
-        //     <div
-        //       color="secondary"
-        //       onClick={handleChangePage(currentPage - 1)}
-        //       className={`${styles.paginationArrow} ${
-        //         pagination[0] === currentPage ? styles.disabledArrow : ''
-        //       }`}
-        //     >
-        //       <Image src={arrowIcon} alt="Arrow icon" width={14} height={14} />
-        //     </div>
-        //     {pagination.map((page) => {
-        //       return (
-        //         <Link key={page} href={`/market${page === 1 ? '' : `?page=${page}`}`}>
-        //           <a>
-        //             <div
-        //               color="secondary"
-        //               onClick={handleChangePage(page)}
-        //               className={`${styles.paginationBtn} ${
-        //                 page === currentPage ? styles.active : ''
-        //               }`}
-        //             >
-        //               {page}
-        //             </div>
-        //           </a>
-        //         </Link>
-        //       );
-        //     })}
-        //     <div
-        //       color="secondary"
-        //       onClick={handleChangePage(currentPage + 1)}
-        //       className={`${styles.paginationArrow} ${styles.rotate} ${
-        //         pagination.reverse()[0] === currentPage ? styles.disabledArrow : ''
-        //       }`}
-        //     >
-        //       <Image src={arrowIcon} alt="Arrow icon" width={14} height={14} />
-        //     </div>
-        //   </div>
-        // </div>
       )}
     </div>
   );

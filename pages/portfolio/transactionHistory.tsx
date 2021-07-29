@@ -1,8 +1,9 @@
 import { Api } from 'api';
 import { Card } from 'components/Card';
 import { Layout } from 'components/Layout';
+import { Pagination } from 'components/Pagination';
 import { TransactionHistoryTable } from 'components/TransactionHistoryTable';
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { wrapper } from 'store';
 import { selectUserTransactionHistory } from 'store/selectors';
@@ -10,14 +11,21 @@ import { setUserTransactionHistory } from 'store/slices/userSlice';
 
 export default function TransactionHistory() {
   const data = useSelector(selectUserTransactionHistory);
-
-  //if (!data) return <div>nema</div>;
-  //console.log(data.items[0]);
-
+  const [currentPage, setCurrentPage] = useState(data.currentPage + 1);
+  console.log(currentPage);
   return (
     <Layout>
       <Card title="Transaction History">
         <TransactionHistoryTable data={data.items} />
+        {data.totalItems > 15 && (
+          <Pagination
+            currentPage={currentPage}
+            itemsPerPage={15}
+            numberOfItems={data.totalItems}
+            setCurrentPage={setCurrentPage}
+            navHref="/portfolio/transactionHistory"
+          />
+        )}
       </Card>
     </Layout>
   );
@@ -28,10 +36,10 @@ export const getServerSideProps = wrapper.getServerSideProps(
     async ({ req, res, query }) => {
       try {
         let currentPage = 0;
-        let currentSize = 20;
+        let currentSize = 15;
         const { size, page } = query;
         if (size) currentSize = +size;
-        if (page) currentPage = +page;
+        if (page) currentPage = +page - 1;
 
         const data = await Api().getUserTransactionHistory({
           size: currentSize,

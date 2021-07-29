@@ -26,7 +26,7 @@ export const userApi = (instance: AxiosInstance) => {
       return instance.get('/user/portfolio').then(({ data }) => data.data);
     },
     getUserTransactionHistory: ({
-      size = 20,
+      size = 15,
       page = 0,
     }: PaginationPayload): Promise<PaginatedTransactions> => {
       return instance

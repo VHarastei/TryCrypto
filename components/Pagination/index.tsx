@@ -1,25 +1,28 @@
-import { fetcher } from 'api/marketApi';
-import { MarketApi, TableCoin } from 'api/marketApi';
-import { createPagination } from 'utils/createPagination';
+import { nanoid } from '@reduxjs/toolkit';
 import Image from 'next/image';
 import Link from 'next/link';
 import arrowIcon from 'public/static/back.svg';
-import React, { useEffect, useState } from 'react';
-import useSWR from 'swr';
+import React from 'react';
+import { createPagination } from 'utils/createPagination';
 import styles from './Pagination.module.scss';
 
 type PropsType = {
   currentPage: number;
-  pagination: number[];
-  showing: {
-    items: string;
-    total: number;
-  };
+  numberOfItems: number;
+  itemsPerPage: number;
+  navHref: string;
   setCurrentPage: (newPage: number) => void;
 };
 
 export const Pagination: React.FC<PropsType> = React.memo(
-  ({ currentPage, pagination, showing, setCurrentPage }) => {
+  ({ currentPage, numberOfItems, itemsPerPage, navHref, setCurrentPage }) => {
+    const { pagination, showing } = createPagination({
+      numberOfItems,
+      itemsPerPage,
+      numberOfButtons: 5,
+      currentPage,
+    });
+
     const handleChangePage = (newPage: number) => () => {
       setCurrentPage(newPage);
       window.scrollTo(0, 0);
@@ -27,24 +30,24 @@ export const Pagination: React.FC<PropsType> = React.memo(
 
     return (
       <div className={styles.container}>
-        {pagination.map((p) => (
-          <div>{p}</div>
-        ))}
         <div className={styles.showing}>{`Showing ${showing.items} out of ${showing.total}`}</div>
         <div className={styles.pagination}>
-          <div
-            color="secondary"
-            onClick={handleChangePage(currentPage - 1)}
-            className={`${styles.paginationArrow} ${
-              pagination[0] === currentPage ? styles.disabledArrow : ''
-            }`}
+          <Link
+            href={`${navHref}${pagination[0] === currentPage ? '' : `?page=${currentPage - 1}`}`}
           >
-            <Image src={arrowIcon} alt="Arrow icon" width={14} height={14} />
-          </div>
-          {pagination.map((page, index) => {
-            console.log(page);
+            <a
+              onClick={handleChangePage(currentPage - 1)}
+              className={`${styles.paginationArrow} ${
+                pagination[0] === currentPage ? styles.disabledArrow : ''
+              }`}
+            >
+              <Image src={arrowIcon} alt="Arrow icon" width={14} height={14} />
+            </a>
+          </Link>
+
+          {pagination.map((page) => {
             return (
-              <Link key={page} href={`/market${page === 1 ? '' : `?page=${page}`}`}>
+              <Link key={nanoid()} href={`${navHref}${page === 1 ? '' : `?page=${page}`}`}>
                 <a>
                   <div
                     color="secondary"
@@ -59,15 +62,21 @@ export const Pagination: React.FC<PropsType> = React.memo(
               </Link>
             );
           })}
-          <div
-            color="secondary"
-            onClick={handleChangePage(currentPage + 1)}
-            className={`${styles.paginationArrow} ${styles.rotate} ${
-              pagination.reverse()[0] === currentPage ? styles.disabledArrow : ''
+
+          <Link
+            href={`${navHref}${
+              [...pagination].reverse()[0] === currentPage ? '' : `?page=${currentPage + 1}`
             }`}
           >
-            <Image src={arrowIcon} alt="Arrow icon" width={14} height={14} />
-          </div>
+            <a
+              onClick={handleChangePage(currentPage + 1)}
+              className={`${styles.paginationArrow} ${styles.rotate} ${
+                [...pagination].reverse()[0] === currentPage ? styles.disabledArrow : ''
+              }`}
+            >
+              <Image src={arrowIcon} alt="Arrow icon" width={14} height={14} />
+            </a>
+          </Link>
         </div>
       </div>
     );

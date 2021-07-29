@@ -11,7 +11,7 @@
     justify-content: space-between;
     padding: 12px 24px;
     margin: 0;
-    border-bottom: 1px solid $gray;
+    //border-bottom: 1px solid $gray;
 
     li {
       list-style: none;
@@ -83,7 +83,7 @@
   display: flex;
   justify-content: space-between;
   padding: 16px 24px;
-  border-bottom: 1px solid $gray;
+  border-top: 1px solid $gray;
   cursor: pointer;
   margin: 0;
 

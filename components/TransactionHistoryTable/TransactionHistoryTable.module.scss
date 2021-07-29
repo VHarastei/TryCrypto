@@ -23,6 +23,9 @@
   flex-basis: 18% !important;
   margin-right: 6px;
 }
+.tableSource {
+  flex-basis: 8% !important;
+}
 
 .tableRowContainer {
   display: flex;
@@ -42,8 +45,8 @@
     flex-basis: 14%;
   }
   .tableAsset {
-    cursor: pointer;
-    &:hover {
+    :hover {
+      cursor: pointer;
       color: $primary;
       text-decoration: underline;
     }

@@ -1,0 +1,17 @@
+@import 'styles/theme.scss';
+
+.portfolioBalanceContainer {
+  display: flex;
+  justify-content: space-between;
+
+  .portfolioBalance {
+    width: 100%;
+  }
+  .portfolioBalanceShimmer {
+    width: 100px;
+    height: 25px;
+    background-color: $secondary;
+    border-radius: 6px;
+    margin-top: 4px;
+  }
+}

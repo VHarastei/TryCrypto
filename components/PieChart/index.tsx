@@ -1,10 +1,11 @@
 import { Typography } from 'components/Typography';
 import { formatPercent } from 'utils/formatPercent';
 import Link from 'next/link';
-import React from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { VictoryContainer, VictoryPie } from 'victory';
 import styles from './PieChart.module.scss';
 import { Asset } from 'store/slices/userSlice';
+import { useDidMount } from 'hooks/useDidMount';
 
 type PropsType = {
   data: Asset[];
@@ -15,7 +16,6 @@ export const PieChart: React.FC<PropsType> = React.memo(({ data }) => {
     x: string;
     y: number;
   };
-
   let otherCurrencies = 0;
   const chartData: ChartData[] = data.reduce((results: ChartData[], item, index) => {
     if (index <= 3)
@@ -36,19 +36,25 @@ export const PieChart: React.FC<PropsType> = React.memo(({ data }) => {
   }, []);
 
   const chartColors = ['#f3aa4e', '#6076ff', 'tomato', '#82bb47', '#7b7f82'];
+  const [animatedData, setAnimatedData] = useState<ChartData[] | undefined>();
 
+  useEffect(() => {
+    setAnimatedData(chartData);
+  }, []);
   return (
     <div className={styles.container}>
       <div className={styles.chart}>
         <VictoryPie
+          animate={{ onLoad: { duration: 500 } }}
           height={200}
           width={200}
-          padAngle={5}
+          padAngle={3}
           innerRadius={85}
           padding={0}
           domainPadding={0}
           colorScale={chartColors}
-          data={chartData}
+          data={animatedData}
+          endAngle={animatedData ? 360 : 0}
           containerComponent={<VictoryContainer height={200} width={200} />}
         />
       </div>
@@ -88,13 +94,43 @@ export const PieChart: React.FC<PropsType> = React.memo(({ data }) => {
                 </div>
                 <Typography variant="mediumText">{formatPercent(otherCurrencies)}</Typography>
               </div>
-              // <div className={styles.chartItem} key={item.id}>
-              //   <div className={`${styles.chartItemColor} ${styles.gray}`}></div>
-              //   <Typography variant="regularText">Other</Typography>
-              // </div>
             );
         })}
       </div>
     </div>
   );
 });
+
+export const PieChartPreloader = () => {
+  return (
+    <div className={styles.container}>
+      <div className={styles.chart}>
+        <div className={`${styles.chartShimmer} ${styles.shimmer}`}>
+          <div className={styles.chartShimmerInner}></div>
+        </div>
+      </div>
+      <div className={styles.chartItemsContainer}>
+        <div className={styles.chartItem}>
+          <div className={`${styles.chartItemNameShimmer} ${styles.shimmer}`}></div>
+          <div className={`${styles.chartItemValueShimmer} ${styles.shimmer}`}></div>
+        </div>
+        <div className={styles.chartItem}>
+          <div className={`${styles.chartItemNameShimmer} ${styles.shimmer}`}></div>
+          <div className={`${styles.chartItemValueShimmer} ${styles.shimmer}`}></div>
+        </div>
+        <div className={styles.chartItem}>
+          <div className={`${styles.chartItemNameShimmer} ${styles.shimmer}`}></div>
+          <div className={`${styles.chartItemValueShimmer} ${styles.shimmer}`}></div>
+        </div>
+        <div className={styles.chartItem}>
+          <div className={`${styles.chartItemNameShimmer} ${styles.shimmer}`}></div>
+          <div className={`${styles.chartItemValueShimmer} ${styles.shimmer}`}></div>
+        </div>
+        <div className={styles.chartItem}>
+          <div className={`${styles.chartItemNameShimmer} ${styles.shimmer}`}></div>
+          <div className={`${styles.chartItemValueShimmer} ${styles.shimmer}`}></div>
+        </div>
+      </div>
+    </div>
+  );
+};

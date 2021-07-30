@@ -4,7 +4,8 @@ import { Card } from 'components/Card';
 import { ContentLayout } from 'components/ContentLayout';
 import { Layout } from 'components/Layout';
 import { Paper } from 'components/Paper';
-import { PieChart } from 'components/PieChart';
+import { PieChart, PieChartPreloader } from 'components/PieChart';
+import { PortfolioBalanceCard } from 'components/PortfolioBalanceCard';
 import { Typography } from 'components/Typography';
 import { Watchlist } from 'components/Watchlist';
 import Image from 'next/image';
@@ -38,19 +39,7 @@ export default function Home() {
         button="Confirm email"
       />
       <ContentLayout>
-        <Card title="Portfolio balance" withPadding>
-          <div className={styles.portfolioBalanceContainer}>
-            <div className={styles.portfolioBalance}>
-              <Typography variant="regularText" color="gray">
-                Account balance:
-              </Typography>
-              <Typography fw="fw-500" fs="fs-24">
-                {formatDollar(portfolio.balance, 20)}
-              </Typography>
-            </div>
-            <PieChart data={assets} />
-          </div>
-        </Card>
+        <PortfolioBalanceCard assets={assets} balance={portfolio.balance} />
 
         <Card title="Invite a friend and get bonus" withPadding>
           <Typography variant="regularText" color="gray">

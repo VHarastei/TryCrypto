@@ -5,3 +5,27 @@ $gray: #7b7f82;
 $green: #02c076;
 $red: #f84960;
 $background: #181a1e;
+
+.shimmer {
+  animation: shimmer 3s;
+  animation-iteration-count: infinite;
+  background: linear-gradient(
+    to right,
+    $secondary 0%,
+    #4f5355 10%,
+    #5f6264 20%,
+    #4f5355 30%,
+    $secondary 40%,
+    $secondary 80%
+  );
+
+  background-size: 800px 100%;
+}
+@keyframes shimmer {
+  from {
+    background-position: -400px 0;
+  }
+  to {
+    background-position: 400px 0;
+  }
+}

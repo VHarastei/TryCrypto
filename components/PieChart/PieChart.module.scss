@@ -2,17 +2,13 @@
 
 .container {
   display: flex;
-  //align-items: center;
   width: 100%;
   justify-content: space-between;
-  //margin: 0px 16px;
   .chart {
     height: 220px;
     width: 220px;
-    //margin: 0px 16px;
   }
   .chartItemsContainer {
-    //margin-right: 16px;
     margin-left: 16px;
     .chartItem {
       display: flex;
@@ -25,7 +21,6 @@
         background-color: $secondary;
         cursor: pointer;
       }
-      //letter-spacing: 1px;
       .chartItemName {
         display: flex;
         align-items: center;
@@ -54,3 +49,56 @@
     }
   }
 }
+
+.chartShimmer {
+  height: 220px;
+  width: 220px;
+  background-color: $secondary;
+  border-radius: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .chartShimmerInner {
+    height: 180px;
+    width: 180px;
+    background-color: $backgroundGray;
+    border-radius: 100%;
+  }
+}
+
+.chartItemNameShimmer {
+  width: 70px;
+  height: 24px;
+  background-color: $secondary;
+  border-radius: 6px;
+  margin-right: 16px;
+}
+.chartItemValueShimmer {
+  width: 50px;
+  height: 24px;
+  background-color: $secondary;
+  border-radius: 6px;
+}
+
+// .shimmer {
+//   animation: shimmer 3s;
+//   animation-iteration-count: infinite;
+//   background: linear-gradient(
+//     to right,
+//     $secondary 0%,
+//     #4f5355 10%,
+//     #5f6264 20%,
+//     #4f5355 30%,
+//     $secondary 40%,
+//     $secondary 80%
+//   );
+//   background-size: 800px 100%;
+// }
+// @keyframes shimmer {
+//   from {
+//     background-position: -400px 0;
+//   }
+//   to {
+//     background-position: 400px 0;
+//   }
+// }

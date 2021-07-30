@@ -1,20 +1,5 @@
 @import 'styles/theme.scss';
 
-// .miniPortfolio {
-//   display: flex;
-//   gap: 24px;
-// }
-// .miniPortfolio > * + * {
-//   margin-left: 24px;  //or gap: 24px;
-// }
-.portfolioBalanceContainer {
-  display: flex;
-  justify-content: space-between;
-
-  .portfolioBalance {
-    width: 100%;
-  }
-}
 .inviteUrl {
   font-size: 18px;
   border: 1px solid $gray;

@@ -1,0 +1,32 @@
+@import 'styles/theme.scss';
+.container {
+  height: 36px;
+  width: 36px;
+  position: relative;
+  cursor: pointer;
+}
+.container::before {
+  position: absolute;
+  bottom: 2px;
+  left: 6px;
+  font-size: 28px;
+  color: $gray;
+  :hover {
+    color: $primary;
+  }
+  //fill: $primary;
+  content: '☆';
+}
+.container:hover::before {
+  color: $primary;
+}
+.isWatchlisted::before {
+  content: '★';
+  color: $primary;
+}
+.outlined {
+  padding: 18px;
+  margin-left: 10px;
+  background-color: $secondary;
+  border-radius: 8px;
+}

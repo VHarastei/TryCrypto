@@ -1,7 +1,7 @@
 import { Button } from 'components/Button';
 import { Paper } from 'components/Paper';
-import { Currency } from 'pages/market/[currencyId]';
 import React from 'react';
+import { Currency } from 'store/slices/types';
 import { BuySell } from './BuySell';
 import styles from './BuySellCard.module.scss';
 

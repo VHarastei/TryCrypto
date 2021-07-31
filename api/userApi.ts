@@ -1,5 +1,11 @@
 import { AxiosInstance } from 'axios';
-import { Asset, UserPortfolio, Transaction, PaginatedTransactions } from 'store/slices/userSlice';
+import {
+  PaginatedTransactions,
+  Asset,
+  Transaction,
+  UserPortfolio,
+  WatchlistCurrency,
+} from 'store/slices/types';
 
 interface UserPortfolioWithAssets extends UserPortfolio {
   assets: Asset[];
@@ -57,6 +63,15 @@ export const userApi = (instance: AxiosInstance) => {
       payload: CreateTransactionPayload
     ): Promise<Asset[]> => {
       return instance.post(`/user/assets/${currencyId}`, payload).then(({ data }) => data.data);
+    },
+    getUserWatchlist: (): Promise<WatchlistCurrency[]> => {
+      return instance.get('/user/watchlist').then(({ data }) => data.data);
+    },
+    createUserWatchlistCurrency: (currencyId: string): Promise<WatchlistCurrency> => {
+      return instance.post(`/user/watchlist/${currencyId}`).then(({ data }) => data.data);
+    },
+    deleteUserWatchlistCurrency: (currencyId: string): Promise<string> => {
+      return instance.delete(`/user/watchlist/${currencyId}`).then(() => currencyId);
     },
   };
 };

@@ -8,31 +8,34 @@ import Image from 'next/image';
 import Link from 'next/link';
 import cryptoCurrencyIcon from 'public/static/cryptocurrency.svg';
 import React from 'react';
+import { useSelector } from 'react-redux';
+import { selectUserWatchlist } from 'store/selectors';
 import useSWR from 'swr';
 import { formatDollar } from 'utils/formatDollar';
 import { VictoryAxis, VictoryChart, VictoryLine } from 'victory';
 import styles from './Watchlist.module.scss';
 export const Watchlist = React.memo(() => {
-  const currencyIds: string[] = [
-    'bitcoin',
-    'matic-network',
-    'terra-luna',
-    // 'cardano',
-    // 'solana',
-    // 'solanium',
-    // 'tether',
-    // 'ethereum', //
-    // 'ripple',
-    // 'binancecoin',
-    // 'litecoin',
-    // 'tron',
-  ];
-  const divider = currencyIds.length % 3 === 0 ? 3 : currencyIds.length % 5 === 0 ? 5 : 4;
+  const watchlist = useSelector(selectUserWatchlist);
+  // const watchlist: string[] = [
+  //   'bitcoin',
+  //   'matic-network',
+  //   'terra-luna',
+  //   'cardano',
+  //   'solana',
+  //   'solanium',
+  //   // 'tether',
+  //   // 'ethereum', //
+  //   // 'ripple',
+  //   // 'binancecoin',
+  //   // 'litecoin',
+  //   // 'tron',
+  // ];
+  const divider = watchlist.length % 3 === 0 ? 3 : watchlist.length % 5 === 0 ? 5 : 4;
 
   const dividedItems: any[] = [];
   let fourItems: any[] = [];
-  currencyIds.forEach((item, index) => {
-    fourItems.push(item);
+  watchlist.forEach((item, index) => {
+    fourItems.push(item.currencyId);
     if ((index + 1) % divider === 0) {
       dividedItems.push(fourItems);
       fourItems = [];
@@ -66,7 +69,7 @@ export const Watchlist = React.memo(() => {
             </div>
           );
         })}
-        {!currencyIds.length && (
+        {!watchlist.length && (
           <div className={styles.emptyWatchlistContainer}>
             <Image src={cryptoCurrencyIcon} width={128} height={128} />
             <Typography className={styles.emptyWatchlistText} variant="regularText">

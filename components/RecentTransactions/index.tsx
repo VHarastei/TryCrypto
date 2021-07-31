@@ -4,7 +4,7 @@ import { Typography } from 'components/Typography';
 import { format, parseISO } from 'date-fns';
 import Link from 'next/link';
 import React from 'react';
-import { Transaction } from 'store/slices/userSlice';
+import { Transaction } from 'store/slices/types';
 import styles from './RecentTransaction.module.scss';
 
 type PropsType = {

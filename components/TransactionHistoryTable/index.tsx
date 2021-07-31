@@ -2,7 +2,7 @@ import { Typography } from 'components/Typography';
 import { format, parseISO } from 'date-fns';
 import Link from 'next/link';
 import React from 'react';
-import { Transaction } from 'store/slices/userSlice';
+import { Transaction } from 'store/slices/types';
 import { formatDollar } from 'utils/formatDollar';
 import styles from './TransactionHistoryTable.module.scss';
 

@@ -1,14 +1,6 @@
-import { format } from 'date-fns';
 import React from 'react';
-import {
-  VictoryAxis,
-  VictoryBrushContainer,
-  VictoryChart,
-  VictoryLine,
-  VictoryVoronoiContainer,
-} from 'victory';
+import { VictoryBrushContainer, VictoryChart, VictoryLine } from 'victory';
 import { ChartArray } from '..';
-import { CustomTooltip } from '../CustomTooltip';
 
 type PropsType = {
   data: ChartArray[] | undefined;

@@ -1,5 +1,4 @@
 import { Typography } from 'components/Typography';
-import fi from 'date-fns/esm/locale/fi/index.js';
 import React from 'react';
 import styles from './PriceStatisticsItem.module.scss';
 

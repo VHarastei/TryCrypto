@@ -9,6 +9,9 @@ import starIcon from 'public/static/star.svg';
 import React, { useEffect } from 'react';
 import { VictoryAxis, VictoryChart, VictoryLine } from 'victory';
 import styles from './SortableTable.module.scss';
+import { WatchlistButton } from 'components/WatchlistButton';
+import { useSelector } from 'react-redux';
+import { selectUserWatchlist } from 'store/selectors';
 
 type PropsType = {
   data: TableCoin[];
@@ -39,6 +42,8 @@ export const SortableTable: React.FC<PropsType> = React.memo(
       if (!sortConfig) return '';
       return sortConfig.key === name ? sortConfig.direction : '';
     };
+
+    const watchlist = useSelector(selectUserWatchlist);
 
     return (
       <div className={styles.table}>
@@ -90,7 +95,13 @@ export const SortableTable: React.FC<PropsType> = React.memo(
 
         <div>
           {items.map((coin: TableCoin) => {
-            return <TableRow key={coin.id} coin={coin} />;
+            return (
+              <TableRow
+                key={coin.id}
+                coin={coin}
+                //isWatchlisted={watchlist.some((i) => i.currencyId === coin.id)}
+              />
+            );
           })}
         </div>
         {isSearchResult && (
@@ -125,52 +136,54 @@ const TableHeaderItem: React.FC<TableHeaderItemPropsType> = React.memo(
 
 type TableRowPropsType = {
   coin: TableCoin;
+  //isWatchlisted: boolean;
 };
 
 export const TableRow: React.FC<TableRowPropsType> = React.memo(({ coin }) => {
   return (
-    <Link href={`/market/${coin.id}`}>
-      <a>
-        <ul className={styles.tableRowContainer}>
-          <li className={styles.watch}>
-            <Image layout="fixed" src={starIcon} alt={`star icon`} width={24} height={24} />
-          </li>
-          <li className={styles.ordNum}>{coin.ordNum}</li>
-          <li className={styles.name}>
+    <ul className={styles.tableRowContainer}>
+      <li className={styles.watch}>
+        {/* <Image layout="fixed" src={starIcon} alt={`star icon`} width={24} height={24} /> */}
+        <WatchlistButton currencyId={coin.id} />
+      </li>
+      <li className={styles.ordNum}>{coin.ordNum}</li>
+      <li className={styles.name}>
+        <Link href={`/market/${coin.id}`}>
+          <a className={styles.name}>
             <img src={coin.image} alt={`${coin.symbol} icon`} width={30} height={30} />
             <p>{coin.name}</p>
             <span>{coin.symbol.toUpperCase()}</span>
-          </li>
-          <li className={styles.price}>{formatDollar(coin.current_price, 20)}</li>
-          <li className={styles.change}>
-            <PriceChangeField value={coin.price_change_percentage_24h} />
-          </li>
-          <li className={styles.change}>
-            <PriceChangeField value={coin.price_change_percentage_7d_in_currency} />
-          </li>
-          <li className={styles.marketCap}>{formatDollar(coin.market_cap, 12)}</li>
-          <li className={styles.sparkline}>
-            <VictoryChart
-              //animate={{ duration: 300, onLoad: { duration: 300 } }}
-              width={150}
-              height={30}
-              padding={0}
-              //domainPadding={{ y: 16 }}
-            >
-              <VictoryLine
-                style={{
-                  data: {
-                    stroke: coin.price_change_percentage_7d_in_currency < 0 ? '#f84960' : '#02c076',
-                    strokeWidth: 1,
-                  },
-                }}
-                data={coin.sparkline_in_7d.price}
-              />
-              <VictoryAxis style={{ axis: { stroke: 'none' } }} />
-            </VictoryChart>
-          </li>
-        </ul>
-      </a>
-    </Link>
+          </a>
+        </Link>
+      </li>
+      <li className={styles.price}>{formatDollar(coin.current_price, 20)}</li>
+      <li className={styles.change}>
+        <PriceChangeField value={coin.price_change_percentage_24h} />
+      </li>
+      <li className={styles.change}>
+        <PriceChangeField value={coin.price_change_percentage_7d_in_currency} />
+      </li>
+      <li className={styles.marketCap}>{formatDollar(coin.market_cap, 12)}</li>
+      <li className={styles.sparkline}>
+        <VictoryChart
+          //animate={{ duration: 300, onLoad: { duration: 300 } }}
+          width={150}
+          height={30}
+          padding={0}
+          //domainPadding={{ y: 16 }}
+        >
+          <VictoryLine
+            style={{
+              data: {
+                stroke: coin.price_change_percentage_7d_in_currency < 0 ? '#f84960' : '#02c076',
+                strokeWidth: 1,
+              },
+            }}
+            data={coin.sparkline_in_7d.price}
+          />
+          <VictoryAxis style={{ axis: { stroke: 'none' } }} />
+        </VictoryChart>
+      </li>
+    </ul>
   );
 });

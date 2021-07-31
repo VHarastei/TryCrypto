@@ -1,17 +1,11 @@
-import { fetcher } from 'api/marketApi';
-import { MarketApi } from 'api/marketApi';
+import { fetcher, MarketApi } from 'api/marketApi';
 import { Paper } from 'components/Paper';
 import { Preloader } from 'components/Preloader';
 import { PriceChangeField } from 'components/PriceChangeField';
-import { format } from 'date-fns';
-import { formatDollar } from 'utils/formatDollar';
-import { formatPercent } from 'utils/formatPercent';
 import React, { useEffect, useState } from 'react';
 import useSWR from 'swr';
-import { VictoryAxis, VictoryChart, VictoryLine, VictoryVoronoiContainer } from 'victory';
-import { CustomBrushChart } from './CustomBrushChart';
+import { formatDollar } from 'utils/formatDollar';
 import { CustomChart } from './CustomChart';
-import { CustomTooltip } from './CustomTooltip';
 import styles from './MarketChart.module.scss';
 
 type PropsType = {

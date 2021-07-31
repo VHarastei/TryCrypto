@@ -4,10 +4,10 @@ import Link from 'next/link';
 import React from 'react';
 import { VictoryContainer, VictoryPie } from 'victory';
 import styles from './PortfolioBalanceCard.module.scss';
-import { Asset } from 'store/slices/userSlice';
 import { formatDollar } from 'utils/formatDollar';
 import { Card } from 'components/Card';
 import { PieChart, PieChartPreloader } from 'components/PieChart';
+import { Asset } from 'store/slices/types';
 
 type PropsType = {
   balance: number;

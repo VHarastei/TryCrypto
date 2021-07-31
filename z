@@ -1,2 +1,2 @@
-npx sequelize-cli model:generate --name Transaction --attributes date:DATE,source:STRING,type:STRING,usdValue:DOUBLE,amount:DOUBLE
-npx sequelize-cli seed:generate --name Transaction
+npx sequelize-cli model:generate --name Watch --attributes isWatched:BOOLEAN
+npx sequelize-cli seed:generate --name Watch

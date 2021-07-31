@@ -14,7 +14,8 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { wrapper } from 'store';
 import { selectUserAssets, selectUserPortfolio } from 'store/selectors';
-import { Asset, setUserAssets, setUserPortfolio } from 'store/slices/userSlice';
+import { Asset } from 'store/slices/types';
+import { setUserAssets, setUserPortfolio } from 'store/slices/userSlice';
 import { formatDollar } from 'utils/formatDollar';
 import styles from './Portfolio.module.scss';
 

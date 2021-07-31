@@ -1,6 +1,5 @@
-import { fetcher } from 'api/marketApi';
-import { ListCoin, MarketApi, TableCoin } from 'api/marketApi';
-import { ContentLayout } from 'components/ContentLayout';
+import { Api } from 'api';
+import { fetcher, ListCoin, MarketApi, TableCoin } from 'api/marketApi';
 import { Layout } from 'components/Layout';
 import { MarketTable } from 'components/MarketTable';
 import { SortableTable } from 'components/MarketTable/SortableTable';
@@ -13,6 +12,8 @@ import closeIcon from 'public/static/close.svg';
 import loadingIcon from 'public/static/loading.svg';
 import searchIcon from 'public/static/search.svg';
 import React, { useEffect } from 'react';
+import { wrapper } from 'store';
+import { setUserWatchlist } from 'store/slices/watchlistSlice';
 import useSWR from 'swr';
 import styles from './Market.module.scss';
 
@@ -111,24 +112,29 @@ export default function Market({ data, coinsList, currentPage }: PropsType) {
   );
 }
 
-export async function getServerSideProps(ctx: GetServerSidePropsContext) {
-  let currentPage = 1;
-  const { page } = ctx.query;
-  if (page) currentPage = +page;
+export const getServerSideProps = wrapper.getServerSideProps(
+  (store) =>
+    async ({ req, res, query }) => {
+      let currentPage = 1;
+      const { page } = query;
+      if (page) currentPage = +page;
 
-  try {
-    const [data, coinsList] = await Promise.all([
-      fetcher(MarketApi.getTableDataUrl(currentPage)()),
-      fetcher(MarketApi.getCoinsListUrl()),
-    ]);
+      try {
+        const [data, coinsList, watchlist] = await Promise.all([
+          fetcher(MarketApi.getTableDataUrl(currentPage)()),
+          fetcher(MarketApi.getCoinsListUrl()),
+          Api().getUserWatchlist(),
+        ]);
 
-    return {
-      props: { data, coinsList, currentPage },
-    };
-  } catch (err) {
-    console.log(err);
-    return {
-      props: { data: [], coinsList: [], currentPage },
-    };
-  }
-}
+        store.dispatch(setUserWatchlist(watchlist));
+        return {
+          props: { data, coinsList, currentPage },
+        };
+      } catch (err) {
+        console.log(err);
+        return {
+          props: { data: [], coinsList: [], currentPage },
+        };
+      }
+    }
+);

@@ -3,7 +3,6 @@ import { Preloader } from 'components/Preloader';
 import { Typography } from 'components/Typography';
 import { useControlBuySell } from 'hooks/useControlBuySell';
 import Image from 'next/image';
-import { Currency } from 'pages/market/[currencyId]';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectUserAsset, selectUserAssetsIsLoading } from 'store/selectors';
@@ -12,6 +11,7 @@ import { BuySellType } from '..';
 import styles from './BuySell.module.scss';
 import loadingIcon from 'public/static/loadingMini.svg';
 import { useAppDispatch } from 'store';
+import { Currency } from 'store/slices/types';
 
 type PropsType = {
   action: BuySellType;

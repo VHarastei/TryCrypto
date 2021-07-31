@@ -1,6 +1,5 @@
 import { Api } from 'api';
 import { fetcher, MarketApi } from 'api/marketApi';
-import { Button } from 'components/Button';
 import { BuySellCard } from 'components/BuySellCard';
 import { Card } from 'components/Card';
 import { ContentLayout } from 'components/ContentLayout';
@@ -9,12 +8,12 @@ import { MarketChart } from 'components/MarketChart';
 import { MarketTransactions } from 'components/MarketTransactions';
 import { Preloader } from 'components/Preloader';
 import { PriceStatistics } from 'components/PriceStatistics';
-import Image from 'next/image';
+import { WatchlistButton } from 'components/WatchlistButton';
 import { useRouter } from 'next/router';
-import starIcon from 'public/static/star.svg';
 import React from 'react';
 import { wrapper } from 'store';
-import { setUserAssets, setUserPortfolio } from 'store/slices/userSlice';
+import { Currency } from 'store/slices/types';
+import { setUserAssets } from 'store/slices/userSlice';
 import useSWR from 'swr';
 import styles from './Market.module.scss';
 
@@ -22,13 +21,6 @@ interface CurrencyData extends Omit<Currency, 'image'> {
   image: any;
   market_data: any;
   description: any;
-}
-
-export interface Currency {
-  id: string;
-  symbol: string;
-  name: string;
-  image: string;
 }
 
 export default function CurrencyPage() {
@@ -74,9 +66,8 @@ export default function CurrencyPage() {
             />
             <h1 className={styles.name}>{currencyData.name}</h1>
             <h1>{currencyData.symbol.toUpperCase()}</h1>
-            <Button color="secondary" className={styles.watchlistBtn}>
-              <Image layout="fixed" src={starIcon} alt={`star icon`} width={24} height={24} />
-            </Button>
+
+            <WatchlistButton outlined />
           </div>
           <div>
             <div className={styles.menu}>

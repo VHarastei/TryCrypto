@@ -1,10 +1,10 @@
+import { Api } from 'api';
 import { Banner } from 'components/Banner';
 import { Button } from 'components/Button';
 import { Card } from 'components/Card';
 import { ContentLayout } from 'components/ContentLayout';
 import { Layout } from 'components/Layout';
 import { Paper } from 'components/Paper';
-import { PieChart, PieChartPreloader } from 'components/PieChart';
 import { PortfolioBalanceCard } from 'components/PortfolioBalanceCard';
 import { Typography } from 'components/Typography';
 import { Watchlist } from 'components/Watchlist';
@@ -12,9 +12,10 @@ import Image from 'next/image';
 import btcIcon from 'public/static/btc.png';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { wrapper } from 'store';
 import { selectUserAssets, selectUserPortfolio } from 'store/selectors';
 import { fetchUserAssets } from 'store/slices/userSlice';
-import { formatDollar } from 'utils/formatDollar';
+import { setUserWatchlist } from 'store/slices/watchlistSlice';
 import styles from './Home.module.scss';
 
 export default function Home() {
@@ -114,3 +115,18 @@ export default function Home() {
     </Layout>
   );
 }
+
+export const getServerSideProps = wrapper.getServerSideProps((store) => async ({ req, res }) => {
+  try {
+    const watchlist = await Api().getUserWatchlist();
+    store.dispatch(setUserWatchlist(watchlist));
+    return {
+      props: {},
+    };
+  } catch (err) {
+    console.log(err);
+    return {
+      props: {},
+    };
+  }
+});

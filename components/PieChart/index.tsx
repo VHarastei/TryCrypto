@@ -1,11 +1,10 @@
 import { Typography } from 'components/Typography';
-import { formatPercent } from 'utils/formatPercent';
 import Link from 'next/link';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { Asset } from 'store/slices/types';
+import { formatPercent } from 'utils/formatPercent';
 import { VictoryContainer, VictoryPie } from 'victory';
 import styles from './PieChart.module.scss';
-import { Asset } from 'store/slices/userSlice';
-import { useDidMount } from 'hooks/useDidMount';
 
 type PropsType = {
   data: Asset[];

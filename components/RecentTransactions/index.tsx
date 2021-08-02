@@ -78,3 +78,12 @@ export const TransactionItem: React.FC<Transaction> = React.memo(
     );
   }
 );
+
+export const TransactionItemPreloader = React.memo(() => {
+  return (
+    <div className={styles.transactionContainer}>
+      <div className={`${styles.actionTypeShimmer} ${styles.shimmer}`}></div>
+      <div className={`${styles.contentShimmer} ${styles.shimmer}`}></div>
+    </div>
+  );
+});

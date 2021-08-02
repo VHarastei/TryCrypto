@@ -15,6 +15,8 @@ export const selectUserAsset = (currencyId: string): Selector<Asset | undefined>
   );
 export const selectUserAssetsIsLoading = (state: RootState) =>
   state.user.assets.loadingState === LoadingState.LOADING;
+export const selectAssetsTransactionIsLoading = (state: RootState) =>
+  state.user.assets.transactionLoadingState === LoadingState.LOADING;
 
 export const selectUserWatchlist = (state: RootState) => state.watchlist.items;
 

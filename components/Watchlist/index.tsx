@@ -50,12 +50,12 @@ export const Watchlist = React.memo(() => {
   return (
     <Card title="Watchlist" transparent>
       <div className={styles.container}>
-        {dividedItems.map((fourItems) => {
+        {dividedItems.map((fourItems, index: number) => {
           return (
-            <div key={nanoid()} className={styles.miniChartsContainer}>
+            <div key={index} className={styles.miniChartsContainer}>
               {fourItems.map((currencyId: string) =>
                 currencyId === 'discoverMore' ? (
-                  <div key={nanoid()} className={styles.discoverMore}>
+                  <div className={styles.discoverMore}>
                     <Link href="/market">
                       <a>
                         <Button>Discover more</Button>
@@ -63,7 +63,7 @@ export const Watchlist = React.memo(() => {
                     </Link>
                   </div>
                 ) : (
-                  <MiniChart key={nanoid()} currencyId={currencyId} />
+                  <MiniChart key={currencyId} currencyId={currencyId} />
                 )
               )}
             </div>
@@ -78,7 +78,7 @@ export const Watchlist = React.memo(() => {
           </div>
         )}
         {!withDiscoverMore && (
-          <div key={nanoid()} className={`${styles.discoverMore} ${styles.discoverMoreWide}`}>
+          <div className={`${styles.discoverMore} ${styles.discoverMoreWide}`}>
             <Link href="/market">
               <a>
                 <Button>Discover more</Button>

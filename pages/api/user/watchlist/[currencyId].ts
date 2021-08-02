@@ -1,11 +1,30 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import nextConnect from 'next-connect';
-import { getAssets } from 'utils/apiRoutes/getAssets';
-import { getAssetsMarketData } from 'utils/apiRoutes/getAssetsMarketData';
 
 const db = require('db/models/index');
 
 const handler = nextConnect()
+  .get(async (req: NextApiRequest, res: NextApiResponse) => {
+    try {
+      const userId = 1;
+      const { currencyId } = req.query as { currencyId: string };
+
+      const watchlistCurrency = await db.Watch.findOne({
+        where: { userId, currencyId },
+      });
+
+      res.status(200).json({
+        status: 'success',
+        data: watchlistCurrency,
+      });
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({
+        status: 'error',
+        data: err,
+      });
+    }
+  })
   .post(async (req: NextApiRequest, res: NextApiResponse) => {
     try {
       const userId = 1;

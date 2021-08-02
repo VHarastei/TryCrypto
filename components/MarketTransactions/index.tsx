@@ -1,12 +1,11 @@
 import { Button } from 'components/Button';
 import { Card } from 'components/Card';
-import { Preloader } from 'components/Preloader';
-import { TransactionItem } from 'components/RecentTransactions';
+import { TransactionItem, TransactionItemPreloader } from 'components/RecentTransactions';
 import { Typography } from 'components/Typography';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from 'store';
-import { selectUserAsset } from 'store/selectors';
+import { selectAssetsTransactionIsLoading, selectUserAsset } from 'store/selectors';
 import { Currency } from 'store/slices/types';
 import { fetchAssetTransactions, fetchUserAsset } from 'store/slices/userSlice';
 import { formatDollar } from 'utils/formatDollar';
@@ -21,6 +20,8 @@ export const MarketTransactions: React.FC<PropsType> = React.memo(({ currency })
   const [page, setPage] = useState(1);
 
   const asset = useSelector(selectUserAsset(currency.id));
+  const creatingTransaction = useSelector(selectAssetsTransactionIsLoading);
+
   let transactions;
   if (asset?.transactions.items) {
     transactions = asset.transactions.items.map((txn) => {
@@ -29,41 +30,17 @@ export const MarketTransactions: React.FC<PropsType> = React.memo(({ currency })
     });
   }
   useEffect(() => {
-    // if (!isError) dispatch(fetchUserAsset(currency.id))
-    if (asset) {
-      dispatch(fetchUserAsset(currency.id));
-    }
+    if (asset) dispatch(fetchUserAsset(currency.id));
   }, []);
 
   const handleLoadMore = () => {
     if (asset) {
       setPage((prev) => prev + 1);
-
-      //console.log({ currencyId: currency.id, page, size: 7, assetId: `${asset.id}` });
       dispatch(
         fetchAssetTransactions({ currencyId: currency.id, page, size: 7, assetId: `${asset.id}` })
       ); // TODO: make assetId UUID!!!
     }
   };
-
-  // if (currency) {
-  //   dispatch(fetchUserMarketAsset(currency.id))
-  //     .unwrap()
-  //     .then((res) => {
-  //       transactions = res.transactions.map((txn) => {
-  //         const { transactions, ...rest } = res;
-  //         return { ...txn, asset: rest };
-  //       });
-  //     });
-  // }
-  // console.log(transactions);
-
-  // if (isNever || isLoading)
-  //   return (
-  //     <div>
-  //       <Preloader />
-  //     </div>
-  //   );
 
   return (
     <Card
@@ -75,8 +52,11 @@ export const MarketTransactions: React.FC<PropsType> = React.memo(({ currency })
         {transactions ? (
           transactions.length ? (
             <div>
-              {transactions.map((txn) => {
-                return <TransactionItem key={txn.id} {...txn} />;
+              {creatingTransaction && <TransactionItemPreloader />}
+              {transactions.map((txn, index) => {
+                if (creatingTransaction) {
+                  if (index < 6) return <TransactionItem key={txn.id} {...txn} />;
+                } else return <TransactionItem key={txn.id} {...txn} />;
               })}
               {asset?.transactions.totalPages && asset.transactions.totalPages > page ? (
                 <div className={styles.btnContainer}>
@@ -88,7 +68,9 @@ export const MarketTransactions: React.FC<PropsType> = React.memo(({ currency })
             </div>
           ) : (
             <div>
-              <Preloader />
+              <TransactionItemPreloader />
+              <TransactionItemPreloader />
+              <TransactionItemPreloader />
             </div>
           )
         ) : (

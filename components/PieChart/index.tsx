@@ -10,7 +10,7 @@ type PropsType = {
   data: Asset[];
 };
 
-export const PieChart: React.FC<PropsType> = React.memo(({ data }) => {
+export const PieChart: React.FC<PropsType> = ({ data }) => {
   type ChartData = {
     x: string;
     y: number;
@@ -33,13 +33,12 @@ export const PieChart: React.FC<PropsType> = React.memo(({ data }) => {
     }
     return results;
   }, []);
-
   const chartColors = ['#f3aa4e', '#6076ff', 'tomato', '#82bb47', '#7b7f82'];
-  const [animatedData, setAnimatedData] = useState<ChartData[] | undefined>();
+  //const [animatedData, setAnimatedData] = useState<ChartData[] | undefined>();
 
-  useEffect(() => {
-    setAnimatedData(chartData);
-  }, []);
+  // useEffect(() => {
+  //   setAnimatedData(chartData);
+  // }, []);
   return (
     <div className={styles.container}>
       <div className={styles.chart}>
@@ -52,8 +51,8 @@ export const PieChart: React.FC<PropsType> = React.memo(({ data }) => {
           padding={0}
           domainPadding={0}
           colorScale={chartColors}
-          data={animatedData}
-          endAngle={animatedData ? 360 : 0}
+          data={chartData}
+          // endAngle={animatedData ? 360 : 0}
           containerComponent={<VictoryContainer height={200} width={200} />}
         />
       </div>
@@ -98,7 +97,7 @@ export const PieChart: React.FC<PropsType> = React.memo(({ data }) => {
       </div>
     </div>
   );
-});
+};
 
 export const PieChartPreloader = () => {
   return (

@@ -47,3 +47,17 @@
   padding: 9px;
   border-top: 1px solid $gray;
 }
+
+.actionTypeShimmer {
+  background-color: $secondary;
+  height: 45.33px;
+  width: 45.33px;
+  border-radius: 100%;
+}
+.contentShimmer {
+  width: 100%;
+  height: 45.33px;
+  background-color: $secondary;
+  border-radius: 6px;
+  margin-left: 10px;
+}

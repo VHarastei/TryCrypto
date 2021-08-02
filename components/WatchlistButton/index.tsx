@@ -15,7 +15,6 @@ type PropsTypes = {
 
 export const WatchlistButton: React.FC<PropsTypes> = React.memo(({ currencyId, outlined }) => {
   const isWatchlisted = useSelector(selectIsWatclistedCurrency(currencyId));
-  console.log(isWatchlisted);
   const dispatch = useDispatch();
 
   const handleIsWatchlisted = () => {

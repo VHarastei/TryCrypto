@@ -14,13 +14,13 @@ const initialState: WatchlistSliceState = {
   loadingState: LoadingState.NEVER,
 };
 
-// export const fetchUserWatchlist = createAsyncThunk<WatchlistCurrency[]>(
-//   'watchlist/fetchUserWatchlist',
-//   async () => {
-//     const watchlist = await Api().getUserWatchlist();
-//     return watchlist;
-//   }
-// );
+export const fetchUserWatchlistCurrency = createAsyncThunk<WatchlistCurrency, string>(
+  'watchlist/fetchUserWatchlistCurrency',
+  async (currencyId) => {
+    const watchlistCurrency = await Api().getUserWatchlistCurrency(currencyId);
+    return watchlistCurrency;
+  }
+);
 
 export const fetchCreateWatchlistCurrency = createAsyncThunk<WatchlistCurrency, string>(
   'watchlist/fetchCreateWatchlistCurrency',
@@ -45,15 +45,23 @@ export const watchlistSlice = createSlice({
       state.items = action.payload;
       state.loadingState = LoadingState.LOADED;
     },
+    setUserWatchlistCurrency: (state, action: PayloadAction<WatchlistCurrency>) => {
+      const index = state.items.findIndex((i) => i.currencyId === action.payload.currencyId);
+      console.log(index);
+      if (index === -1) {
+        state.items.push(action.payload);
+        //state.loadingState = LoadingState.LOADED;
+      }
+    },
   },
   extraReducers: (builder) =>
     builder
-      // .addCase(
-      //   fetchUserWatchlist.fulfilled.type,
-      //   (state, action: PayloadAction<WatchlistCurrency[]>) => {
-      //     state.watchlist.items = action.payload;
-      //   }
-      // )
+      .addCase(
+        fetchUserWatchlistCurrency.fulfilled.type,
+        (state, action: PayloadAction<WatchlistCurrency[]>) => {
+          console.log(action.payload);
+        }
+      )
       .addCase(fetchCreateWatchlistCurrency.pending.type, (state) => {
         state.loadingState = LoadingState.LOADING;
       })
@@ -71,15 +79,18 @@ export const watchlistSlice = createSlice({
         fetchDeleteWatchlistCurrency.fulfilled.type,
         (state, action: PayloadAction<string>) => {
           const index = state.items.findIndex((i) => i.currencyId === action.payload);
-          console.log(index);
           if (index !== -1) state.items.splice(index, 1);
           state.loadingState = LoadingState.LOADED;
         }
       )
       .addCase(HYDRATE as any, (state, action: PayloadAction<RootState>) => {
-        state.items = action.payload.watchlist.items;
+        //state = { ...state, ...action.payload }
+        if (state.loadingState === LoadingState.NEVER) {
+          state.loadingState = action.payload.watchlist.loadingState;
+          state.items = action.payload.watchlist.items;
+        }
       }),
 });
 
-export const { setUserWatchlist } = watchlistSlice.actions;
+export const { setUserWatchlist, setUserWatchlistCurrency } = watchlistSlice.actions;
 export const watchlistReducer = watchlistSlice.reducer;

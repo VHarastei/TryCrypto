@@ -11,6 +11,7 @@ export type UserSliceState = {
   assets: {
     items: Asset[];
     loadingState: LoadingState;
+    transactionLoadingState: LoadingState;
   };
 };
 
@@ -32,6 +33,7 @@ const initialState: UserSliceState = {
   assets: {
     items: [],
     loadingState: LoadingState.NEVER,
+    transactionLoadingState: LoadingState.NEVER,
   },
 };
 
@@ -94,10 +96,10 @@ export const userSlice = createSlice({
           state.assets.items[assetIndex] = asset;
         });
 
-        state.assets.loadingState = LoadingState.LOADED;
+        state.assets.transactionLoadingState = LoadingState.LOADED;
       })
       .addCase(fetchCreateTransaction.pending.type, (state) => {
-        state.assets.loadingState = LoadingState.LOADING;
+        state.assets.transactionLoadingState = LoadingState.LOADING;
       })
       .addCase(
         fetchUserAssets.fulfilled.type,

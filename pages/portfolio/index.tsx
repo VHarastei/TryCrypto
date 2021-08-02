@@ -106,7 +106,7 @@ export default function Portfolio() {
               </div>
               <div>
                 {assets.map((asset) => {
-                  return <AssetsTableRow asset={asset} />;
+                  return <AssetsTableRow key={asset.id} asset={asset} />;
                 })}
               </div>
             </div>

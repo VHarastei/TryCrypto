@@ -67,6 +67,9 @@ export const userApi = (instance: AxiosInstance) => {
     getUserWatchlist: (): Promise<WatchlistCurrency[]> => {
       return instance.get('/user/watchlist').then(({ data }) => data.data);
     },
+    getUserWatchlistCurrency: (currencyId: string): Promise<WatchlistCurrency> => {
+      return instance.get(`/user/watchlist/${currencyId}`).then(({ data }) => data.data);
+    },
     createUserWatchlistCurrency: (currencyId: string): Promise<WatchlistCurrency> => {
       return instance.post(`/user/watchlist/${currencyId}`).then(({ data }) => data.data);
     },

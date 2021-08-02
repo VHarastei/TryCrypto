@@ -13,6 +13,7 @@ import loadingIcon from 'public/static/loading.svg';
 import searchIcon from 'public/static/search.svg';
 import React, { useEffect } from 'react';
 import { wrapper } from 'store';
+import { LoadingState } from 'store/slices/types';
 import { setUserWatchlist } from 'store/slices/watchlistSlice';
 import useSWR from 'swr';
 import styles from './Market.module.scss';
@@ -125,8 +126,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
           fetcher(MarketApi.getCoinsListUrl()),
           Api().getUserWatchlist(),
         ]);
-
         store.dispatch(setUserWatchlist(watchlist));
+
         return {
           props: { data, coinsList, currentPage },
         };

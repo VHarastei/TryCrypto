@@ -14,6 +14,7 @@ import React from 'react';
 import { wrapper } from 'store';
 import { Currency } from 'store/slices/types';
 import { setUserAssets } from 'store/slices/userSlice';
+import { setUserWatchlistCurrency } from 'store/slices/watchlistSlice';
 import useSWR from 'swr';
 import styles from './Market.module.scss';
 
@@ -25,7 +26,7 @@ interface CurrencyData extends Omit<Currency, 'image'> {
 
 export default function CurrencyPage() {
   const router = useRouter();
-  const { currencyId } = router.query;
+  const { currencyId } = router.query as { currencyId: string };
 
   let { data: currencyData } = useSWR<CurrencyData>(
     currencyId ? MarketApi.getCurrencyDataUrl(currencyId as string) : null,
@@ -67,7 +68,7 @@ export default function CurrencyPage() {
             <h1 className={styles.name}>{currencyData.name}</h1>
             <h1>{currencyData.symbol.toUpperCase()}</h1>
 
-            <WatchlistButton outlined />
+            <WatchlistButton outlined currencyId={currencyId} />
           </div>
           <div>
             <div className={styles.menu}>
@@ -124,17 +125,29 @@ export default function CurrencyPage() {
   );
 }
 
-export const getServerSideProps = wrapper.getServerSideProps((store) => async ({ req, res }) => {
-  try {
-    const data = await Api().getUserAssets();
-    store.dispatch(setUserAssets(data.assets));
-    return {
-      props: {},
-    };
-  } catch (err) {
-    console.log(err);
-    return {
-      props: {},
-    };
-  }
-});
+export const getServerSideProps = wrapper.getServerSideProps(
+  (store) =>
+    async ({ req, res, query }) => {
+      try {
+        const { currencyId } = query as { currencyId: string };
+
+        const [data, watchlistCurrency] = await Promise.all([
+          Api().getUserAssets(),
+          Api().getUserWatchlistCurrency(currencyId),
+        ]);
+
+        store.dispatch(setUserAssets(data.assets));
+        if (watchlistCurrency) {
+          store.dispatch(setUserWatchlistCurrency(watchlistCurrency));
+        }
+        return {
+          props: {},
+        };
+      } catch (err) {
+        console.log(err);
+        return {
+          props: {},
+        };
+      }
+    }
+);

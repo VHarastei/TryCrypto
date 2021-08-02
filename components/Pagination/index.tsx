@@ -1,4 +1,3 @@
-import { nanoid } from '@reduxjs/toolkit';
 import Image from 'next/image';
 import Link from 'next/link';
 import arrowIcon from 'public/static/back.svg';
@@ -47,7 +46,7 @@ export const Pagination: React.FC<PropsType> = React.memo(
 
           {pagination.map((page) => {
             return (
-              <Link key={nanoid()} href={`${navHref}${page === 1 ? '' : `?page=${page}`}`}>
+              <Link key={page} href={`${navHref}${page === 1 ? '' : `?page=${page}`}`}>
                 <a>
                   <div
                     color="secondary"

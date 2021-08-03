@@ -1,0 +1,9 @@
+@import 'styles/theme.scss';
+
+.cardTitle {
+  display: flex;
+  justify-content: space-between;
+  .cardTitleIntervals {
+    display: flex;
+  }
+}

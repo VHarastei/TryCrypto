@@ -6,6 +6,7 @@ import React, { useEffect, useState } from 'react';
 import useSWR from 'swr';
 import { formatDollar } from 'utils/formatDollar';
 import { CustomChart } from './CustomChart';
+import { IntervalSelector } from './IntervalSelector';
 import styles from './MarketChart.module.scss';
 
 type PropsType = {
@@ -53,7 +54,7 @@ export const MarketChart: React.FC<PropsType> = React.memo(({ currencyId, market
           <div className={styles.chartSelectorContainer}>
             {chartTypes.map((chartTps) => {
               return (
-                <ChartSelector
+                <IntervalSelector
                   key={chartTps.value}
                   name={chartTps.name}
                   isActive={chartTps.value === chartType}
@@ -75,7 +76,7 @@ export const MarketChart: React.FC<PropsType> = React.memo(({ currencyId, market
           <div className={styles.chartSelectorContainer}>
             {intervals.map((interval) => {
               return (
-                <ChartSelector
+                <IntervalSelector
                   key={interval.value}
                   name={interval.name}
                   isActive={interval.value === dataInterval}
@@ -92,25 +93,6 @@ export const MarketChart: React.FC<PropsType> = React.memo(({ currencyId, market
     </Paper>
   );
 });
-
-type ChartSelectorPropsType = {
-  name: string;
-  isActive: boolean;
-  handleSelectChart: () => void;
-};
-
-const ChartSelector: React.FC<ChartSelectorPropsType> = React.memo(
-  ({ name, isActive, handleSelectChart }) => {
-    return (
-      <div
-        className={`${styles.chartSelector} ${isActive ? styles.chartSelectorActive : ''}`}
-        onClick={handleSelectChart}
-      >
-        {name}
-      </div>
-    );
-  }
-);
 
 type Intervals = {
   name: string;

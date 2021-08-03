@@ -1,4 +1,5 @@
 import { Api } from 'api';
+import { AssetNetWorthChart } from 'components/AssetNetWorthChart';
 import { BarChart } from 'components/BarChart';
 import { Card } from 'components/Card';
 import { ContentLayout } from 'components/ContentLayout';
@@ -77,14 +78,7 @@ export default function Portfolio() {
         </div>
       </Paper>
       <ContentLayout type="halfs">
-        <Card title="Asset Net Worth">
-          <CustomChart
-            data={data.historicalData.balance.map((balance) => {
-              return [new Date(balance.date).getTime(), balance.usdValue];
-            })}
-            dataInterval={'30'}
-          />
-        </Card>
+        <AssetNetWorthChart data={data.historicalData.balance} />
         <Card title="Daily PNL">
           <BarChart />
         </Card>

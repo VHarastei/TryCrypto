@@ -1,6 +1,6 @@
 import { Typography } from 'components/Typography';
 import Link from 'next/link';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Asset } from 'store/slices/types';
 import { formatPercent } from 'utils/formatPercent';
 import { VictoryContainer, VictoryPie } from 'victory';
@@ -88,7 +88,7 @@ export const PieChart: React.FC<PropsType> = ({ data }) => {
               <div className={styles.chartItem} key={item.id}>
                 <div className={styles.chartItemName}>
                   <div className={`${styles.chartItemColor} ${styles.bg_gray}`}></div>
-                  <Typography variant="regularText">Other</Typography>
+                  <Typography variant="regularText">Others</Typography>
                 </div>
                 <Typography variant="mediumText">{formatPercent(otherCurrencies)}</Typography>
               </div>

@@ -1,6 +1,5 @@
-import { Transaction } from '../../store/slices/userSlice';
 import { fetcher, MarketApi } from 'api/marketApi';
-import { Currency } from 'pages/market/[currencyId]';
+import { Currency, Transaction } from 'store/slices/types';
 const db = require('db/models/index');
 
 export type DbAsset = {

@@ -5,7 +5,7 @@ import styles from './Card.module.scss';
 
 type PropsType = {
   children: React.ReactNode;
-  title: string | React.FC;
+  title: any; //string | Element;
   button?: {
     name: string;
     href: string;
@@ -17,7 +17,7 @@ type PropsType = {
 
 export const Card: React.FC<PropsType> = React.memo(
   ({ children, title, withPadding, transparent, className }) => {
-    const Title = title;
+    //const Title = title;
 
     return (
       <div className={`${transparent ? styles.transparent : ''} ${styles.container} ${className}`}>
@@ -26,7 +26,8 @@ export const Card: React.FC<PropsType> = React.memo(
             {typeof title === 'string' ? (
               <Typography variant="title">{title}</Typography>
             ) : (
-              <Title />
+              // <Title />
+              title
             )}
           </div>
           <div className={`${withPadding ? styles.withPadding : ''}`}>{children}</div>

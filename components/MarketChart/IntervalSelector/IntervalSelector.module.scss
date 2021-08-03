@@ -1,0 +1,19 @@
+@import 'styles/theme.scss';
+
+.container {
+  font-size: 14px;
+  font-weight: 500;
+  padding: 2px 2px 2px 0px;
+  margin: 0px 5px;
+  color: $gray;
+  cursor: pointer;
+  &:hover {
+    color: white;
+  }
+}
+.active {
+  color: $primary;
+  &:hover {
+    color: $primary;
+  }
+}

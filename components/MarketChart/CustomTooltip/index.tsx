@@ -28,7 +28,13 @@ export const CustomTooltip = React.memo((props: any) => {
       >
         <div style={{ fontSize: 20, fontWeight: 700 }}>
           {formatDollar(
-            datum.y < 0.0000000001 ? 0.0000000001 : datum.y < 1 ? datum.y : datum.y.toFixed(2),
+            datum.y === 0
+              ? 0
+              : datum.y < 0.0000000001
+              ? 0.0000000001
+              : datum.y < 1
+              ? datum.y
+              : datum.y.toFixed(2),
             datum.y < 0.0001 ? 2 : datum.y > 1000000000 ? 10 : 7
           )}
         </div>

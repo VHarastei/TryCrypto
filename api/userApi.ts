@@ -5,6 +5,7 @@ import {
   Transaction,
   UserPortfolio,
   WatchlistCurrency,
+  HistoricalDataItem,
 } from 'store/slices/types';
 
 interface UserPortfolioWithAssets extends UserPortfolio {
@@ -75,6 +76,16 @@ export const userApi = (instance: AxiosInstance) => {
     },
     deleteUserWatchlistCurrency: (currencyId: string): Promise<string> => {
       return instance.delete(`/user/watchlist/${currencyId}`).then(() => currencyId);
+    },
+    getHistoricalBalanceData: (interval: number): Promise<HistoricalDataItem[]> => {
+      return instance
+        .get(`/user/portfolio/historical/balanceData?interval=${interval}`)
+        .then(({ data }) => data.data);
+    },
+    getHistoricalPnlData: (interval: number): Promise<HistoricalDataItem[]> => {
+      return instance
+        .get(`/user/portfolio/historical/pnlData?interval=${interval}`)
+        .then(({ data }) => data.data);
     },
   };
 };

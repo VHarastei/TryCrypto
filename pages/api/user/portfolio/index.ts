@@ -10,20 +10,6 @@ const handler = nextConnect().get(async (req: NextApiRequest, res: NextApiRespon
     const data = await db.User.findOne({
       where: { id: 1 },
       attributes: [],
-      order: [
-        [
-          { model: db.HistoricalData, as: 'historicalData' },
-          { model: db.Balance, as: 'balance' },
-          'date',
-          'ASC',
-        ],
-        [
-          { model: db.HistoricalData, as: 'historicalData' },
-          { model: db.PNL, as: 'PNL' },
-          'date',
-          'ASC',
-        ],
-      ],
       include: [
         {
           model: db.Asset,
@@ -31,22 +17,26 @@ const handler = nextConnect().get(async (req: NextApiRequest, res: NextApiRespon
           attributes: { exclude: ['userId', 'currencyId'] },
           include: [{ model: db.Currency, as: 'currency' }],
         },
+      ],
+    });
+
+    const historicalData = await db.HistoricalData.findOne({
+      where: { userId: 1 },
+      attributes: ['id'],
+      include: [
         {
-          model: db.HistoricalData,
-          as: 'historicalData',
-          attributes: { exclude: ['userId'] },
-          include: [
-            {
-              model: db.Balance,
-              as: 'balance',
-              attributes: { exclude: ['id', 'historicalDataId'] },
-            },
-            {
-              model: db.PNL,
-              as: 'PNL',
-              attributes: { exclude: ['id', 'historicalDataId'] },
-            },
-          ],
+          model: db.Balance,
+          as: 'balance',
+          attributes: { exclude: ['id', 'historicalDataId'] },
+          order: [['date', 'DESC']],
+          limit: 7,
+        },
+        {
+          model: db.PNL,
+          as: 'PNL',
+          attributes: { exclude: ['id', 'historicalDataId'] },
+          order: [['date', 'DESC']],
+          limit: 7,
         },
       ],
     });
@@ -84,7 +74,7 @@ const handler = nextConnect().get(async (req: NextApiRequest, res: NextApiRespon
         recentTransactions: recentTransactions.items,
         yesterdaysPNL: { usdValue: 10, usdValueChangePercetage: 2 },
         thirtydaysPNL: { usdValue: 15, usdValueChangePercetage: 5 },
-        historicalData: data.historicalData,
+        historicalData, //: data.historicalData,
       },
     });
   } catch (err) {

@@ -43,11 +43,7 @@ export const MarketTransactions: React.FC<PropsType> = React.memo(({ currency })
   };
 
   return (
-    <Card
-      title={() => (
-        <RTTitle currency={currency} amount={asset?.amount} usdValue={asset?.usdValue} />
-      )}
-    >
+    <Card title={<RTTitle currency={currency} amount={asset?.amount} usdValue={asset?.usdValue} />}>
       <div>
         {transactions ? (
           transactions.length ? (

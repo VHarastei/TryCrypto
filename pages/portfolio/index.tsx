@@ -1,5 +1,5 @@
 import { Api } from 'api';
-import { AssetNetWorthChart } from 'components/AssetNetWorthChart';
+import { ChartIntervalProvider } from 'components/ChartIntervalProvider';
 import { BarChart } from 'components/BarChart';
 import { Card } from 'components/Card';
 import { ContentLayout } from 'components/ContentLayout';
@@ -16,16 +16,18 @@ import { useSelector } from 'react-redux';
 import { wrapper } from 'store';
 import { selectUserAssets, selectUserPortfolio } from 'store/selectors';
 import { Asset } from 'store/slices/types';
-import { setUserAssets, setUserPortfolio } from 'store/slices/userSlice';
+import {
+  fetchHistoricalBalanceData,
+  fetchHistoricalPnlData,
+  setUserAssets,
+  setUserPortfolio,
+} from 'store/slices/userSlice';
 import { formatDollar } from 'utils/formatDollar';
 import styles from './Portfolio.module.scss';
 
 export default function Portfolio() {
   const data = useSelector(selectUserPortfolio);
   const assets = useSelector(selectUserAssets);
-
-  //if (!data) return <div>nema</div>;
-  //console.log(new Date(data?.historicalData.balance[0].date).getTime());
 
   return (
     <Layout>
@@ -78,10 +80,20 @@ export default function Portfolio() {
         </div>
       </Paper>
       <ContentLayout type="halfs">
-        <AssetNetWorthChart data={data.historicalData.balance} />
-        <Card title="Daily PNL">
-          <BarChart />
-        </Card>
+        <ChartIntervalProvider
+          title="Asset Net Worth"
+          Chart={CustomChart}
+          handleFetch={fetchHistoricalBalanceData}
+          data={data.historicalData.balance}
+        />
+
+        <ChartIntervalProvider
+          title="Daily PNL"
+          Chart={BarChart}
+          withAxies
+          handleFetch={fetchHistoricalPnlData}
+          data={data.historicalData.PNL}
+        />
       </ContentLayout>
       <ContentLayout type="halfs">
         <div>

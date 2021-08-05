@@ -27,7 +27,7 @@ const handler = nextConnect().get(async (req: NextApiRequest, res: NextApiRespon
 
         const { assets, balance } = await getAssetsMarketData(user.assets);
 
-        const date = addDays(new Date(), 4);
+        const date = addDays(new Date(), 8);
         await db.Balance.create({
           date, //new Date().toISOString(),
           usdValue: balance,

@@ -4,7 +4,13 @@ import { HYDRATE } from 'next-redux-wrapper';
 import { RootState } from 'store';
 import { Api } from './../../api/index';
 import { FetchAssetTransactionsPayload } from './../../api/userApi';
-import { Asset, LoadingState, PaginatedTransactions, UserPortfolio } from './types';
+import {
+  Asset,
+  HistoricalDataItem,
+  LoadingState,
+  PaginatedTransactions,
+  UserPortfolio,
+} from './types';
 
 export type UserSliceState = {
   portfolio: UserPortfolio;
@@ -69,7 +75,21 @@ export const fetchAssetTransactions = createAsyncThunk<
   return transactions;
 });
 
-//createAssetTransaction
+export const fetchHistoricalBalanceData = createAsyncThunk<HistoricalDataItem[], number>(
+  'user/fetchHistoricalBalanceData',
+  async (interval) => {
+    const balance = await Api().getHistoricalBalanceData(interval);
+    return balance;
+  }
+);
+
+export const fetchHistoricalPnlData = createAsyncThunk<HistoricalDataItem[], number>(
+  'user/fetchHistoricalPnlData',
+  async (interval) => {
+    const pnl = await Api().getHistoricalPnlData(interval);
+    return pnl;
+  }
+);
 
 export const userSlice = createSlice({
   name: 'user',
@@ -95,7 +115,6 @@ export const userSlice = createSlice({
           if (assetIndex === -1) state.assets.items.push(asset);
           state.assets.items[assetIndex] = asset;
         });
-
         state.assets.transactionLoadingState = LoadingState.LOADED;
       })
       .addCase(fetchCreateTransaction.pending.type, (state) => {
@@ -116,13 +135,20 @@ export const userSlice = createSlice({
           (a) => a.currency.id === action.payload.currency.id
         );
         state.assets.items[assetIndex] = action.payload;
-        // state.assets.items[assetIndex].transactions.items =
-        //   action.payload.transactions.items;
         state.assets.loadingState = LoadingState.LOADED;
       })
-      .addCase(fetchUserAsset.rejected.type, (state) => {
-        state.assets.loadingState = LoadingState.ERROR;
-      })
+      .addCase(
+        fetchHistoricalBalanceData.fulfilled.type,
+        (state, action: PayloadAction<HistoricalDataItem[]>) => {
+          state.portfolio.historicalData.balance = action.payload;
+        }
+      )
+      .addCase(
+        fetchHistoricalPnlData.fulfilled.type,
+        (state, action: PayloadAction<HistoricalDataItem[]>) => {
+          state.portfolio.historicalData.PNL = action.payload;
+        }
+      )
       .addCase(HYDRATE as any, (state, action: PayloadAction<RootState>) => {
         state.portfolio = action.payload.user.portfolio;
         state.assets = action.payload.user.assets;
@@ -138,12 +164,9 @@ export const userSlice = createSlice({
           const assetIndex = state.assets.items.findIndex(
             (a) => a.currency.id === action.payload.currencyId
           );
-          state.assets.items[assetIndex].transactions.items = [
-            ...state.assets.items[assetIndex].transactions.items,
-            ...action.payload.transactions.items,
-          ];
-          state.assets.items[assetIndex].transactions.currentPage =
-            action.payload.transactions.currentPage;
+          const trx = state.assets.items[assetIndex].transactions;
+          trx.items = [...trx.items, ...action.payload.transactions.items];
+          trx.currentPage = action.payload.transactions.currentPage;
         }
       ),
 });

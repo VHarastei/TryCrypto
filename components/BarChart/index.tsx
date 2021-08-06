@@ -20,12 +20,12 @@ export const BarChart: React.FC<PropsType> = React.memo(({ data }) => {
           voronoiDimension="x"
           labels={() => ` `}
           portalZIndex={99}
-          labelComponent={<CustomTooltip />}
+          labelComponent={<CustomTooltip length={data.length} />}
         />
       }
     >
       <VictoryBar
-        barWidth={data.length <= 7 ? 100 : 20}
+        barWidth={data.length === 7 ? 100 : data.length === 30 ? 20 : 7}
         events={[
           {
             target: 'data',
@@ -58,13 +58,15 @@ export const BarChart: React.FC<PropsType> = React.memo(({ data }) => {
         ]}
         style={{
           data: {
-            fill: (data) => (data.datum.y < 0 ? '#f84960' : '#02c076'),
-            strokeWidth: 2,
+            fill: (data) =>
+              data.datum.y === 0 ? '#7b7f82' : data.datum.y < 0 ? '#f84960' : '#02c076',
+            strokeWidth: 1,
           },
         }}
         data={data}
       />
       <VictoryAxis
+        crossAxis={false}
         fixLabelOverlap
         domainPadding={{ x: 10 }}
         offsetY={32}
@@ -85,7 +87,7 @@ export const BarChart: React.FC<PropsType> = React.memo(({ data }) => {
   );
 });
 
-const CustomTooltip = React.memo(({ x, datum }: any) => {
+const CustomTooltip = React.memo(({ x, datum, length }: any) => {
   return (
     <foreignObject style={{ pointerEvents: 'none' }} x={x - 50} width="100" height="100%">
       <div
@@ -113,11 +115,11 @@ const CustomTooltip = React.memo(({ x, datum }: any) => {
         style={{
           backgroundColor: 'white',
           height: 310,
-          width: 30,
+          width: length === 30 ? 30 : length === 90 ? 10 : 150,
           zIndex: -99,
           opacity: 0.1,
           position: 'absolute',
-          left: 35,
+          left: length === 30 ? 35 : length === 90 ? 45 : 0,
         }}
       ></div>
     </foreignObject>

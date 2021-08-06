@@ -17,7 +17,7 @@ type PropsType = {
 
 export const ChartIntervalProvider: React.FC<PropsType> = React.memo(
   ({ data, title, Chart, withAxies, handleFetch }) => {
-    const [interval, setInterval] = useState(intervals[0].value);
+    const [interval, setInterval] = useState(intervals[1].value);
     const dispatch = useDispatch();
 
     const handleChangeInterval = (newInt: number) => {
@@ -37,7 +37,9 @@ export const ChartIntervalProvider: React.FC<PropsType> = React.memo(
     const placeholderItems: any[] = [];
 
     const placeholderItemsLength = interval - data.length;
-    const endDate = parseISO(data[data.length - 1].date);
+    const endDate = data.length
+      ? parseISO(data[data.length - 1].date)
+      : parseISO(new Date().toISOString());
 
     for (let i = 0; i < placeholderItemsLength; i++) {
       const sub = subDays(endDate, i + 1).getTime();
@@ -94,8 +96,8 @@ const intervals = [
     name: '90D',
     value: 90,
   },
-  {
-    name: '180D',
-    value: 180,
-  },
+  // {
+  //   name: '180D',
+  //   value: 180,
+  // },
 ];

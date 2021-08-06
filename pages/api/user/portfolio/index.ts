@@ -29,14 +29,14 @@ const handler = nextConnect().get(async (req: NextApiRequest, res: NextApiRespon
           as: 'balance',
           attributes: { exclude: ['id', 'historicalDataId'] },
           order: [['date', 'DESC']],
-          limit: 7,
+          limit: 30,
         },
         {
           model: db.PNL,
           as: 'PNL',
           attributes: { exclude: ['id', 'historicalDataId'] },
           order: [['date', 'DESC']],
-          limit: 7,
+          limit: 30,
         },
       ],
     });
@@ -44,37 +44,48 @@ const handler = nextConnect().get(async (req: NextApiRequest, res: NextApiRespon
     const { assets, balance } = await getAssetsMarketData(data.assets);
     const recentTransactions = await getTransactionHistory(1);
 
-    //const calcChange = (a: number, b: number) => +(((b - a) / a) * 100).toFixed(2);
-    // if (data.historicalData) {
-    //   const yesterdaysPNL = {
-    //     usdValue: data.historicalData.PNL[data.historicalData.PNL.length - 1].usdValue,
-    //     usdValueChangePercetage: calcChange(
-    //       data.historicalData.balance[data.historicalData.balance.length - 2].usdValue,
-    //       data.historicalData.balance[data.historicalData.balance.length - 1].usdValue
-    //     ),
-    //   };
-    //   const thirtydaysPNL = {
-    //     usdValue: +(
-    //       data.historicalData.balance[data.historicalData.balance.length - 1].usdValue -
-    //       data.historicalData.balance[0].usdValue
-    //     ).toFixed(2),
-    //     usdValueChangePercetage: calcChange(
-    //       data.historicalData.balance[0].usdValue,
-    //       data.historicalData.balance[data.historicalData.balance.length - 1].usdValue
-    //     ),
-    //   };
-    // }
+    const calcChange = (a: number, b: number) => +(((b - a) / a) * 100).toFixed(2);
+    let yesterdaysPNL, thirtydaysPNL;
+    if (
+      historicalData.balance.length &&
+      historicalData.PNL.length &&
+      historicalData.balance.length !== 1
+    ) {
+      console.log(historicalData.PNL.length - 1);
+      yesterdaysPNL = {
+        usdValue: historicalData.PNL[0].usdValue,
+        usdValueChangePercetage: calcChange(
+          historicalData.balance[1].usdValue,
+          historicalData.balance[0].usdValue
+        ),
+      };
+      // historicalData.balance.forEach((i: any) => {
+      //   console.log(i.usdValue);
+      // });
+      thirtydaysPNL = {
+        usdValue: +(
+          historicalData.balance[0].usdValue -
+          historicalData.balance[historicalData.balance.length - 1].usdValue
+        ).toFixed(2),
+        usdValueChangePercetage: calcChange(
+          historicalData.balance[historicalData.balance.length - 1].usdValue,
+          historicalData.balance[0].usdValue
+        ),
+      };
+    } else {
+      yesterdaysPNL = { usdValue: 0, usdValueChangePercetage: 0 };
+      thirtydaysPNL = { usdValue: 0, usdValueChangePercetage: 0 };
+    }
 
-    res.statusCode = 200;
-    res.json({
+    res.status(200).json({
       status: 'success',
       data: {
         balance,
         assets,
         recentTransactions: recentTransactions.items,
-        yesterdaysPNL: { usdValue: 10, usdValueChangePercetage: 2 },
-        thirtydaysPNL: { usdValue: 15, usdValueChangePercetage: 5 },
-        historicalData, //: data.historicalData,
+        yesterdaysPNL, //: { usdValue: 10, usdValueChangePercetage: 2 },
+        thirtydaysPNL, //: { usdValue: 15, usdValueChangePercetage: 5 },
+        historicalData,
       },
     });
   } catch (err) {

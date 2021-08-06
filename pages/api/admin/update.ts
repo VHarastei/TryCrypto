@@ -27,12 +27,23 @@ const handler = nextConnect().get(async (req: NextApiRequest, res: NextApiRespon
 
         const { assets, balance } = await getAssetsMarketData(user.assets);
 
-        const date = addDays(new Date(), 8);
+        const yesterdayBalance = await db.Balance.findOne({
+          where: { historicalDataId: historicalData.id },
+          order: [['date', 'DESC']],
+        });
+
+        const date = addDays(new Date(), 5);
         await db.Balance.create({
           date, //new Date().toISOString(),
           usdValue: balance,
           historicalDataId: historicalData.id,
         });
+        await db.PNL.create({
+          date, //new Date().toISOString(),
+          usdValue: yesterdayBalance ? +(balance - yesterdayBalance.usdValue).toFixed(2) : 0,
+          historicalDataId: historicalData.id,
+        });
+
         return {
           date, //new Date().toISOString(),
           usdValue: balance,

@@ -10,12 +10,24 @@ module.exports = {
       },
       username: {
         type: Sequelize.STRING,
+        allowNull: false,
       },
       password: {
         type: Sequelize.STRING,
+        allowNull: false,
       },
       email: {
         type: Sequelize.STRING,
+        allowNull: false,
+      },
+      confirmHash: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      confirmed: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
       },
       createdAt: {
         allowNull: false,

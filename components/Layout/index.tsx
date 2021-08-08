@@ -13,6 +13,20 @@ export const Layout: React.FC<PropsType> = React.memo(({ children }) => {
       <Navbar>
         <div className={styles.children}>{children}</div>
       </Navbar>
+      <div className={styles.footer}>
+        <div>
+          <a href="https://github.com/VHarastei" target="_blank">
+            VHarastei
+          </a>
+          <span> © 2021 TryCrypto</span>
+        </div>
+        <div>
+          <span>Data provided by </span>
+          <a href="https://www.coingecko.com" target="_blank">
+            CoinGecko
+          </a>
+        </div>
+      </div>
     </div>
   );
 });

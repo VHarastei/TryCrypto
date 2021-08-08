@@ -1,7 +1,10 @@
+@import 'styles/theme.scss';
+
 .container {
-  display: flex;
+  //display: flex;
   min-width: 100%;
   min-height: 100vh;
+  position: relative;
 }
 .content {
   width: 100%;
@@ -10,4 +13,32 @@
   max-width: 1450px;
   width: 100%;
   gap: 24px;
+  margin-bottom: 24px;
+}
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: calc(100% - 215px);
+  height: 24px;
+  left: 215px;
+  display: flex;
+  justify-content: space-between;
+  padding: 0px 24px;
+  background-color: $backgroundGray;
+  @media all and (max-width: 1280px) {
+    width: calc(100% - 82px);
+    left: 82px;
+  }
+  div {
+    a {
+      color: $primary;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+    span {
+      color: $gray;
+      font-weight: 400;
+    }
+  }
 }

@@ -32,6 +32,7 @@ export const ChartIntervalProvider: React.FC<PropsType> = React.memo(
           y: item.usdValue,
         };
       return [new Date(item.date).getTime(), item.usdValue];
+      //return item;
     });
 
     const placeholderItems: any[] = [];

@@ -95,7 +95,7 @@ type MiniChartPropsType = {
   currencyId: string;
 };
 
-const MiniChart: React.FC<MiniChartPropsType> = React.memo(({ currencyId }) => {
+export const MiniChart: React.FC<MiniChartPropsType> = React.memo(({ currencyId }) => {
   const [display, setDisplay] = React.useState(false);
   const { data: currency } = useSWR(() => MarketApi.getCurrencyDataUrl(currencyId), fetcher);
 

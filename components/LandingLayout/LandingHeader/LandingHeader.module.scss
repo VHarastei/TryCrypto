@@ -1,0 +1,38 @@
+@import 'styles/theme.scss';
+
+.container {
+  height: 64px;
+  background-color: $backgroundGray;
+  //max-width: 1220px;
+  width: 100%;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  .leftSide {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    .logoContainer {
+      display: flex;
+      align-items: center;
+      margin-right: 30px;
+      span {
+        font-size: 26px;
+        font-weight: 700;
+        color: $primary;
+        margin-left: 10px;
+        margin-bottom: 6px;
+      }
+    }
+  }
+  .navItem {
+    font-size: 18px;
+    font-weight: 500;
+    margin-right: 16px;
+    &:hover {
+      color: $primary;
+      cursor: pointer;
+    }
+  }
+}

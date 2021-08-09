@@ -6,17 +6,17 @@ type Selector<S> = (state: RootState) => S;
 export const selectUserPortfolio = (state: RootState) => state.user.portfolio;
 export const selectUserTransactionHistory = (state: RootState) =>
   state.user.portfolio.transactionHistory;
-export const selectUserAssets = (state: RootState) => state.user.assets.items;
+export const selectUserAssets = (state: RootState) => state.assets.items;
 
 export const selectUserAsset = (currencyId: string): Selector<Asset | undefined> =>
   createSelector(
-    [(state: RootState) => state.user.assets.items.find((a) => a.currency.id === currencyId)],
+    [(state: RootState) => state.assets.items.find((a) => a.currency.id === currencyId)],
     (asset) => asset
   );
 export const selectUserAssetsIsLoading = (state: RootState) =>
-  state.user.assets.loadingState === LoadingState.LOADING;
+  state.assets.loadingState === LoadingState.LOADING;
 export const selectAssetsTransactionIsLoading = (state: RootState) =>
-  state.user.assets.transactionLoadingState === LoadingState.LOADING;
+  state.assets.transactionLoadingState === LoadingState.LOADING;
 
 export const selectUserWatchlist = (state: RootState) => state.watchlist.items;
 

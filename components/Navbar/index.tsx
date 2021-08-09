@@ -37,7 +37,7 @@ export const Navbar: React.FC<PropsType> = React.memo(({ children }) => {
           </Link>
           <div className={styles.userContainer}>
             <Image src={userIcon} alt="User icon" width={40} height={40} />
-            <span>VHarastei</span>
+            {/* <span>VHarastei</span> */}
           </div>
         </div>
       </header>

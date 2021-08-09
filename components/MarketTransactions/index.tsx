@@ -6,8 +6,8 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from 'store';
 import { selectAssetsTransactionIsLoading, selectUserAsset } from 'store/selectors';
+import { fetchAssetTransactions, fetchUserAsset } from 'store/slices/assetsSlice';
 import { Currency } from 'store/slices/types';
-import { fetchAssetTransactions, fetchUserAsset } from 'store/slices/userSlice';
 import { formatDollar } from 'utils/formatDollar';
 import styles from './MarketTransactions.module.scss';
 

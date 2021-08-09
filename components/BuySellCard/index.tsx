@@ -1,4 +1,3 @@
-import { Button } from 'components/Button';
 import { Paper } from 'components/Paper';
 import React from 'react';
 import { Currency } from 'store/slices/types';

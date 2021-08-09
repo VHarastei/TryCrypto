@@ -32,7 +32,7 @@ const handler = nextConnect().get(async (req: NextApiRequest, res: NextApiRespon
           order: [['date', 'DESC']],
         });
 
-        const date = addDays(new Date(), 5);
+        const date = addDays(new Date(), 1);
         await db.Balance.create({
           date, //new Date().toISOString(),
           usdValue: balance,

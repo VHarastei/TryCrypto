@@ -1,17 +1,20 @@
 import { Button } from 'components/Button';
-import { Preloader } from 'components/Preloader';
 import { Typography } from 'components/Typography';
 import { useControlBuySell } from 'hooks/useControlBuySell';
 import Image from 'next/image';
+import loadingIcon from 'public/static/loadingMini.svg';
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { selectUserAsset, selectUserAssetsIsLoading } from 'store/selectors';
-import { fetchCreateTransaction } from 'store/slices/userSlice';
+import { useSelector } from 'react-redux';
+import { useAppDispatch } from 'store';
+import {
+  selectAssetsTransactionIsLoading,
+  selectUserAsset,
+  selectUserAssetsIsLoading,
+} from 'store/selectors';
+import { fetchCreateTransaction } from 'store/slices/assetsSlice';
+import { Currency } from 'store/slices/types';
 import { BuySellType } from '..';
 import styles from './BuySell.module.scss';
-import loadingIcon from 'public/static/loadingMini.svg';
-import { useAppDispatch } from 'store';
-import { Currency } from 'store/slices/types';
 
 type PropsType = {
   action: BuySellType;
@@ -28,6 +31,8 @@ export const BuySell: React.FC<PropsType> = React.memo(({ action, currency, curr
   const dispatch = useAppDispatch();
   const asset = useSelector(selectUserAsset(currency.id));
   const isLoading = useSelector(selectUserAssetsIsLoading);
+  const isCreatingTransaction = useSelector(selectAssetsTransactionIsLoading);
+
   let assetAmount = asset?.amount || 0;
 
   const usdtAsset = useSelector(selectUserAsset('tether'));
@@ -182,11 +187,11 @@ export const BuySell: React.FC<PropsType> = React.memo(({ action, currency, curr
       </div>
       <Button
         fullWidth
-        disabled={!amount || error || isLoading}
+        disabled={!amount || error || isLoading || isCreatingTransaction}
         className={action === 'buy' ? styles.actionBuyActive : styles.actionSellActive}
         onClick={handleCreateTransaction}
       >
-        {isLoading ? (
+        {isLoading || isCreatingTransaction ? (
           <div className={styles.isLoadingBtn}>
             <Image src={loadingIcon} height={32} width={32} />
           </div>

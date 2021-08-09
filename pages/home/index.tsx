@@ -14,7 +14,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { wrapper } from 'store';
 import { selectUserAssets, selectUserPortfolio } from 'store/selectors';
-import { fetchUserAssets } from 'store/slices/userSlice';
+import { fetchUserAssets } from 'store/slices/assetsSlice';
 import { setUserWatchlist } from 'store/slices/watchlistSlice';
 import styles from './Home.module.scss';
 

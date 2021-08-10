@@ -3,6 +3,7 @@ import { RootState } from 'store';
 import { Asset, LoadingState, WatchlistCurrency } from './slices/types';
 type Selector<S> = (state: RootState) => S;
 
+export const selectUserLoadingState = (state: RootState) => state.user.loadingState;
 export const selectUserPortfolio = (state: RootState) => state.user.portfolio;
 export const selectUserTransactionHistory = (state: RootState) =>
   state.user.portfolio.transactionHistory;

@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { RegisterPayload } from 'api/authApi';
 import { HYDRATE } from 'next-redux-wrapper';
 import { RootState } from 'store';
 import { Api } from './../../api/index';
@@ -8,11 +9,14 @@ import {
   HistoricalDataItem,
   LoadingState,
   PaginatedTransactions,
+  User,
   UserPortfolio,
 } from './types';
 
 export type UserSliceState = {
   portfolio: UserPortfolio;
+  data: User | null;
+  loadingState: LoadingState;
 };
 
 const initialState: UserSliceState = {
@@ -30,6 +34,8 @@ const initialState: UserSliceState = {
       loadingState: LoadingState.NEVER,
     },
   },
+  data: null,
+  loadingState: LoadingState.NEVER,
 };
 
 export const fetchHistoricalBalanceData = createAsyncThunk<HistoricalDataItem[], number>(
@@ -45,6 +51,14 @@ export const fetchHistoricalPnlData = createAsyncThunk<HistoricalDataItem[], num
   async (interval) => {
     const pnl = await Api().getHistoricalPnlData(interval);
     return pnl;
+  }
+);
+
+export const fetchRegister = createAsyncThunk<undefined, RegisterPayload>(
+  'user/fetchRegister',
+  async (payload) => {
+    const user = await Api().register(payload);
+    return user;
   }
 );
 
@@ -79,6 +93,15 @@ export const userSlice = createSlice({
           state.portfolio.historicalData.PNL = action.payload;
         }
       )
+      .addCase(fetchRegister.fulfilled.type, (state) => {
+        state.loadingState = LoadingState.LOADED;
+      })
+      .addCase(fetchRegister.pending.type, (state) => {
+        state.loadingState = LoadingState.LOADING;
+      })
+      .addCase(fetchRegister.rejected.type, (state) => {
+        state.loadingState = LoadingState.ERROR;
+      })
       .addCase(HYDRATE as any, (state, action: PayloadAction<RootState>) => {
         state.portfolio = action.payload.user.portfolio;
       }),

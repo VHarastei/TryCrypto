@@ -44,24 +44,37 @@
   border-top-left-radius: 24px;
   border-top-right-radius: 24px;
 }
-.portfolio {
+.content {
   max-width: 1200px;
   width: 100%;
   padding: 20px 20px;
-  .portfolioText {
+  .contentText {
     font-size: 32px;
     font-weight: 500;
   }
-  .portfolioSubText {
+  .contentSubText {
     font-size: 18px;
     color: $gray;
     margin-bottom: 30px;
   }
   .portfolioContent {
     display: flex;
+    .portfolioImgContainer {
+      width: 100%;
+
+      .portfolioImg {
+        object-fit: contain;
+        width: 100% !important;
+        height: unset !important;
+      }
+    }
     .portfolioFeatures {
       padding: 0px 20px;
     }
+  }
+  .contentEducation {
+    display: flex;
+    margin-top: -20px;
   }
 }
 
@@ -89,5 +102,49 @@
       color: $gray;
       font-size: 16px;
     }
+  }
+}
+.startNow {
+  margin: 40px 0px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  .startNowTitle {
+    font-size: 32px;
+    font-weight: 500;
+    margin-bottom: 30px;
+  }
+}
+.footer {
+  max-width: 1200px;
+  width: 100%;
+  padding: 30px 20px;
+  display: flex;
+  justify-content: space-between;
+  .footerContact {
+    display: flex;
+    .footerContactImg {
+      display: flex;
+      gap: 12px;
+    }
+    .footerContactText {
+      margin-left: 10px;
+      margin-top: -5px;
+    }
+  }
+  .logoContainer {
+    width: 300px;
+    display: flex;
+    align-items: center;
+    //margin-right: 30px;
+    span {
+      font-size: 26px;
+      font-weight: 700;
+      color: $primary;
+      margin-left: 10px;
+    }
+  }
+  .gecko {
+    margin-bottom: -10px;
   }
 }

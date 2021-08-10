@@ -14,22 +14,4 @@
     flex-direction: column;
     column-gap: 24px;
   }
-  .education {
-    display: flex;
-    flex-direction: column;
-    padding: 16px;
-    margin-bottom: 0px;
-    .educationCurrency {
-      display: flex;
-      align-items: center;
-      margin-bottom: 10px;
-      .educationCurrencyName {
-        margin: 0px 8px;
-      }
-    }
-    .educationBtn {
-      align-self: flex-end;
-      margin-top: 16px;
-    }
-  }
 }

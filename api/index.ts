@@ -1,8 +1,9 @@
+import { authApi } from './authApi';
 import { GetServerSidePropsContext } from 'next';
 import axios from 'axios';
 import { userApi } from './userApi';
 
-type ApiReturnType = ReturnType<typeof userApi>;
+type ApiReturnType = ReturnType<typeof userApi> & ReturnType<typeof authApi>;
 
 // TODO: Типизировать
 export const Api = (): ApiReturnType => {
@@ -16,5 +17,5 @@ export const Api = (): ApiReturnType => {
     // },
   });
 
-  return [userApi].reduce((prev, f) => ({ ...prev, ...f(instance) }), {} as ApiReturnType);
+  return [userApi, authApi].reduce((prev, f) => ({ ...prev, ...f(instance) }), {} as ApiReturnType);
 };

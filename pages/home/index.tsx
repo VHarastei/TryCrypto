@@ -3,6 +3,7 @@ import { Banner } from 'components/Banner';
 import { Button } from 'components/Button';
 import { Card } from 'components/Card';
 import { ContentLayout } from 'components/ContentLayout';
+import { EducationCard } from 'components/EducationCard';
 import { Layout } from 'components/Layout';
 import { Paper } from 'components/Paper';
 import { PortfolioBalanceCard } from 'components/PortfolioBalanceCard';
@@ -53,63 +54,9 @@ export default function Home() {
       </ContentLayout>
       <Card title="Education" transparent>
         <div className={styles.educationContainer}>
-          <Paper className={styles.education}>
-            <div className={styles.educationCurrency}>
-              <Image layout="fixed" src={btcIcon} alt={`btc icon`} width={48} height={48} />
-              <Typography className={styles.educationCurrencyName} fs="fs-22" fw="fw-500">
-                Bitcoin
-              </Typography>
-              <Typography fs="fs-22" fw="fw-500" color="gray">
-                BTC
-              </Typography>
-            </div>
-            <Typography variant="regularText" color="gray">
-              A decentralized digital currency, without a central bank or single administrator, that
-              can be sent from user to user on the peer-to-peer bitcoin network without the need for
-              intermediaries
-            </Typography>
-            <Button fullWidth className={styles.educationBtn}>
-              Learn more
-            </Button>
-          </Paper>
-          <Paper className={styles.education}>
-            <div className={styles.educationCurrency}>
-              <Image layout="fixed" src={btcIcon} alt={`btc icon`} width={48} height={48} />
-              <Typography className={styles.educationCurrencyName} fs="fs-22" fw="fw-500">
-                Bitcoin
-              </Typography>
-              <Typography fs="fs-22" fw="fw-500" color="gray">
-                BTC
-              </Typography>
-            </div>
-            <Typography variant="regularText" color="gray">
-              A decentralized digital currency, without a central bank or single administrator, that
-              can be sent from user to user on the peer-to-peer bitcoin network without the need for
-              intermediaries
-            </Typography>
-            <Button fullWidth className={styles.educationBtn}>
-              Learn more
-            </Button>
-          </Paper>
-          <Paper className={styles.education}>
-            <div className={styles.educationCurrency}>
-              <Image layout="fixed" src={btcIcon} alt={`btc icon`} width={48} height={48} />
-              <Typography className={styles.educationCurrencyName} fs="fs-22" fw="fw-500">
-                Bitcoin
-              </Typography>
-              <Typography fs="fs-22" fw="fw-500" color="gray">
-                BTC
-              </Typography>
-            </div>
-            <Typography variant="regularText" color="gray">
-              A decentralized digital currency, without a central bank or single administrator, that
-              can be sent from user to user on the peer-to-peer bitcoin network without the need for
-              intermediaries
-            </Typography>
-            <Button fullWidth className={styles.educationBtn}>
-              Learn more
-            </Button>
-          </Paper>
+          <EducationCard />
+          <EducationCard />
+          <EducationCard />
         </div>
       </Card>
     </Layout>

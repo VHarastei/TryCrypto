@@ -1,11 +1,9 @@
-import { Navbar } from 'components/Navbar';
-import { useRouter } from 'next/router';
+import { Button } from 'components/Button';
+import Image from 'next/image';
+import Link from 'next/link';
+import logoIcon from 'public/static/logo.png';
 import React from 'react';
 import styles from './LandingHeader.module.scss';
-import Image from 'next/image';
-import logoIcon from 'public/static/logo.png';
-import Link from 'next/link';
-import { Button } from 'components/Button';
 
 export const LandingHeader = React.memo(() => {
   return (

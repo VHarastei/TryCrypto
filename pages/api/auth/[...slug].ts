@@ -65,12 +65,12 @@ const handler = nextConnect()
 
       res.status(201).json({
         status: 'success',
-        data: {
-          id: user.id,
-          username: user.username,
-          email: user.email,
-          confirmed: user.confirmed,
-        },
+        // data: {
+        //   id: user.id,
+        //   username: user.username,
+        //   email: user.email,
+        //   confirmed: user.confirmed,
+        // },
       });
     } catch (err) {
       console.log(err);

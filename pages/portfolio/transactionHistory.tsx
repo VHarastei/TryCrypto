@@ -8,6 +8,7 @@ import { useSelector } from 'react-redux';
 import { wrapper } from 'store';
 import { selectUserTransactionHistory } from 'store/selectors';
 import { setUserTransactionHistory } from 'store/slices/userSlice';
+import { checkAuth } from 'utils/checkAuth';
 
 export default function TransactionHistory() {
   const data = useSelector(selectUserTransactionHistory);
@@ -35,13 +36,16 @@ export const getServerSideProps = wrapper.getServerSideProps(
   (store) =>
     async ({ req, res, query }) => {
       try {
+        const isRedirect = await checkAuth(store, req.cookies.token);
+        if (isRedirect) return isRedirect;
+
         let currentPage = 0;
         let currentSize = 15;
         const { size, page } = query;
         if (size) currentSize = +size;
         if (page) currentPage = +page - 1;
 
-        const data = await Api().getUserTransactionHistory({
+        const data = await Api(req.cookies.token).getUserTransactionHistory({
           size: currentSize,
           page: currentPage,
         });

@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { RegisterPayload } from 'api/authApi';
+import { AuthPayload } from 'api/authApi';
 import { HYDRATE } from 'next-redux-wrapper';
 import { RootState } from 'store';
 import { Api } from './../../api/index';
@@ -54,10 +54,18 @@ export const fetchHistoricalPnlData = createAsyncThunk<HistoricalDataItem[], num
   }
 );
 
-export const fetchRegister = createAsyncThunk<undefined, RegisterPayload>(
+export const fetchRegister = createAsyncThunk<undefined, AuthPayload>(
   'user/fetchRegister',
   async (payload) => {
     const user = await Api().register(payload);
+    return user;
+  }
+);
+
+export const fetchLogin = createAsyncThunk<User, AuthPayload>(
+  'user/fetchLogin',
+  async (payload) => {
+    const user = await Api().login(payload);
     return user;
   }
 );
@@ -68,6 +76,12 @@ export const userSlice = createSlice({
   reducers: {
     setUserPortfolio: (state, action: PayloadAction<UserPortfolio>) => {
       state.portfolio = action.payload;
+    },
+    setUserData: (state, action: PayloadAction<User>) => {
+      state.data = action.payload;
+    },
+    setUserLoadingState: (state, action: PayloadAction<LoadingState>) => {
+      state.loadingState = action.payload;
     },
     setUserTransactionHistory: (state, action: PayloadAction<PaginatedTransactions>) => {
       state.portfolio.transactionHistory = action.payload;
@@ -93,6 +107,17 @@ export const userSlice = createSlice({
           state.portfolio.historicalData.PNL = action.payload;
         }
       )
+      .addCase(fetchLogin.fulfilled.type, (state, action: PayloadAction<User>) => {
+        state.data = action.payload;
+        state.loadingState = LoadingState.LOADED;
+      })
+      .addCase(fetchLogin.pending.type, (state) => {
+        state.data = null;
+        state.loadingState = LoadingState.LOADING;
+      })
+      .addCase(fetchLogin.rejected.type, (state) => {
+        state.loadingState = LoadingState.ERROR;
+      })
       .addCase(fetchRegister.fulfilled.type, (state) => {
         state.loadingState = LoadingState.LOADED;
       })
@@ -104,8 +129,10 @@ export const userSlice = createSlice({
       })
       .addCase(HYDRATE as any, (state, action: PayloadAction<RootState>) => {
         state.portfolio = action.payload.user.portfolio;
+        state.data = action.payload.user.data;
       }),
 });
 
-export const { setUserPortfolio, setUserTransactionHistory } = userSlice.actions;
+export const { setUserPortfolio, setUserData, setUserLoadingState, setUserTransactionHistory } =
+  userSlice.actions;
 export const userReducer = userSlice.reducer;

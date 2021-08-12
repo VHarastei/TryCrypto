@@ -71,8 +71,8 @@ export type WatchlistCurrency = {
 };
 
 export type User = {
-  username: string;
+  id: string;
   email: string;
-  //token: string;
+  token: string;
   confirmed: boolean;
 };

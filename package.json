@@ -38,6 +38,7 @@
   },
   "devDependencies": {
     "@types/date-fns": "^2.6.0",
+    "@types/js-cookie": "^2.2.7",
     "@types/nprogress": "^0.2.0",
     "@types/passport": "^1.0.7",
     "@types/passport-jwt": "^3.0.6",

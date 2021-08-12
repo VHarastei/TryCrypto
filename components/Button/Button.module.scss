@@ -20,6 +20,7 @@
 }
 .secondary {
   background-color: $secondary;
+  color: white !important;
   &:hover {
     background-color: #35373d;
   }
@@ -34,4 +35,11 @@
 .fullWidth {
   padding: 16px;
   width: 100%;
+}
+.isLoading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  margin: -4.5px;
 }

@@ -25,10 +25,6 @@ export type PaginationPayload = {
 
 export const userApi = (instance: AxiosInstance) => {
   return {
-    // getMe: async (): Promise<UserData> => {
-    //   const { data } = await instance.get('/auth/me');
-    //   return data;
-    // },
     getUserPortfolio: (): Promise<UserPortfolioWithAssets> => {
       return instance.get('/user/portfolio').then(({ data }) => data.data);
     },

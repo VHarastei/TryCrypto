@@ -49,7 +49,7 @@ export const getAssetsMarketData = async (dbAssets: any[]) => {
   assets.sort((a, b) => (a.usdValue > b.usdValue ? -1 : 1));
 
   return {
-    assets: dbAssets.length === 1 ? (assets[0] as any) : (assets as any[]),
+    assets, //: dbAssets.length === 1 ? (assets[0] as any) : (assets as any[]),
     balance: +balance.toFixed(2),
   };
 };

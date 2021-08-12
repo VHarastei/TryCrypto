@@ -16,6 +16,7 @@ import { setUserAssets } from 'store/slices/assetsSlice';
 import { Currency } from 'store/slices/types';
 import { setUserWatchlistCurrency } from 'store/slices/watchlistSlice';
 import useSWR from 'swr';
+import { checkAuth } from 'utils/checkAuth';
 import styles from './Market.module.scss';
 
 interface CurrencyData extends Omit<Currency, 'image'> {
@@ -129,11 +130,15 @@ export const getServerSideProps = wrapper.getServerSideProps(
   (store) =>
     async ({ req, res, query }) => {
       try {
+        const token = req.cookies.token;
+        const isRedirect = await checkAuth(store, token);
+        if (isRedirect) return isRedirect;
+
         const { currencyId } = query as { currencyId: string };
 
         const [data, watchlistCurrency] = await Promise.all([
-          Api().getUserAssets(),
-          Api().getUserWatchlistCurrency(currencyId),
+          Api(token).getUserAssets(),
+          Api(token).getUserWatchlistCurrency(currencyId),
         ]);
 
         store.dispatch(setUserAssets(data.assets));

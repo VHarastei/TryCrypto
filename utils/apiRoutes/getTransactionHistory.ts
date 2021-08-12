@@ -2,7 +2,7 @@ import { getPaginatedData } from './getPaginatedData';
 import { getPagination } from './getPagination';
 const db = require('db/models/index');
 
-export const getTransactionHistory = async (userId: number | number[], size = 4, page = 0) => {
+export const getTransactionHistory = async (userId: string, size = 4, page = 0) => {
   const { limit, offset } = getPagination(size, page);
 
   const dbTransactions = await db.Transaction.findAndCountAll({
@@ -16,7 +16,7 @@ export const getTransactionHistory = async (userId: number | number[], size = 4,
         as: 'transactions',
         attributes: ['amount'],
         include: [{ model: db.Currency, as: 'currency' }],
-        where: { userId: 1 },
+        where: { userId },
       },
     ],
   });

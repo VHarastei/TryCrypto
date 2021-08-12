@@ -17,6 +17,7 @@ import { wrapper } from 'store';
 import { selectUserAssets, selectUserPortfolio } from 'store/selectors';
 import { fetchUserAssets } from 'store/slices/assetsSlice';
 import { setUserWatchlist } from 'store/slices/watchlistSlice';
+import { checkAuth } from 'utils/checkAuth';
 import styles from './Home.module.scss';
 
 export default function Home() {
@@ -65,7 +66,10 @@ export default function Home() {
 
 export const getServerSideProps = wrapper.getServerSideProps((store) => async ({ req, res }) => {
   try {
-    const watchlist = await Api().getUserWatchlist();
+    const isRedirect = await checkAuth(store, req.cookies.token);
+    if (isRedirect) return isRedirect;
+
+    const watchlist = await Api(req.cookies.token).getUserWatchlist();
     store.dispatch(setUserWatchlist(watchlist));
     return {
       props: {},

@@ -196,7 +196,7 @@ export const BuySell: React.FC<PropsType> = React.memo(({ action, currency, curr
             <Image src={loadingIcon} height={32} width={32} />
           </div>
         ) : (
-          action[0].toUpperCase() + action.slice(1)
+          action[0].toUpperCase() + action.slice(1) + ' ISLOADINGPROP'
         )}
       </Button>
     </div>

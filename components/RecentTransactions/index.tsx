@@ -17,7 +17,7 @@ export const RecentTransactions: React.FC<PropsType> = React.memo(
     return (
       <Card title={'Recent transactions'} withPadding={withPadding}>
         <div>
-          {transactions ? (
+          {transactions && transactions.length ? (
             <div>
               {transactions.map((txn) => {
                 return <TransactionItem key={txn.id} {...txn} />;
@@ -29,9 +29,11 @@ export const RecentTransactions: React.FC<PropsType> = React.memo(
               </Link>
             </div>
           ) : (
-            <Typography variant="regularText">
-              You don’t own any crypto. Buy some crypto to get started.
-            </Typography>
+            <div className={styles.withPadding}>
+              <Typography variant="regularText">
+                You don`t have any transactions. Buy some crypto to see your recent transactions.
+              </Typography>
+            </div>
           )}
         </div>
       </Card>

@@ -3,13 +3,18 @@ import nextConnect from 'next-connect';
 const db = require('db/models/index');
 import passport from 'middlewares/passport';
 import { generateMD5 } from 'utils/generateHash';
+import { User } from 'store/slices/types';
+
+export interface NextApiReqWithUser extends NextApiRequest {
+  user: User;
+}
 
 const handler = nextConnect()
   .use(passport.initialize())
   .post(
     'api/auth/login',
     passport.authenticate('local', { session: false }),
-    async (req: any, res: NextApiResponse) => {
+    async (req: NextApiReqWithUser, res: NextApiResponse) => {
       try {
         res.status(200).json({
           status: 'success',
@@ -27,7 +32,7 @@ const handler = nextConnect()
   .get(
     'api/auth/me',
     passport.authenticate('jwt', { session: false }),
-    async (req: any, res: NextApiResponse) => {
+    async (req: NextApiReqWithUser, res: NextApiResponse) => {
       try {
         res.status(200).json({
           status: 'success',
@@ -42,7 +47,7 @@ const handler = nextConnect()
       }
     }
   )
-  .post('api/auth/register', async (req: any, res: NextApiResponse) => {
+  .post('api/auth/register', async (req: NextApiRequest, res: NextApiResponse) => {
     try {
       const { username, password, email } = req.body;
 
@@ -62,15 +67,18 @@ const handler = nextConnect()
       };
 
       const user = await db.User.create(data);
+      const userId = user.id;
+
+      await db.Asset.create({
+        currencyId: 'tether',
+        amount: 50.0,
+        userId,
+      });
+      await db.Watch.create({ currencyId: 'bitcoin', userId });
+      await db.HistoricalData.create({ userId });
 
       res.status(201).json({
         status: 'success',
-        // data: {
-        //   id: user.id,
-        //   username: user.username,
-        //   email: user.email,
-        //   confirmed: user.confirmed,
-        // },
       });
     } catch (err) {
       console.log(err);

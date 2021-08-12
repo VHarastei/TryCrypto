@@ -7,58 +7,53 @@ import styles from './Login.module.scss';
 import { TextField } from 'components/TextField';
 import { Button } from 'components/Button';
 import { useDispatch, useSelector } from 'react-redux';
-import { RegisterPayload } from 'api/authApi';
-import { fetchRegister } from 'store/slices/userSlice';
-import { selectUserLoadingState } from 'store/selectors';
+import { AuthPayload } from 'api/authApi';
+import { fetchLogin, fetchRegister } from 'store/slices/userSlice';
+import { selectUser, selectUserLoadingState } from 'store/selectors';
 import { LoadingState } from 'store/slices/types';
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
+import Cookies from 'js-cookie';
 
 const schema = Yup.object().shape({
   email: Yup.string().email('Invalid email').required('Required'),
-  username: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Required'),
   password: Yup.string().min(6, 'Too Short!').max(50, 'Too Long!').required('Required'),
-  passwordConfirmation: Yup.string()
-    .oneOf([Yup.ref('password'), null], 'Passwords must match')
-    .required('Required'),
 });
 
 export default function Login() {
   const dispatch = useDispatch();
   const loadingState = useSelector(selectUserLoadingState);
 
-  interface RegisterForm extends RegisterPayload {
-    passwordConfirmation: string;
-  }
-
   const {
     register,
     handleSubmit,
-
-    formState: { errors, isValid },
+    formState: { errors },
     setError,
-  } = useForm<RegisterForm>({
+  } = useForm<AuthPayload>({
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = (data: RegisterForm) => {
-    const { passwordConfirmation, ...payload } = data;
-    dispatch(fetchRegister(payload as RegisterPayload));
+  const onSubmit = (data: AuthPayload) => {
+    dispatch(fetchLogin(data));
   };
+
+  const router = useRouter();
+  const user = useSelector(selectUser);
 
   useEffect(() => {
     if (loadingState === LoadingState.ERROR)
-      setError('email', { type: 'manual', message: 'Email already in use' });
+      setError('password', { type: 'manual', message: 'Wrong email or password' });
+    if (loadingState === LoadingState.LOADED && user) {
+      Cookies.remove('token');
+      Cookies.set('token', user.token);
+      router.push('/home');
+    }
   }, [loadingState]);
-  console.log(isValid);
-
-  const router = useRouter();
 
   return (
     <LandingLayout>
       <div className={styles.container}>
-        <div className={styles.title}>Create account</div>
-        {/* 
+        <div className={styles.title}>TryCrypto Account Login</div>
         <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
           <TextField
             name="Email"
@@ -66,33 +61,21 @@ export default function Login() {
             register={register('email')}
             error={errors.email?.message}
           />
-          <TextField
-            name="Username"
-            type="text"
-            register={register('username')}
-            error={errors.username?.message}
-          />
+
           <TextField
             name="Password"
             type="password"
             register={register('password')}
             error={errors.password?.message}
           />
-          <TextField
-            name="Password Confirmation"
-            type="password"
-            register={register('passwordConfirmation')}
-            error={errors.passwordConfirmation?.message}
-          />
-
           <Button
-            onClick={() => router.push('/login')}
-            disabled={loadingState === LoadingState.LOADING || !isValid}
+            disabled={loadingState === LoadingState.LOADING}
+            isLoading={loadingState === LoadingState.LOADING}
             type="submit"
           >
-            Create account
+            Log In
           </Button>
-        </form> */}
+        </form>
       </div>
     </LandingLayout>
   );

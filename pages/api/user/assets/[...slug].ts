@@ -7,7 +7,7 @@ import { DbAsset, getAssetsMarketData } from 'utils/apiRoutes/getAssetsMarketDat
 import { getPaginatedData } from 'utils/apiRoutes/getPaginatedData';
 
 const db = require('db/models/index');
-
+//TODO! USERID
 const handler = nextConnect()
   .get('api/user/assets/:slug', async (req: NextApiRequest, res: NextApiResponse) => {
     try {

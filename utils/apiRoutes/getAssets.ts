@@ -55,7 +55,7 @@ export const getAssets = async (userId: number, currencyIds: string[], page = 0,
   );
 
   if (!assets.length) return [];
-  if (currencyIds.length === 1) return paginatedAssets[0];
+  //if (currencyIds.length === 1) return paginatedAssets[0];
 
   return paginatedAssets;
 };

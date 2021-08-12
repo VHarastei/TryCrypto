@@ -1,13 +1,17 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
+import passport from 'middlewares/passport';
+import type { NextApiResponse } from 'next';
 import nextConnect from 'next-connect';
-import { getTransactionHistory } from 'utils/apiRoutes/getTransactionHistory';
+import { NextApiReqWithUser } from './../../../auth/[...slug]';
 const db = require('db/models/index');
 
-const handler = nextConnect().get(async (req: NextApiRequest, res: NextApiResponse) => {
+const handler = nextConnect().get(  passport.authenticate('jwt', { session: false }),
+async (req: NextApiReqWithUser, res: NextApiResponse) => {
   try {
+    const userId = req.user.id;
+
     const { interval } = req.query as { interval: string };
     const data = await db.HistoricalData.findOne({
-      where: { userId: 1 },
+      where: { userId },
       attributes: ['id'],
       include: [
         {

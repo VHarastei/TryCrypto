@@ -7,16 +7,15 @@ import styles from './Register.module.scss';
 import { TextField } from 'components/TextField';
 import { Button } from 'components/Button';
 import { useDispatch, useSelector } from 'react-redux';
-import { RegisterPayload } from 'api/authApi';
-import { fetchRegister } from 'store/slices/userSlice';
+import { AuthPayload } from 'api/authApi';
+import { fetchRegister, setUserLoadingState } from 'store/slices/userSlice';
 import { selectUserLoadingState } from 'store/selectors';
 import { LoadingState } from 'store/slices/types';
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 
 const schema = Yup.object().shape({
-  email: Yup.string().email('Invalid email').required('Required'),
-  username: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Required'),
+  email: Yup.string().email('Invalid email adress').required('Required'),
   password: Yup.string().min(6, 'Too Short!').max(50, 'Too Long!').required('Required'),
   passwordConfirmation: Yup.string()
     .oneOf([Yup.ref('password'), null], 'Passwords must match')
@@ -27,7 +26,7 @@ export default function Register() {
   const dispatch = useDispatch();
   const loadingState = useSelector(selectUserLoadingState);
 
-  interface RegisterForm extends RegisterPayload {
+  interface RegisterForm extends AuthPayload {
     passwordConfirmation: string;
   }
 
@@ -42,16 +41,19 @@ export default function Register() {
 
   const onSubmit = (data: RegisterForm) => {
     const { passwordConfirmation, ...payload } = data;
-    dispatch(fetchRegister(payload as RegisterPayload));
+    dispatch(fetchRegister(payload as AuthPayload));
   };
 
+  const router = useRouter();
   useEffect(() => {
     if (loadingState === LoadingState.ERROR)
       setError('email', { type: 'manual', message: 'Email already in use' });
     if (loadingState === LoadingState.LOADED) router.push('/login');
-  }, [loadingState]);
 
-  const router = useRouter();
+    return () => {
+      dispatch(setUserLoadingState(LoadingState.NEVER));
+    };
+  }, [loadingState]);
 
   return (
     <LandingLayout>
@@ -64,12 +66,6 @@ export default function Register() {
             type="text"
             register={register('email')}
             error={errors.email?.message}
-          />
-          <TextField
-            name="Username"
-            type="text"
-            register={register('username')}
-            error={errors.username?.message}
           />
           <TextField
             name="Password"

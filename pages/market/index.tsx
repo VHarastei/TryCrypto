@@ -14,6 +14,7 @@ import React, { useEffect } from 'react';
 import { wrapper } from 'store';
 import { setUserWatchlist } from 'store/slices/watchlistSlice';
 import useSWR from 'swr';
+import { checkAuth } from 'utils/checkAuth';
 import styles from './Market.module.scss';
 
 type PropsType = {
@@ -114,6 +115,9 @@ export default function Market({ data, coinsList, currentPage }: PropsType) {
 export const getServerSideProps = wrapper.getServerSideProps(
   (store) =>
     async ({ req, res, query }) => {
+      const isRedirect = await checkAuth(store, req.cookies.token);
+      if (isRedirect) return isRedirect;
+
       let currentPage = 1;
       const { page } = query;
       if (page) currentPage = +page;
@@ -122,7 +126,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
         const [data, coinsList, watchlist] = await Promise.all([
           fetcher(MarketApi.getTableDataUrl(currentPage)()),
           fetcher(MarketApi.getCoinsListUrl()),
-          Api().getUserWatchlist(),
+          Api(req.cookies.token).getUserWatchlist(),
         ]);
         store.dispatch(setUserWatchlist(watchlist));
 

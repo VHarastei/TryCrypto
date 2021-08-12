@@ -24,6 +24,7 @@ import {
 import { formatDollar } from 'utils/formatDollar';
 import styles from './Portfolio.module.scss';
 import { setUserAssets } from 'store/slices/assetsSlice';
+import { checkAuth } from 'utils/checkAuth';
 
 export default function Portfolio() {
   const data = useSelector(selectUserPortfolio);
@@ -199,7 +200,10 @@ const AssetsTableRow: React.FC<AssetsTableRowPropsType> = React.memo(({ asset })
 
 export const getServerSideProps = wrapper.getServerSideProps((store) => async ({ req, res }) => {
   try {
-    const data = await Api().getUserPortfolio();
+    const isRedirect = await checkAuth(store, req.cookies.token);
+    if (isRedirect) return isRedirect;
+
+    const data = await Api(req.cookies.token).getUserPortfolio();
     const { assets, ...portfolio } = data;
     store.dispatch(setUserPortfolio(portfolio));
     store.dispatch(setUserAssets(assets));

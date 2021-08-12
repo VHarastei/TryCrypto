@@ -15,6 +15,7 @@ type PropsType = {
 };
 
 export const PortfolioBalanceCard: React.FC<PropsType> = React.memo(({ balance, assets }) => {
+  console.log(assets.length);
   return (
     <Card title="Portfolio balance" withPadding>
       <div className={styles.portfolioBalanceContainer}>
@@ -30,7 +31,7 @@ export const PortfolioBalanceCard: React.FC<PropsType> = React.memo(({ balance, 
             </Typography>
           )}
         </div>
-        {assets.length ? <PieChart data={assets} /> : <PieChartPreloader />}
+        {!!assets.length ? <PieChart data={assets} /> : <PieChartPreloader />}
       </div>
     </Card>
   );

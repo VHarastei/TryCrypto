@@ -9,10 +9,12 @@ export const LandingHeader = React.memo(() => {
   return (
     <div className={styles.container}>
       <div className={styles.leftSide}>
-        <div className={styles.logoContainer}>
-          <Image src={logoIcon} alt="Logo icon" width={42} height={38} />
-          <span>TryCrypto</span>
-        </div>
+        <Link href="/">
+          <a className={styles.logoContainer}>
+            <Image src={logoIcon} alt="Logo icon" width={42} height={38} />
+            <span>TryCrypto</span>
+          </a>
+        </Link>
         <Link href="/bonuses">
           <a className={styles.navItem}>Bonuses</a>
         </Link>

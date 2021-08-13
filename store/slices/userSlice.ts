@@ -77,7 +77,7 @@ export const userSlice = createSlice({
     setUserPortfolio: (state, action: PayloadAction<UserPortfolio>) => {
       state.portfolio = action.payload;
     },
-    setUserData: (state, action: PayloadAction<User>) => {
+    setUserData: (state, action: PayloadAction<UserSliceState['data']>) => {
       state.data = action.payload;
     },
     setUserLoadingState: (state, action: PayloadAction<LoadingState>) => {

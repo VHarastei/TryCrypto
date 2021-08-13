@@ -188,16 +188,11 @@ export const BuySell: React.FC<PropsType> = React.memo(({ action, currency, curr
       <Button
         fullWidth
         disabled={!amount || error || isLoading || isCreatingTransaction}
+        isLoading={isLoading || isCreatingTransaction}
         className={action === 'buy' ? styles.actionBuyActive : styles.actionSellActive}
         onClick={handleCreateTransaction}
       >
-        {isLoading || isCreatingTransaction ? (
-          <div className={styles.isLoadingBtn}>
-            <Image src={loadingIcon} height={32} width={32} />
-          </div>
-        ) : (
-          action[0].toUpperCase() + action.slice(1) + ' ISLOADINGPROP'
-        )}
+        {action[0].toUpperCase() + action.slice(1)}
       </Button>
     </div>
   );

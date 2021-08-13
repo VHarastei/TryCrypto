@@ -14,6 +14,7 @@ import { LoadingState } from 'store/slices/types';
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Cookies from 'js-cookie';
+import Link from 'next/link';
 
 const schema = Yup.object().shape({
   email: Yup.string().email('Invalid email').required('Required'),
@@ -76,6 +77,9 @@ export default function Login() {
             Log In
           </Button>
         </form>
+        <Link href="/register">
+          <a className={styles.link}>Don`t have an account? Register now</a>
+        </Link>
       </div>
     </LandingLayout>
   );

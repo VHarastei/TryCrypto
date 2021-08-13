@@ -1,0 +1,82 @@
+@import 'styles/theme.scss';
+
+.icon {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+.dropDown {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  background-color: rgba(0, 0, 0, 0.5);
+  width: calc(100% + 24px);
+  height: 100vh;
+}
+.dropDownMenu {
+  width: 270px;
+  position: absolute;
+  top: 66px;
+  right: 50px;
+  background-color: $backgroundGray;
+  border-radius: 12px;
+  .title {
+    font-size: 22px;
+    font-weight: 500;
+    padding: 16px;
+    padding-bottom: 10px;
+  }
+  .subTitleContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-left: 16px;
+    padding-bottom: 16px;
+    .subTitle {
+      display: flex;
+      font-size: 16px;
+      font-weight: 500;
+      color: $gray;
+      div {
+        margin-left: 6px;
+      }
+    }
+    .verification {
+      display: flex;
+      align-items: center;
+      border-bottom-left-radius: 16px;
+      border-top-left-radius: 16px;
+      padding: 3px 5px;
+    }
+    .verified {
+      background-color: rgba(2, 192, 118, 0.3);
+    }
+    .unVerified {
+      background-color: rgba(248, 73, 96, 0.3);
+    }
+  }
+  .dropDownMenuItem {
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    span {
+      color: $gray;
+      font-size: 17px;
+      font-weight: 500;
+      margin-left: 10px;
+    }
+    &:hover {
+      color: white;
+      cursor: pointer;
+      background-color: $secondary;
+      span {
+        color: white;
+      }
+    }
+  }
+  .dropDownMenuLogout {
+    border-top: 1px solid $secondary;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+  }
+}

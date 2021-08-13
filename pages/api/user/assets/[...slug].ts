@@ -1,3 +1,4 @@
+import { NextApiReqWithUser } from './../../auth/[...slug]';
 import { getPagination } from './../../../../utils/apiRoutes/getPagination';
 import { fetcher, MarketApi } from 'api/marketApi';
 import type { NextApiRequest, NextApiResponse } from 'next';
@@ -5,26 +6,26 @@ import nextConnect from 'next-connect';
 import { getAssets } from 'utils/apiRoutes/getAssets';
 import { DbAsset, getAssetsMarketData } from 'utils/apiRoutes/getAssetsMarketData';
 import { getPaginatedData } from 'utils/apiRoutes/getPaginatedData';
+import passport from 'middlewares/passport';
 
 const db = require('db/models/index');
-//TODO! USERID
 const handler = nextConnect()
-  .get('api/user/assets/:slug', async (req: NextApiRequest, res: NextApiResponse) => {
+  .use(passport.authenticate('jwt', { session: false }))
+  .get('api/user/assets/:slug', async (req: NextApiReqWithUser, res: NextApiResponse) => {
     try {
+      const userId = req.user.id;
       const { slug: currencyId } = req.query as { slug: string };
-      const asset = await getAssets(1, [currencyId]);
-
+      const asset = await getAssets(userId, [currencyId]);
       if (!asset)
         return res.status(404).json({
           status: 'error',
           message: `Asset with ${currencyId} not found`,
         });
 
-      const { assets: assetWithMarketData } = await getAssetsMarketData([asset]);
-
+      const { assets: assetWithMarketData } = await getAssetsMarketData([asset[0]]);
       res.status(200).json({
         status: 'success',
-        data: assetWithMarketData,
+        data: assetWithMarketData[0],
       });
     } catch (err) {
       console.log(err);
@@ -71,9 +72,10 @@ const handler = nextConnect()
       });
     }
   })
-  .post(async (req: NextApiRequest, res: NextApiResponse) => {
+  .post(async (req: NextApiReqWithUser, res: NextApiResponse) => {
     try {
-      const userId = 1;
+      const userId = req.user.id;
+
       const data = req.body;
       const currencyId = req.query.slug[0];
       console.log(currencyId);
@@ -108,7 +110,7 @@ const handler = nextConnect()
       await usdtAsset.save();
       await transaction.save(); //fullfilled
 
-      const updatedAssets = await getAssets(1, [currencyId, 'tether']);
+      const updatedAssets = await getAssets(userId, [currencyId, 'tether']);
       const { assets: updatedAssetsWithMarketData } = await getAssetsMarketData(updatedAssets);
 
       res.status(200).json({

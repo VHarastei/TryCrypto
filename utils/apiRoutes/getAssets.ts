@@ -4,7 +4,7 @@ import { getPaginatedData } from './getPaginatedData';
 import { getPagination } from './getPagination';
 const db = require('db/models/index');
 
-export const getAssets = async (userId: number, currencyIds: string[], page = 0, size = 7) => {
+export const getAssets = async (userId: string, currencyIds: string[], page = 0, size = 7) => {
   const assets: any[] = await db.Asset.findAll({
     where: { userId, currencyId: currencyIds },
     attributes: ['id', 'amount'],

@@ -13,6 +13,7 @@ import { selectUserLoadingState } from 'store/selectors';
 import { LoadingState } from 'store/slices/types';
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 
 const schema = Yup.object().shape({
   email: Yup.string().email('Invalid email adress').required('Required'),
@@ -80,10 +81,17 @@ export default function Register() {
             error={errors.passwordConfirmation?.message}
           />
 
-          <Button disabled={loadingState === LoadingState.LOADING} type="submit">
+          <Button
+            disabled={loadingState === LoadingState.LOADING}
+            isLoading={loadingState === LoadingState.LOADING}
+            type="submit"
+          >
             Create account
           </Button>
         </form>
+        <Link href="/login">
+          <a className={styles.link}>Already registered? Log In</a>
+        </Link>
       </div>
     </LandingLayout>
   );

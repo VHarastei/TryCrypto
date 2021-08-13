@@ -11,6 +11,7 @@ import React from 'react';
 import styles from './Navbar.module.scss';
 import { NavItem } from './NavItem';
 import Link from 'next/link';
+import { UserDialog } from './UserDialog';
 
 type PropsType = {
   children: React.ReactNode;
@@ -35,10 +36,7 @@ export const Navbar: React.FC<PropsType> = React.memo(({ children }) => {
               <span>{active[0].toUpperCase() + active.slice(1)}</span>
             </div>
           </Link>
-          <div className={styles.userContainer}>
-            <Image src={userIcon} alt="User icon" width={40} height={40} />
-            {/* <span>VHarastei</span> */}
-          </div>
+          <UserDialog />
         </div>
       </header>
 

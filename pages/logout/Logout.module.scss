@@ -1,0 +1,15 @@
+@import 'styles/theme.scss';
+
+.container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  margin-top: 100px;
+  .title {
+    font-size: 48px;
+    font-weight: 500;
+    margin-bottom: 10px;
+  }
+}

@@ -6,34 +6,32 @@ import { NextApiReqWithUser } from 'pages/api/auth/[...slug]';
 const db = require('db/models/index');
 
 const handler = nextConnect()
-  .get(
-    passport.authenticate('jwt', { session: false }),
-    async (req: NextApiReqWithUser, res: NextApiResponse) => {
-      try {
-        const userId = req.user.id;
-
-        const { currencyId } = req.query as { currencyId: string };
-
-        const watchlistCurrency = await db.Watch.findOne({
-          where: { userId, currencyId },
-        });
-
-        res.status(200).json({
-          status: 'success',
-          data: watchlistCurrency,
-        });
-      } catch (err) {
-        console.log(err);
-        res.status(500).json({
-          status: 'error',
-          data: err,
-        });
-      }
-    }
-  )
-  .post(async (req: NextApiRequest, res: NextApiResponse) => {
+  .use(passport.authenticate('jwt', { session: false }))
+  .get(async (req: NextApiReqWithUser, res: NextApiResponse) => {
     try {
-      const userId = 1;
+      const userId = req.user.id;
+
+      const { currencyId } = req.query as { currencyId: string };
+
+      const watchlistCurrency = await db.Watch.findOne({
+        where: { userId, currencyId },
+      });
+
+      res.status(200).json({
+        status: 'success',
+        data: watchlistCurrency,
+      });
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({
+        status: 'error',
+        data: err,
+      });
+    }
+  })
+  .post(async (req: NextApiReqWithUser, res: NextApiResponse) => {
+    try {
+      const userId = req.user.id;
       const { currencyId } = req.query as { currencyId: string };
 
       const newWatchlistCurrency = await db.Watch.create({
@@ -53,9 +51,9 @@ const handler = nextConnect()
       });
     }
   })
-  .delete(async (req: NextApiRequest, res: NextApiResponse) => {
+  .delete(async (req: NextApiReqWithUser, res: NextApiResponse) => {
     try {
-      const userId = 1;
+      const userId = req.user.id;
       const { currencyId } = req.query as { currencyId: string };
 
       await db.Watch.destroy({ where: { userId, currencyId } });

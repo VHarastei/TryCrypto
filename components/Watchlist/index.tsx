@@ -1,4 +1,3 @@
-import { nanoid } from '@reduxjs/toolkit';
 import { fetcher, MarketApi } from 'api/marketApi';
 import { Button } from 'components/Button';
 import { Card } from 'components/Card';
@@ -15,21 +14,8 @@ import { formatDollar } from 'utils/formatDollar';
 import { VictoryAxis, VictoryChart, VictoryLine } from 'victory';
 import styles from './Watchlist.module.scss';
 export const Watchlist = React.memo(() => {
-  const watchlist = useSelector(selectUserWatchlist);
-  // const watchlist: string[] = [
-  //   'bitcoin',
-  //   'matic-network',
-  //   'terra-luna',
-  //   'cardano',
-  //   'solana',
-  //   'solanium',
-  //   // 'tether',
-  //   // 'ethereum', //
-  //   // 'ripple',
-  //   // 'binancecoin',
-  //   // 'litecoin',
-  //   // 'tron',
-  // ];
+  const watchlist = useSelector(selectUserWatchlist).slice(0, 12); //max 12 elements
+
   const divider = watchlist.length % 3 === 0 ? 3 : watchlist.length % 5 === 0 ? 5 : 4;
 
   const dividedItems: any[] = [];

@@ -1,2 +1,0 @@
-npx sequelize-cli model:generate --name Watch --attributes isWatched:BOOLEAN
-npx sequelize-cli seed:generate --name Watch

@@ -10,14 +10,17 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    confirmHash: {
+    verifyHash: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    confirmed: {
+    verified: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
       defaultValue: false,
+    },
+    invitedBy: {
+      type: DataTypes.STRING,
     },
   });
 

@@ -74,5 +74,5 @@ export type User = {
   id: string;
   email: string;
   token: string;
-  confirmed: boolean;
+  verified: boolean;
 };

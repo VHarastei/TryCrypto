@@ -4,7 +4,7 @@ const db = require('db/models/index');
 import passport from 'middlewares/passport';
 import { generateMD5 } from 'utils/generateHash';
 import { User } from 'store/slices/types';
-
+import * as nodemailer from 'nodemailer';
 export interface NextApiReqWithUser extends NextApiRequest {
   user: User;
 }
@@ -87,6 +87,88 @@ const handler = nextConnect()
         data: err,
       });
     }
-  });
+  })
+  .get(
+    'api/auth/sendEmail',
+    passport.authenticate('jwt', { session: false }),
+    async (req: NextApiReqWithUser, res: NextApiResponse) => {
+      try {
+        const user = await db.User.findByPk(req.user.id);
+        console.log(process.env.GMAIL_USER);
+        const options = {
+          service: 'gmail',
+          auth: {
+            user: process.env.GMAIL_USER,
+            pass: process.env.GMAIL_PASS,
+          },
+        };
+        const mailer = nodemailer.createTransport(options);
+        mailer.sendMail(
+          {
+            from: 'trycrypto@gmail.com',
+            to: user.email,
+            subject: 'Email verification for TryCrypto',
+            html: `To verify your email, go to <a href="http://localhost:3000/verification/${user.verifyHash}">this link</a>`,
+          },
+          (err) => {
+            if (err) {
+              console.log(err);
+              return res.status(500).json({
+                status: 'error',
+                message: 'Error when sending email',
+                details: err,
+              });
+            }
+          }
+        );
+        res.status(200).json({
+          status: 'success',
+        });
+      } catch (err) {
+        console.log(err);
+        res.status(500).json({
+          status: 'error',
+          data: err,
+        });
+      }
+    }
+  )
+  .patch(
+    'api/auth/verify/:hash',
+    //passport.authenticate('jwt', { session: false }),
+    async (req: NextApiRequest, res: NextApiResponse) => {
+      try {
+        const { hash } = req.query as { hash: string };
+        if (!hash) {
+          res.status(400).json({
+            status: 'error',
+            message: 'Hash is not defined',
+          });
+        }
+
+        const user = await db.User.findOne({ where: { verifyHash: hash } });
+        if (!user) {
+          res.status(404).json({
+            status: 'error',
+            message: 'User is not defined',
+          });
+        }
+
+        user.verified = true;
+        await user.save();
+
+        res.status(200).json({
+          status: 'success',
+          data: user,
+        });
+      } catch (err) {
+        console.log(err);
+        res.status(500).json({
+          status: 'error',
+          data: err,
+        });
+      }
+    }
+  );
 
 export default handler;

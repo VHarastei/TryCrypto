@@ -1,0 +1,27 @@
+@import 'styles/theme.scss';
+
+.container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 600px;
+    width: 100%;
+    padding: 16px;
+    .title {
+      font-size: 32px;
+      font-weight: 500;
+    }
+    .subTitle {
+      margin-top: 10px;
+      margin-bottom: 16px;
+    }
+    .button {
+      padding: 8px 48px;
+    }
+  }
+}

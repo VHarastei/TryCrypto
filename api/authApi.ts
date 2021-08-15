@@ -17,5 +17,8 @@ export const authApi = (instance: AxiosInstance) => {
     getMe: (): Promise<User> => {
       return instance.get(`/auth/me`).then(({ data }) => data.data);
     },
+    sendEmail: (): Promise<undefined> => {
+      return instance.get(`/auth/sendEmail`);
+    },
   };
 };

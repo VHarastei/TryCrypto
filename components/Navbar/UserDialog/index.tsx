@@ -38,17 +38,17 @@ export const UserDialog = React.memo(() => {
               </div>
               <div
                 className={`${styles.verification} ${
-                  user.confirmed ? styles.verified : styles.unVerified
+                  user.verified ? styles.verified : styles.unVerified
                 }`}
               >
                 <Image
-                  src={user.confirmed ? verifiedIcon : unVerifiedIcon}
+                  src={user.verified ? verifiedIcon : unVerifiedIcon}
                   alt="verification icon"
                   width={22}
                   height={22}
                 />
-                <Typography fw={'fw-500'} fs="fs-14" color={user.confirmed ? 'green' : 'red'}>
-                  {user.confirmed ? 'Verified' : 'Unverified'}
+                <Typography fw={'fw-500'} fs="fs-14" color={user.verified ? 'green' : 'red'}>
+                  {user.verified ? 'Verified' : 'Unverified'}
                 </Typography>
               </div>
             </div>

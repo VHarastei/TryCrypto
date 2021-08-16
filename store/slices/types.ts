@@ -25,7 +25,7 @@ export type Asset = {
 export type Transaction = {
   id: number;
   date: string;
-  source: 'market' | 'education';
+  source: 'market' | 'education' | 'bonuses';
   type: 'buy' | 'sell' | 'receive';
   usdValue: number;
   amount: number;
@@ -75,4 +75,5 @@ export type User = {
   email: string;
   token: string;
   verified: boolean;
+  referralLink: string;
 };

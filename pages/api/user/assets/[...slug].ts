@@ -98,7 +98,7 @@ const handler = nextConnect()
       let newUsdtAsset = usdtAsset.amount;
       if (transaction.type === 'buy') {
         newAssetAmount += transaction.amount;
-        newUsdtAsset -= transaction.total;
+        newUsdtAsset -= transaction.total; //TODO: this may cause problems: -0.000007
       } else {
         newAssetAmount -= transaction.amount;
         newUsdtAsset += transaction.total;

@@ -1,0 +1,63 @@
+@import 'styles/theme.scss';
+
+.container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  .content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    max-width: 700px;
+    width: 100%;
+    padding: 16px;
+    .title {
+      font-size: 32px;
+      font-weight: 500;
+    }
+    .subTitle {
+      margin-top: 10px;
+      margin-bottom: 16px;
+    }
+    .link {
+      display: flex;
+      span {
+        font-size: 18px;
+        border: 1px solid $gray;
+        border-radius: 8px;
+        padding: 16px;
+        margin-right: 16px;
+        width: 100%;
+      }
+      .button {
+        padding: 8px;
+        width: 140px;
+      }
+    }
+  }
+}
+.statTitle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+.statContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  .statItem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .statItemTitle {
+      font-size: 28px;
+      font-weight: 500;
+      margin-bottom: 6px;
+    }
+  }
+}

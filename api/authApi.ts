@@ -1,5 +1,5 @@
 import { AxiosInstance } from 'axios';
-import { Asset, User } from 'store/slices/types';
+import { User } from 'store/slices/types';
 
 export type AuthPayload = {
   email: string;
@@ -19,6 +19,9 @@ export const authApi = (instance: AxiosInstance) => {
     },
     sendEmail: (): Promise<undefined> => {
       return instance.get(`/auth/sendEmail`);
+    },
+    verify: (hash: string): Promise<User> => {
+      return instance.patch(`/auth/verify/${hash}`).then(({ data }) => data.data);
     },
   };
 };

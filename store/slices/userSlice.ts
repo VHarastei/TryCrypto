@@ -70,6 +70,12 @@ export const fetchLogin = createAsyncThunk<User, AuthPayload>(
   }
 );
 
+export const fetchVerify = createAsyncThunk<User, string>('user/fetchVerify', async (hash) => {
+  const user = await Api().verify(hash);
+  console.log(user);
+  return user;
+});
+
 export const userSlice = createSlice({
   name: 'user',
   initialState,
@@ -126,6 +132,10 @@ export const userSlice = createSlice({
       })
       .addCase(fetchRegister.rejected.type, (state) => {
         state.loadingState = LoadingState.ERROR;
+      })
+      .addCase(fetchVerify.fulfilled.type, (state, action: PayloadAction<User>) => {
+        state.data = action.payload;
+        //state.loadingState = LoadingState.LOADED;
       })
       .addCase(HYDRATE as any, (state, action: PayloadAction<RootState>) => {
         state.portfolio = action.payload.user.portfolio;

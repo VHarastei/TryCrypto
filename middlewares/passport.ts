@@ -17,8 +17,8 @@ passport.use(
         if (!user) return done(null, false, { message: 'Incorrect email.' });
 
         if (user.password === generateMD5(password + process.env.SECRET_KEY)) {
-          const { id, email, verified } = user;
-          return done(null, { id, email, verified, token: createJwtToken(user) });
+          const { id, email, verified, referralLink } = user;
+          return done(null, { id, email, verified, referralLink, token: createJwtToken(user) });
         } else {
           return done(null, false, { message: 'Incorrect password.' });
         }
@@ -39,8 +39,8 @@ passport.use(
       try {
         const user = await db.User.findByPk(payload.data.id);
         if (user) {
-          const { id, email, verified } = user;
-          return done(null, { id, email, verified });
+          const { id, email, verified, referralLink } = user;
+          return done(null, { id, email, verified, referralLink });
         }
         done(null, false);
       } catch (err) {

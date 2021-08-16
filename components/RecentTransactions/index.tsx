@@ -70,7 +70,7 @@ export const TransactionItem: React.FC<Transaction> = React.memo(
         </div>
         <div className={styles.priceContainer}>
           <Typography variant="regularText">{`${
-            type === 'buy' ? '+' : '-'
+            type === 'sell' ? '-' : '+'
           }${amount} ${asset.currency.symbol.toUpperCase()}`}</Typography>
           <Typography variant="thinText" color="gray">
             {`${type === 'buy' ? '-' : '+'}$${usdValue} `}

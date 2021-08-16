@@ -46,8 +46,8 @@ export default function Home() {
 
         <Card title="Invite a friend and get bonus" withPadding>
           <Typography variant="regularText" color="gray">
-            Invite a friend and you will both receive $20 when they confirm email and buy crypto for
-            $50 or more
+            Invite a friend and you will both receive $50 in USDT when they successfully verify
+            email address
           </Typography>
           <div className={styles.inviteUrl}>https://trycrypto.com/invite/sdfr24csfd</div>
           <Button fullWidth>Copy link</Button>

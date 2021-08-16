@@ -17,6 +17,8 @@ import { EducationCard } from 'components/EducationCard';
 import logoIcon from 'public/static/logo.png';
 import { Typography } from 'components/Typography';
 import Link from 'next/link';
+import { wrapper } from 'store';
+import { checkAuth } from 'utils/checkAuth';
 
 export default function Landing() {
   return (
@@ -139,6 +141,26 @@ export default function Landing() {
     </LandingLayout>
   );
 }
+
+export const getServerSideProps = wrapper.getServerSideProps((store) => async ({ req, res }) => {
+  try {
+    const isRedirect = await checkAuth(store, req.cookies.token);
+    //console.log(isRedirect);
+    if (!isRedirect)
+      return {
+        props: {},
+        redirect: {
+          permanent: false,
+          destination: '/home',
+        },
+      };
+
+    return { props: {} };
+  } catch (err) {
+    console.log(err);
+    return { props: {} };
+  }
+});
 
 type PropsType = {
   title: string;

@@ -13,7 +13,7 @@ import { checkAuth } from 'utils/checkAuth';
 export default function TransactionHistory() {
   const data = useSelector(selectUserTransactionHistory);
   const [currentPage, setCurrentPage] = useState(data.currentPage + 1);
-  console.log(currentPage);
+
   return (
     <Layout>
       <Card title="Transaction History">

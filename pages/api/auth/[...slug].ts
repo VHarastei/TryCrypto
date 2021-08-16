@@ -49,6 +49,7 @@ const handler = nextConnect()
   )
   .post('api/auth/register', async (req: NextApiRequest, res: NextApiResponse) => {
     try {
+      // query reflink
       const { username, password, email } = req.body;
 
       const emailInUse = await db.User.findOne({ where: { email } });
@@ -63,16 +64,25 @@ const handler = nextConnect()
         username,
         password: generateMD5(password + process.env.SECRET_KEY),
         email,
-        confirmHash: generateMD5(process.env.SECRET_KEY + email || Math.random().toString()),
+        verifyHash: generateMD5(process.env.SECRET_KEY + email || Math.random().toString()),
       };
 
       const user = await db.User.create(data);
       const userId = user.id;
 
-      await db.Asset.create({
+      const usdtAsset = await db.Asset.create({
         currencyId: 'tether',
-        amount: 50.0,
+        amount: 100.0,
         userId,
+      });
+      await db.Transaction.create({
+        date: new Date().toISOString(),
+        source: 'bonuses',
+        type: 'receive',
+        usdValue: 100.0,
+        amount: 100.0,
+        total: 100.0,
+        assetId: usdtAsset.id,
       });
       await db.Watch.create({ currencyId: 'bitcoin', userId });
       await db.HistoricalData.create({ userId });
@@ -133,42 +143,61 @@ const handler = nextConnect()
       }
     }
   )
-  .patch(
-    'api/auth/verify/:hash',
-    //passport.authenticate('jwt', { session: false }),
-    async (req: NextApiRequest, res: NextApiResponse) => {
-      try {
-        const { hash } = req.query as { hash: string };
-        if (!hash) {
-          res.status(400).json({
-            status: 'error',
-            message: 'Hash is not defined',
-          });
-        }
-
-        const user = await db.User.findOne({ where: { verifyHash: hash } });
-        if (!user) {
-          res.status(404).json({
-            status: 'error',
-            message: 'User is not defined',
-          });
-        }
-
-        user.verified = true;
-        await user.save();
-
-        res.status(200).json({
-          status: 'success',
-          data: user,
-        });
-      } catch (err) {
-        console.log(err);
-        res.status(500).json({
+  .patch('api/auth/verify/:hash', async (req: NextApiRequest, res: NextApiResponse) => {
+    try {
+      const { slug: hash } = req.query as { slug: string };
+      if (!hash)
+        return res.status(400).json({
           status: 'error',
-          data: err,
+          message: 'Hash is not defined',
         });
-      }
+
+      const user = await db.User.findOne({ where: { verifyHash: hash } });
+
+      if (!user)
+        return res.status(404).json({
+          status: 'error',
+          message: 'User is not defined',
+        });
+
+      if (user.verified === true)
+        return res.status(400).json({
+          status: 'error',
+          message: 'User already verified',
+        });
+
+      user.verified = true;
+      await user.save();
+
+      const usdtAsset = await db.Asset.findOne({
+        where: { userId: user.id, currencyId: 'tether' },
+      });
+
+      const transaction = await db.Transaction.create({
+        date: new Date().toISOString(),
+        source: 'bonuses',
+        type: 'receive',
+        usdValue: 50.0,
+        amount: 50.0,
+        total: 50.0,
+        assetId: usdtAsset.id,
+      });
+      const newAmount = +(usdtAsset.amount + transaction.amount).toFixed(6);
+      usdtAsset.amount = newAmount;
+      await usdtAsset.save();
+
+      const { id, email, verified, referralLink } = user;
+      res.status(200).json({
+        status: 'success',
+        data: { id, email, verified, referralLink },
+      });
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({
+        status: 'error',
+        data: err,
+      });
     }
-  );
+  });
 
 export default handler;

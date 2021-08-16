@@ -11,6 +11,7 @@ import { wrapper } from 'store';
 import { checkAuth } from 'utils/checkAuth';
 import { Paper } from 'components/Paper';
 import { Api } from 'api';
+import Link from 'next/link';
 
 export default function Verification() {
   const user = useSelector(selectUser);
@@ -23,13 +24,30 @@ export default function Verification() {
     <Layout>
       <div className={styles.container}>
         <Paper className={styles.content}>
-          <div>
-            <div className={styles.title}>Verify your email address</div>
-            <Typography color="gray" fs="fs-18" className={styles.subTitle}>
-              {`Receive $50 by verifying, we will send to you email: ${user?.email} verication message`}
-            </Typography>
-            <Button className={styles.button}>Send</Button>
-          </div>
+          {!user?.verified ? (
+            <div>
+              <div className={styles.title}>Verify your email address</div>
+              <Typography color="gray" fs="fs-18" className={styles.subTitle}>
+                {`Receive $50 by verifying, we will send to you email: ${user?.email} verication message`}
+              </Typography>
+              <Button onClick={handleSendEmail} className={styles.button}>
+                Send
+              </Button>
+            </div>
+          ) : (
+            <div>
+              <div className={styles.title}>Thank you</div>
+              <Typography color="gray" fs="fs-18" className={styles.subTitle}>
+                You had already verified your email address, we send to you $50 in USDT check you
+                portfolio
+              </Typography>
+              <Link href="/portfolio">
+                <a>
+                  <Button className={styles.button}>Go to Portfolio page</Button>
+                </a>
+              </Link>
+            </div>
+          )}
           <Image layout="fixed" src={securityIcon} width={200} height={150} />
         </Paper>
       </div>

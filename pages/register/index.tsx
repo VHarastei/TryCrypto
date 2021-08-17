@@ -24,6 +24,9 @@ const schema = Yup.object().shape({
 });
 
 export default function Register() {
+  const router = useRouter();
+  const { ref } = router.query as { ref: string };
+
   const dispatch = useDispatch();
   const loadingState = useSelector(selectUserLoadingState);
 
@@ -41,11 +44,15 @@ export default function Register() {
   });
 
   const onSubmit = (data: RegisterForm) => {
-    const { passwordConfirmation, ...payload } = data;
+    const payload = {
+      email: data.email,
+      password: data.password,
+      ref,
+    };
+
     dispatch(fetchRegister(payload as AuthPayload));
   };
 
-  const router = useRouter();
   useEffect(() => {
     if (loadingState === LoadingState.ERROR)
       setError('email', { type: 'manual', message: 'Email already in use' });

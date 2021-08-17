@@ -11,17 +11,15 @@ import { selectUser } from 'store/selectors';
 import { useSelector } from 'react-redux';
 import { wrapper } from 'store';
 import { checkAuth } from 'utils/checkAuth';
+import { Api } from 'api';
+import { CopyButton } from 'components/CopyButton';
 
-export default function Referral() {
+type PropsType = {
+  numberOfReferrals: number;
+};
+
+export default function Referral({ numberOfReferrals }: PropsType) {
   const user = useSelector(selectUser);
-
-  const [copied, setCopied] = useState(false);
-  const referralLink = `http://localhost:3000/invite/${user?.referralLink}`;
-  const handleCopy = () => {
-    navigator.clipboard.writeText(referralLink);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 1000);
-  };
 
   return (
     <Layout>
@@ -32,24 +30,24 @@ export default function Referral() {
             The more the merrier! Get another $50 every time someone uses your link and verify email
             address
           </Typography>
-          <div className={styles.link}>
-            <span>{referralLink}</span>
-            <Button onClick={handleCopy} className={styles.button}>
-              {!copied ? 'Copy' : 'Copied'}
-            </Button>
-          </div>
+          {user && (
+            <div className={styles.link}>
+              <span>{`localhost:3000/register?ref=${user.referralLink}`}</span>
+              <CopyButton refCode={user.referralLink} className={styles.button} />
+            </div>
+          )}
         </Paper>
         <Paper className={styles.content}>
           <div className={styles.statTitle}>Statistics</div>
           <div className={styles.statContainer}>
             <div className={styles.statItem}>
-              <div className={styles.statItemTitle}>200.00</div>
+              <div className={styles.statItemTitle}>{(numberOfReferrals * 50).toFixed(2)}</div>
               <Typography fs="fs-18" color="gray">
                 USDT Earned
               </Typography>
             </div>
             <div className={styles.statItem}>
-              <div className={styles.statItemTitle}>2</div>
+              <div className={styles.statItemTitle}>{numberOfReferrals}</div>
               <Typography fs="fs-18" color="gray">
                 Friends Referred
               </Typography>
@@ -63,12 +61,14 @@ export default function Referral() {
 
 export const getServerSideProps = wrapper.getServerSideProps((store) => async ({ req, res }) => {
   try {
-    const isRedirect = await checkAuth(store, req.cookies.token);
+    const token = req.cookies.token;
+    const isRedirect = await checkAuth(store, token);
     if (isRedirect) return isRedirect;
 
-    return { props: {} };
+    const numberOfReferrals = await Api(token).getNumberOfReferrals();
+    return { props: { numberOfReferrals } };
   } catch (err) {
     console.log(err);
-    return { props: {} };
+    return { props: { numberOfReferrals: 0 } };
   }
 });

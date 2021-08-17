@@ -41,7 +41,7 @@ export const Watchlist = React.memo(() => {
             <div key={index} className={styles.miniChartsContainer}>
               {fourItems.map((currencyId: string) =>
                 currencyId === 'discoverMore' ? (
-                  <div className={styles.discoverMore}>
+                  <div key={currencyId} className={styles.discoverMore}>
                     <Link href="/market">
                       <a>
                         <Button>Discover more</Button>

@@ -1,12 +1,11 @@
-import { NextApiReqWithUser } from './../../auth/[...slug]';
-import { getPagination } from './../../../../utils/apiRoutes/getPagination';
-import { fetcher, MarketApi } from 'api/marketApi';
+import passport from 'middlewares/passport';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import nextConnect from 'next-connect';
 import { getAssets } from 'utils/apiRoutes/getAssets';
-import { DbAsset, getAssetsMarketData } from 'utils/apiRoutes/getAssetsMarketData';
+import { getAssetsMarketData } from 'utils/apiRoutes/getAssetsMarketData';
 import { getPaginatedData } from 'utils/apiRoutes/getPaginatedData';
-import passport from 'middlewares/passport';
+import { getPagination } from './../../../../utils/apiRoutes/getPagination';
+import { NextApiReqWithUser } from './../../auth/[...slug]';
 
 const db = require('db/models/index');
 const handler = nextConnect()

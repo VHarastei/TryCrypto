@@ -13,6 +13,7 @@ import {
 } from 'store/selectors';
 import { fetchCreateTransaction } from 'store/slices/assetsSlice';
 import { Currency } from 'store/slices/types';
+import { roundDec } from 'utils/roundDec';
 import { BuySellType } from '..';
 import styles from './BuySell.module.scss';
 
@@ -208,7 +209,7 @@ type PercentInputPropsType = {
 
 const PercentInput: React.FC<PercentInputPropsType> = React.memo(
   ({ precentage, currentAmount, amount, precision, action, onClick }) => {
-    const newAmount = (amount * (precentage / 100)).toFixed(precision);
+    const newAmount = roundDec(amount * (precentage / 100), precision);
     return (
       <div className={styles.percentInput}>
         <input
@@ -220,7 +221,7 @@ const PercentInput: React.FC<PercentInputPropsType> = React.memo(
               : ''
           }`}
           type="button"
-          onClick={() => onClick(newAmount)}
+          onClick={() => onClick(`${newAmount}`)}
         />
         <label>{`${precentage}%`}</label>
       </div>

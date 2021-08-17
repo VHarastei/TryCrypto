@@ -3,6 +3,7 @@ import { Banner } from 'components/Banner';
 import { Button } from 'components/Button';
 import { Card } from 'components/Card';
 import { ContentLayout } from 'components/ContentLayout';
+import { CopyButton } from 'components/CopyButton';
 import { EducationCard } from 'components/EducationCard';
 import { Layout } from 'components/Layout';
 import { Paper } from 'components/Paper';
@@ -14,7 +15,7 @@ import btcIcon from 'public/static/btc.png';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { wrapper } from 'store';
-import { selectUserAssets, selectUserPortfolio } from 'store/selectors';
+import { selectUser, selectUserAssets, selectUserPortfolio } from 'store/selectors';
 import { fetchUserAssets } from 'store/slices/assetsSlice';
 import { setUserWatchlist } from 'store/slices/watchlistSlice';
 import { checkAuth } from 'utils/checkAuth';
@@ -23,6 +24,7 @@ import styles from './Home.module.scss';
 export default function Home() {
   const portfolio = useSelector(selectUserPortfolio);
   const assets = useSelector(selectUserAssets);
+  const user = useSelector(selectUser);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(fetchUserAssets());
@@ -34,24 +36,29 @@ export default function Home() {
         title="Learn and earn crypto with TryCrypto Education"
         text="Learn about cryptocurrencies like Bitcoin, Ethereum, Binance Coin and earn them for free!"
         button="Earn crypto"
+        href="/education"
       />
       <Watchlist />
       <Banner
         title="Get $50 free"
-        text="Confirm your email address and get bonus"
-        button="Confirm email"
+        text="Verify your email address and get bonus"
+        button="Verify email"
+        href="/verification"
       />
       <ContentLayout>
         <PortfolioBalanceCard assets={assets} balance={portfolio.balance} />
-
-        <Card title="Invite a friend and get bonus" withPadding>
-          <Typography variant="regularText" color="gray">
-            Invite a friend and you will both receive $50 in USDT when they successfully verify
-            email address
-          </Typography>
-          <div className={styles.inviteUrl}>https://trycrypto.com/invite/sdfr24csfd</div>
-          <Button fullWidth>Copy link</Button>
-        </Card>
+        {user && (
+          <Card title="Invite a friend and get bonus" withPadding>
+            <Typography variant="regularText" color="gray">
+              Invite a friend and you will both receive $50 in USDT, when they successfully verify
+              email address
+            </Typography>
+            <div className={styles.inviteUrl}>
+              {`localhost:3000/register?ref=${user.referralLink}`.slice(0, 35) + '...'}
+            </div>
+            <CopyButton refCode={user.referralLink} fullWidth />
+          </Card>
+        )}
       </ContentLayout>
       <Card title="Education" transparent>
         <div className={styles.educationContainer}>

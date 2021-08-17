@@ -5,6 +5,7 @@ import passport from 'middlewares/passport';
 import { generateMD5 } from 'utils/generateHash';
 import { User } from 'store/slices/types';
 import * as nodemailer from 'nodemailer';
+import { updateUsdtAsset } from 'utils/apiRoutes/updateUsdtAsset';
 export interface NextApiReqWithUser extends NextApiRequest {
   user: User;
 }
@@ -49,7 +50,7 @@ const handler = nextConnect()
   )
   .post('api/auth/register', async (req: NextApiRequest, res: NextApiResponse) => {
     try {
-      // query reflink
+      const { ref: referralLink } = req.query as { ref: string };
       const { username, password, email } = req.body;
 
       const emailInUse = await db.User.findOne({ where: { email } });
@@ -70,22 +71,16 @@ const handler = nextConnect()
       const user = await db.User.create(data);
       const userId = user.id;
 
-      const usdtAsset = await db.Asset.create({
-        currencyId: 'tether',
-        amount: 100.0,
-        userId,
-      });
-      await db.Transaction.create({
-        date: new Date().toISOString(),
-        source: 'bonuses',
-        type: 'receive',
-        usdValue: 100.0,
-        amount: 100.0,
-        total: 100.0,
-        assetId: usdtAsset.id,
-      });
+      const usdtAsset = await db.Asset.create({ currencyId: 'tether', amount: 0, userId });
       await db.Watch.create({ currencyId: 'bitcoin', userId });
       await db.HistoricalData.create({ userId });
+
+      await updateUsdtAsset(usdtAsset, 100);
+      if (referralLink) {
+        const referrer = await db.User.findOne({ where: { referralLink } });
+        user.invitedBy = referrer.email;
+        await user.save();
+      }
 
       res.status(201).json({
         status: 'success',
@@ -173,18 +168,16 @@ const handler = nextConnect()
         where: { userId: user.id, currencyId: 'tether' },
       });
 
-      const transaction = await db.Transaction.create({
-        date: new Date().toISOString(),
-        source: 'bonuses',
-        type: 'receive',
-        usdValue: 50.0,
-        amount: 50.0,
-        total: 50.0,
-        assetId: usdtAsset.id,
-      });
-      const newAmount = +(usdtAsset.amount + transaction.amount).toFixed(6);
-      usdtAsset.amount = newAmount;
-      await usdtAsset.save();
+      await updateUsdtAsset(usdtAsset, 50);
+      if (user.invitedBy) {
+        const referrer = await db.User.findOne({ where: { email: user.invitedBy } });
+        const referrerUsdtAsset = await db.Asset.findOne({
+          where: { userId: referrer.id, currencyId: 'tether' },
+        });
+
+        await updateUsdtAsset(usdtAsset, 50);
+        await updateUsdtAsset(referrerUsdtAsset, 50);
+      }
 
       const { id, email, verified, referralLink } = user;
       res.status(200).json({
@@ -198,6 +191,27 @@ const handler = nextConnect()
         data: err,
       });
     }
-  });
+  })
+  .get(
+    'api/auth/referrals',
+    passport.authenticate('jwt', { session: false }),
+    async (req: NextApiReqWithUser, res: NextApiResponse) => {
+      const data = await db.User.findAndCountAll({
+        where: { invitedBy: req.user.email, verified: true },
+      });
+      try {
+        res.status(200).json({
+          status: 'success',
+          data: data.count,
+        });
+      } catch (err) {
+        console.log(err);
+        res.status(500).json({
+          status: 'error',
+          data: err,
+        });
+      }
+    }
+  );
 
 export default handler;

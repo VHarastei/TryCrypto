@@ -1,6 +1,7 @@
 import { Button } from 'components/Button';
 import { Paper } from 'components/Paper';
 import { Typography } from 'components/Typography';
+import Link from 'next/link';
 import React from 'react';
 import styles from './Banner.module.scss';
 
@@ -8,9 +9,10 @@ type PropsType = {
   title: string;
   text: string;
   button: string;
+  href: string;
 };
 
-export const Banner: React.FC<PropsType> = ({ title, text, button }) => {
+export const Banner: React.FC<PropsType> = ({ title, text, button, href }) => {
   return (
     <Paper>
       <div className={styles.container}>
@@ -20,7 +22,11 @@ export const Banner: React.FC<PropsType> = ({ title, text, button }) => {
             {text}
           </Typography>
         </div>
-        <Button>{button}</Button>
+        <Link href={href}>
+          <a>
+            <Button>{button}</Button>
+          </a>
+        </Link>
       </div>
     </Paper>
   );

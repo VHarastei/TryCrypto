@@ -1,3 +1,4 @@
+import { roundDec } from './../utils/roundDec';
 import { BuySellType } from 'components/BuySellCard';
 import { useEffect } from 'react';
 import { useControlInput } from './useControlInput';
@@ -10,12 +11,12 @@ export const useControlBuySell = (action: BuySellType, currentPrice: number) => 
   const handleSetAmount = (val: string) => {
     onChangeAmount(val);
     const newTotal = +val * currentPrice;
-    onChangeTotal(newTotal > 0 ? newTotal.toFixed(precision.total) : '');
+    onChangeTotal(newTotal > 0 ? `${roundDec(newTotal, precision.total)}` : '');
   };
   const handleSetTotal = (val: string) => {
     onChangeTotal(val);
     const newAmount = +val / currentPrice;
-    onChangeAmount(newAmount > 0 ? newAmount.toFixed(precision.amount) : '');
+    onChangeAmount(newAmount > 0 ? `${roundDec(newAmount, precision.amount)}` : '');
   };
 
   const handleClear = () => {

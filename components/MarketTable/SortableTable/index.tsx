@@ -1,17 +1,15 @@
 import { Key, TableCoin } from 'api/marketApi';
+import clsx from 'clsx';
 import { PriceChangeField } from 'components/PriceChangeField';
 import { Typography } from 'components/Typography';
-import { formatDollar } from 'utils/formatDollar';
+import { WatchlistButton } from 'components/WatchlistButton';
 import { useSortableData } from 'hooks/useSortableData';
 import Image from 'next/image';
 import Link from 'next/link';
-import starIcon from 'public/static/star.svg';
 import React, { useEffect } from 'react';
+import { formatDollar } from 'utils/formatDollar';
 import { VictoryAxis, VictoryChart, VictoryLine } from 'victory';
 import styles from './SortableTable.module.scss';
-import { WatchlistButton } from 'components/WatchlistButton';
-import { useSelector } from 'react-redux';
-import { selectUserWatchlist } from 'store/selectors';
 
 type PropsType = {
   data: TableCoin[];
@@ -36,14 +34,12 @@ export const SortableTable: React.FC<PropsType> = React.memo(
 
     useEffect(() => {
       if (data.length) setItems(data);
-    }, [data]);
+    }, [data, setItems]);
 
     const getClassName = (name: Key) => {
       if (!sortConfig) return '';
       return sortConfig.key === name ? sortConfig.direction : '';
     };
-
-    const watchlist = useSelector(selectUserWatchlist);
 
     return (
       <div className={styles.table}>
@@ -121,25 +117,28 @@ type TableHeaderItemPropsType = {
   getClassName: (name: Key) => string;
 };
 
-const TableHeaderItem: React.FC<TableHeaderItemPropsType> = React.memo(
-  ({ name, itemKey, requestSort, getClassName }) => {
-    return (
-      <li className={styles[itemKey]} onClick={() => requestSort(itemKey)}>
-        <Typography variant="thinText" color="gray">
-          {name}
-        </Typography>
-        <span className={`${styles.sort} ${styles[getClassName(itemKey)]}`}></span>
-      </li>
-    );
-  }
-);
+const TableHeaderItem: React.FC<TableHeaderItemPropsType> = React.memo(function TableRow({
+  name,
+  itemKey,
+  requestSort,
+  getClassName,
+}) {
+  return (
+    <li className={styles[itemKey]} onClick={() => requestSort(itemKey)}>
+      <Typography variant="thinText" color="gray">
+        {name}
+      </Typography>
+      <span className={clsx(styles.sort, styles[getClassName(itemKey)])}></span>
+    </li>
+  );
+});
 
 type TableRowPropsType = {
   coin: TableCoin;
   //isWatchlisted: boolean;
 };
 
-export const TableRow: React.FC<TableRowPropsType> = React.memo(({ coin }) => {
+export const TableRow: React.FC<TableRowPropsType> = React.memo(function TableRow({ coin }) {
   return (
     <ul className={styles.tableRowContainer}>
       <li className={styles.watch}>
@@ -150,7 +149,7 @@ export const TableRow: React.FC<TableRowPropsType> = React.memo(({ coin }) => {
       <li className={styles.name}>
         <Link href={`/market/${coin.id}`}>
           <a className={styles.name}>
-            <img src={coin.image} alt={`${coin.symbol} icon`} width={30} height={30} />
+            <Image src={coin.image} alt={`${coin.symbol} icon`} width={30} height={30} />
             <p>{coin.name}</p>
             <span>{coin.symbol.toUpperCase()}</span>
           </a>

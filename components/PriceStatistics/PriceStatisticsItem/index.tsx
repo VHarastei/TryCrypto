@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import { Typography } from 'components/Typography';
 import React from 'react';
 import styles from './PriceStatisticsItem.module.scss';
@@ -36,13 +37,14 @@ export const PriceStatisticsItem: React.FC<PropsType> = React.memo(
           )}
           {subValue && (
             <div
-              className={`${styles.subValue} ${
+              className={clsx(
+                styles.subValue,
                 subValue && !!!parseFloat(subValue)
                   ? ''
                   : parseFloat(subValue) > 0
                   ? styles.green
                   : styles.red
-              } `}
+              )}
             >
               <span></span>
               {!!!parseFloat(subValue) ? '--' : subValue}

@@ -8,6 +8,7 @@ import { formatDollar } from 'utils/formatDollar';
 import { Card } from 'components/Card';
 import { PieChart, PieChartPreloader } from 'components/PieChart';
 import { Asset } from 'store/slices/types';
+import clsx from 'clsx';
 
 type PropsType = {
   balance: number;
@@ -24,7 +25,7 @@ export const PortfolioBalanceCard: React.FC<PropsType> = React.memo(({ balance, 
             Account balance:
           </Typography>
           {balance === 0 ? (
-            <div className={`${styles.portfolioBalanceShimmer} ${styles.shimmer}`}></div>
+            <div className={clsx(styles.portfolioBalanceShimmer, styles.shimmer)}></div>
           ) : (
             <Typography fw="fw-500" fs="fs-24">
               {formatDollar(balance, 20)}

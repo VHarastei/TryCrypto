@@ -8,7 +8,7 @@ import btcIcon from 'public/static/btc.png';
 
 type PropsTypes = {};
 
-export const EducationCard: React.FC<PropsTypes> = React.memo(() => {
+export const EducationCard: React.FC<PropsTypes> = React.memo(function EducationCard() {
   return (
     <Paper className={styles.education}>
       <div className={styles.educationCurrency}>

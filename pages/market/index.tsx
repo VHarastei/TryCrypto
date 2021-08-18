@@ -97,7 +97,7 @@ export default function Market({ data, coinsList, currentPage }: PropsType) {
         </div>
         {isInvalidCoinName ? (
           <div className={styles.notFound}>
-            <Typography variant="regularText">We couldn't find that asset</Typography>
+            <Typography variant="regularText">We couldn`t find that asset</Typography>
             <Typography variant="thinText" color="gray">
               Try again with a different term.
             </Typography>

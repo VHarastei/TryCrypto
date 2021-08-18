@@ -61,6 +61,7 @@ export default function Register() {
     return () => {
       dispatch(setUserLoadingState(LoadingState.NEVER));
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loadingState]);
 
   return (

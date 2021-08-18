@@ -8,7 +8,7 @@ type PropsType = {
   children: React.ReactNode;
 };
 
-export const LandingLayout: React.FC<PropsType> = React.memo(({ children }) => {
+export const LandingLayout: React.FC<PropsType> = React.memo(function LandingLayout({ children }) {
   return (
     <div className={styles.container}>
       <LandingHeader />

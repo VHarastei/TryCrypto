@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import { Typography } from 'components/Typography';
 import Link from 'next/link';
 import React from 'react';
@@ -67,9 +68,10 @@ export const PieChart: React.FC<PropsType> = ({ data }) => {
                 <a className={styles.chartItem}>
                   <div className={styles.chartItemName}>
                     <div
-                      className={`${styles.chartItemColor} ${
+                      className={clsx(
+                        styles.chartItemColor,
                         styles[`bg_${chartColors[index].slice(1)}`]
-                      }`}
+                      )}
                     ></div>
                     <Typography variant="regularText">
                       {item.currency.symbol.toUpperCase()}
@@ -87,7 +89,7 @@ export const PieChart: React.FC<PropsType> = ({ data }) => {
             return (
               <div className={styles.chartItem} key={item.id}>
                 <div className={styles.chartItemName}>
-                  <div className={`${styles.chartItemColor} ${styles.bg_gray}`}></div>
+                  <div className={clsx(styles.chartItemColor, styles.bg_gray)}></div>
                   <Typography variant="regularText">Others</Typography>
                 </div>
                 <Typography variant="mediumText">{formatPercent(otherCurrencies)}</Typography>
@@ -103,30 +105,30 @@ export const PieChartPreloader = () => {
   return (
     <div className={styles.container}>
       <div className={styles.chart}>
-        <div className={`${styles.chartShimmer} ${styles.shimmer}`}>
+        <div className={clsx(styles.chartShimmer, styles.shimmer)}>
           <div className={styles.chartShimmerInner}></div>
         </div>
       </div>
       <div className={styles.chartItemsContainer}>
         <div className={styles.chartItem}>
-          <div className={`${styles.chartItemNameShimmer} ${styles.shimmer}`}></div>
-          <div className={`${styles.chartItemValueShimmer} ${styles.shimmer}`}></div>
+          <div className={clsx(styles.chartItemNameShimmer, styles.shimmer)}></div>
+          <div className={clsx(styles.chartItemValueShimmer, styles.shimmer)}></div>
         </div>
         <div className={styles.chartItem}>
-          <div className={`${styles.chartItemNameShimmer} ${styles.shimmer}`}></div>
-          <div className={`${styles.chartItemValueShimmer} ${styles.shimmer}`}></div>
+          <div className={clsx(styles.chartItemNameShimmer, styles.shimmer)}></div>
+          <div className={clsx(styles.chartItemValueShimmer, styles.shimmer)}></div>
         </div>
         <div className={styles.chartItem}>
-          <div className={`${styles.chartItemNameShimmer} ${styles.shimmer}`}></div>
-          <div className={`${styles.chartItemValueShimmer} ${styles.shimmer}`}></div>
+          <div className={clsx(styles.chartItemNameShimmer, styles.shimmer)}></div>
+          <div className={clsx(styles.chartItemValueShimmer, styles.shimmer)}></div>
         </div>
         <div className={styles.chartItem}>
-          <div className={`${styles.chartItemNameShimmer} ${styles.shimmer}`}></div>
-          <div className={`${styles.chartItemValueShimmer} ${styles.shimmer}`}></div>
+          <div className={clsx(styles.chartItemNameShimmer, styles.shimmer)}></div>
+          <div className={clsx(styles.chartItemValueShimmer, styles.shimmer)}></div>
         </div>
         <div className={styles.chartItem}>
-          <div className={`${styles.chartItemNameShimmer} ${styles.shimmer}`}></div>
-          <div className={`${styles.chartItemValueShimmer} ${styles.shimmer}`}></div>
+          <div className={clsx(styles.chartItemNameShimmer, styles.shimmer)}></div>
+          <div className={clsx(styles.chartItemValueShimmer, styles.shimmer)}></div>
         </div>
       </div>
     </div>

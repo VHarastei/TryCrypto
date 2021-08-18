@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import Image from 'next/image';
 import Link from 'next/link';
 import arrowIcon from 'public/static/back.svg';
@@ -36,9 +37,10 @@ export const Pagination: React.FC<PropsType> = React.memo(
           >
             <a
               onClick={handleChangePage(currentPage - 1)}
-              className={`${styles.paginationArrow} ${
-                pagination[0] === currentPage ? styles.disabledArrow : ''
-              }`}
+              className={clsx(
+                styles.paginationArrow,
+                pagination[0] === currentPage && styles.disabledArrow
+              )}
             >
               <Image src={arrowIcon} alt="Arrow icon" width={14} height={14} />
             </a>
@@ -51,9 +53,7 @@ export const Pagination: React.FC<PropsType> = React.memo(
                   <div
                     color="secondary"
                     onClick={handleChangePage(page)}
-                    className={`${styles.paginationBtn} ${
-                      page === currentPage ? styles.active : ''
-                    }`}
+                    className={clsx(styles.paginationBtn, page === currentPage && styles.active)}
                   >
                     {page}
                   </div>
@@ -69,9 +69,11 @@ export const Pagination: React.FC<PropsType> = React.memo(
           >
             <a
               onClick={handleChangePage(currentPage + 1)}
-              className={`${styles.paginationArrow} ${styles.rotate} ${
-                [...pagination].reverse()[0] === currentPage ? styles.disabledArrow : ''
-              }`}
+              className={clsx(
+                styles.paginationArrow,
+                styles.rotate,
+                [...pagination].reverse()[0] === currentPage && styles.disabledArrow
+              )}
             >
               <Image src={arrowIcon} alt="Arrow icon" width={14} height={14} />
             </a>

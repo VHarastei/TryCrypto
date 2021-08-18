@@ -55,7 +55,7 @@ export default function Verification() {
               </Link>
             </div>
           )}
-          <Image layout="fixed" src={securityIcon} width={200} height={150} />
+          <Image alt="security icon" layout="fixed" src={securityIcon} width={200} height={150} />
         </Paper>
       </div>
     </Layout>

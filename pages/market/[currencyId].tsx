@@ -1,5 +1,6 @@
 import { Api } from 'api';
 import { fetcher, MarketApi } from 'api/marketApi';
+import clsx from 'clsx';
 import { BuySellCard } from 'components/BuySellCard';
 import { Card } from 'components/Card';
 import { ContentLayout } from 'components/ContentLayout';
@@ -9,6 +10,7 @@ import { MarketTransactions } from 'components/MarketTransactions';
 import { Preloader } from 'components/Preloader';
 import { PriceStatistics } from 'components/PriceStatistics';
 import { WatchlistButton } from 'components/WatchlistButton';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { wrapper } from 'store';
@@ -60,7 +62,7 @@ export default function CurrencyPage() {
       <div>
         <div className={styles.header}>
           <div className={styles.nameContainer}>
-            <img
+            <Image
               src={currencyData.image.large}
               alt={`${currencyData.symbol} icon`}
               width={48}
@@ -75,13 +77,13 @@ export default function CurrencyPage() {
             <div className={styles.menu}>
               <div
                 onClick={() => handleChangeTab('tab1')}
-                className={`${styles.tab} ${tab === 'tab1' ? styles.active : ''}`}
+                className={clsx(styles.tab, tab === 'tab1' && styles.active)}
               >
                 Overview
               </div>
               <div
                 onClick={() => handleChangeTab('tab2')}
-                className={`${styles.tab} ${tab === 'tab2' ? styles.active : ''}`}
+                className={clsx(styles.tab, tab === 'tab2' && styles.active)}
               >
                 Buy/Sell
               </div>

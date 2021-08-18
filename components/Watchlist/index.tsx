@@ -1,4 +1,5 @@
 import { fetcher, MarketApi } from 'api/marketApi';
+import clsx from 'clsx';
 import { Button } from 'components/Button';
 import { Card } from 'components/Card';
 import { PriceChangeField } from 'components/PriceChangeField';
@@ -57,14 +58,14 @@ export const Watchlist = React.memo(() => {
         })}
         {!watchlist.length && (
           <div className={styles.emptyWatchlistContainer}>
-            <Image src={cryptoCurrencyIcon} width={128} height={128} />
+            <Image alt="cryptocurrency icon" src={cryptoCurrencyIcon} width={128} height={128} />
             <Typography className={styles.emptyWatchlistText} variant="regularText">
               Add crypto to your watchlist by clicking button below
             </Typography>
           </div>
         )}
         {!withDiscoverMore && (
-          <div className={`${styles.discoverMore} ${styles.discoverMoreWide}`}>
+          <div className={clsx(styles.discoverMore, styles.discoverMoreWide)}>
             <Link href="/market">
               <a>
                 <Button>Discover more</Button>
@@ -95,7 +96,7 @@ export const MiniChart: React.FC<MiniChartPropsType> = React.memo(({ currencyId 
       <div className={styles.miniChartDesc}>
         <div className={styles.miniChartInfo}>
           <div>
-            <img
+            <Image
               src={currency.image.small}
               alt={`${currency.symbol} icon`}
               width={30}
@@ -119,7 +120,7 @@ export const MiniChart: React.FC<MiniChartPropsType> = React.memo(({ currencyId 
       <Sparkline data={currency.market_data} />
       <Link href={`/market/${currency.id}`}>
         <a>
-          <Button className={`${styles.miniChartButton} ${display && styles.display}`}>
+          <Button className={clsx(styles.miniChartButton, display && styles.display)}>
             View more
           </Button>
         </a>
@@ -134,18 +135,17 @@ const MiniChartPreloader = React.memo(() => {
       <div className={styles.miniChartDesc}>
         <div className={styles.miniChartInfo}>
           <div>
-            <div className={`${styles.miniChartInfoImg} ${styles.shimmer}`}></div>
-            <div className={`${styles.miniChartInfoCurrName} ${styles.shimmer}`}></div>
+            <div className={clsx(styles.miniChartInfoImg, styles.shimmer)}></div>
+            <div className={clsx(styles.miniChartInfoCurrName, styles.shimmer)}></div>
           </div>
-
-          <div className={`${styles.miniChartInfoPrice} ${styles.shimmer}`}></div>
+          <div className={clsx(styles.miniChartInfoPrice, styles.shimmer)}></div>
         </div>
         <div className={styles.miniChartInfo}>
-          <div className={`${styles.miniChartInfoDate} ${styles.shimmer}`}></div>
-          <div className={`${styles.miniChartInfoPriceChange} ${styles.shimmer}`}></div>
+          <div className={clsx(styles.miniChartInfoDate, styles.shimmer)}></div>
+          <div className={clsx(styles.miniChartInfoPriceChange, styles.shimmer)}></div>
         </div>
       </div>
-      <div className={`${styles.miniChartSparkline} ${styles.shimmer}`}>
+      <div className={clsx(styles.miniChartSparkline, styles.shimmer)}>
         <VictoryChart width={500} height={150} padding={0} domainPadding={{ y: 16 }}>
           <VictoryAxis
             dependentAxis

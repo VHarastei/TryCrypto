@@ -17,7 +17,7 @@ type PropsType = {
   children: React.ReactNode;
 };
 
-export const Navbar: React.FC<PropsType> = React.memo(({ children }) => {
+export const Navbar: React.FC<PropsType> = React.memo(function Navbar({ children }) {
   const router = useRouter();
   const path = router.pathname.split('/');
   const active = path[1];
@@ -31,10 +31,10 @@ export const Navbar: React.FC<PropsType> = React.memo(({ children }) => {
         </div>
         <div className={styles.headerBar}>
           <Link href={`/${active}`}>
-            <div className={styles.activePage}>
+            <a className={styles.activePage}>
               {path[2] && <Image src={backIcon} alt="Back icon" width={24} height={24} />}
               <span>{active[0].toUpperCase() + active.slice(1)}</span>
-            </div>
+            </a>
           </Link>
           <UserDialog />
         </div>

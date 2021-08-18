@@ -25,6 +25,7 @@ import { formatDollar } from 'utils/formatDollar';
 import styles from './Portfolio.module.scss';
 import { setUserAssets } from 'store/slices/assetsSlice';
 import { checkAuth } from 'utils/checkAuth';
+import Image from 'next/image';
 
 export default function Portfolio() {
   const data = useSelector(selectUserPortfolio);
@@ -44,7 +45,7 @@ export default function Portfolio() {
         <div className={styles.headerPnls}>
           <div className={styles.headerItem}>
             <Typography variant="mediumText" color="gray">
-              Yesterday's PNL
+              Yesterday`s PNL
             </Typography>
             <div className={styles.headerItemValueContainer}>
               <span className={styles.headerItemValue}>
@@ -62,7 +63,7 @@ export default function Portfolio() {
           </div>
           <div className={styles.headerItem}>
             <Typography variant="mediumText" color="gray">
-              30 day's PNL
+              30 day`s PNL
             </Typography>
             <div className={styles.headerItemValueContainer}>
               <span className={styles.headerItemValue}>
@@ -175,7 +176,7 @@ const AssetsTableRow: React.FC<AssetsTableRowPropsType> = React.memo(({ asset })
     <Link href={`market/${asset.currency.id}`}>
       <a className={styles.tableRowContainer}>
         <div className={styles.assetsTableAsset}>
-          <img
+          <Image
             src={asset.currency.image}
             alt={`${asset.currency.symbol} icon`}
             width={30}
@@ -197,6 +198,8 @@ const AssetsTableRow: React.FC<AssetsTableRowPropsType> = React.memo(({ asset })
     </Link>
   );
 });
+
+AssetsTableRow.displayName = 'AssetsTableRow';
 
 export const getServerSideProps = wrapper.getServerSideProps((store) => async ({ req, res }) => {
   try {

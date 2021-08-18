@@ -15,7 +15,9 @@ type PropsType = {
   currency: Currency;
 };
 
-export const MarketTransactions: React.FC<PropsType> = React.memo(({ currency }) => {
+export const MarketTransactions: React.FC<PropsType> = React.memo(function MarketTransactions({
+  currency,
+}) {
   const dispatch = useAppDispatch();
   const [page, setPage] = useState(1);
 
@@ -31,6 +33,7 @@ export const MarketTransactions: React.FC<PropsType> = React.memo(({ currency })
   }
   useEffect(() => {
     if (asset) dispatch(fetchUserAsset(currency.id));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleLoadMore = () => {
@@ -85,16 +88,18 @@ type RTTitlePropsType = {
   usdValue?: number;
 };
 
-const RTTitle: React.FC<RTTitlePropsType> = React.memo(
-  ({ currency, amount = 0, usdValue = 0.0 }) => {
-    return (
-      <div className={styles.rTTitle}>
-        <Typography variant="title">{`${currency.name} transactions`}</Typography>
-        <Typography variant="title">{`Balance: ${amount} ${currency.symbol.toLocaleUpperCase()} (${formatDollar(
-          usdValue,
-          20
-        )})`}</Typography>
-      </div>
-    );
-  }
-);
+const RTTitle: React.FC<RTTitlePropsType> = React.memo(function RTTitle({
+  currency,
+  amount = 0,
+  usdValue = 0.0,
+}) {
+  return (
+    <div className={styles.rTTitle}>
+      <Typography variant="title">{`${currency.name} transactions`}</Typography>
+      <Typography variant="title">{`Balance: ${amount} ${currency.symbol.toLocaleUpperCase()} (${formatDollar(
+        usdValue,
+        20
+      )})`}</Typography>
+    </div>
+  );
+});

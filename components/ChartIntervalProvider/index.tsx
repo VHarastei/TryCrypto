@@ -16,7 +16,7 @@ type PropsType = {
 };
 
 export const ChartIntervalProvider: React.FC<PropsType> = React.memo(
-  ({ data, title, Chart, withAxies, handleFetch }) => {
+  function ChartIntervalProvider({ data, title, Chart, withAxies, handleFetch }) {
     const [interval, setInterval] = useState(intervals[1].value);
     const dispatch = useDispatch();
 
@@ -66,7 +66,11 @@ type CardTitlePropsType = {
   setInterval: (newInt: number) => void;
 };
 
-const CardTitle: React.FC<CardTitlePropsType> = React.memo(({ title, interval, setInterval }) => {
+const CardTitle: React.FC<CardTitlePropsType> = React.memo(function CardTitle({
+  title,
+  interval,
+  setInterval,
+}) {
   return (
     <div className={styles.cardTitle}>
       <Typography variant="title">{title}</Typography>

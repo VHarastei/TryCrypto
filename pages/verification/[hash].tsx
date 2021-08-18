@@ -18,13 +18,13 @@ export default function HashVerification() {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(fetchVerify(hash));
-  }, []);
+  }, [dispatch, router, hash]);
 
   return (
     <LandingLayout>
       <div className={styles.container}>
         <Paper className={styles.hashContent}>
-          <Image layout="fixed" src={checkIcon} width={100} height={100} />
+          <Image alt="check icon" layout="fixed" src={checkIcon} width={100} height={100} />
           <div className={styles.title}>Thank you</div>
           <Typography color="gray" fs="fs-18" className={styles.subTitle}>
             You have verified your email

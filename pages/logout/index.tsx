@@ -13,7 +13,7 @@ export default function Logout() {
   useEffect(() => {
     Cookies.remove('token');
     router.push('/');
-  }, []);
+  }, [router]);
 
   return (
     <LandingLayout>

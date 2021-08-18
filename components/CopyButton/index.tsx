@@ -7,7 +7,11 @@ type PropsType = {
   fullWidth?: boolean;
 };
 
-export const CopyButton: React.FC<PropsType> = React.memo(({ refCode, className, fullWidth }) => {
+export const CopyButton: React.FC<PropsType> = React.memo(function CopyButton({
+  refCode,
+  className,
+  fullWidth,
+}) {
   const [copied, setCopied] = useState(false);
   const referralLink = `localhost:3000/register?ref=${refCode}`;
   const handleCopy = () => {

@@ -1,8 +1,8 @@
+import clsx from 'clsx';
 import { Button } from 'components/Button';
 import { Typography } from 'components/Typography';
 import { useControlBuySell } from 'hooks/useControlBuySell';
 import Image from 'next/image';
-import loadingIcon from 'public/static/loadingMini.svg';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from 'store';
@@ -28,33 +28,38 @@ export type BuySellPrecision = {
   total: number;
 };
 
-export const BuySell: React.FC<PropsType> = React.memo(({ action, currency, currentPrice }) => {
+export const BuySell: React.FC<PropsType> = React.memo(function BuySell({
+  action,
+  currency,
+  currentPrice,
+}) {
   const dispatch = useAppDispatch();
   const asset = useSelector(selectUserAsset(currency.id));
   const isLoading = useSelector(selectUserAssetsIsLoading);
   const isCreatingTransaction = useSelector(selectAssetsTransactionIsLoading);
+  const [error, setError] = useState(false);
 
   let assetAmount = asset?.amount || 0;
-
-  const usdtAsset = useSelector(selectUserAsset('tether'));
-  if (!usdtAsset) return null;
 
   const { amount, total, handleSetAmount, handleSetTotal, handleClear, precision } =
     useControlBuySell(action, currentPrice);
 
-  const [error, setError] = useState(false);
+  const usdtAsset = useSelector(selectUserAsset('tether'));
+
   useEffect(() => {
-    if (action === 'buy') {
+    if (action === 'buy' && usdtAsset) {
       +total > +usdtAsset.amount.toFixed(precision.total) ? setError(true) : setError(false);
     } else {
       +amount > +assetAmount.toFixed(precision.amount) || assetAmount === 0
         ? setError(true)
         : setError(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [amount, total]);
 
+  if (!usdtAsset) return null;
+
   const handleCreateTransaction = () => {
-    //!asset || --- isLoading
     if (!usdtAsset || error) return;
     const date = new Date().toISOString();
     const transaction = {
@@ -97,9 +102,10 @@ export const BuySell: React.FC<PropsType> = React.memo(({ action, currency, curr
       </div>
       <div
         title={`Max Amount ${assetAmount}`}
-        className={`${styles.inputContainer} ${
+        className={clsx(
+          styles.inputContainer,
           action === 'sell' && error && styles.inputContainerError
-        }`}
+        )}
       >
         <Typography color="gray" fw="fw-500">
           Amount
@@ -143,9 +149,10 @@ export const BuySell: React.FC<PropsType> = React.memo(({ action, currency, curr
 
       <div
         title="Your balance is not enough"
-        className={`${styles.inputContainer} ${
+        className={clsx(
+          styles.inputContainer,
           action === 'buy' && error && styles.inputContainerError
-        }`}
+        )}
       >
         <Typography color="gray" fw="fw-500">
           Total
@@ -164,7 +171,7 @@ export const BuySell: React.FC<PropsType> = React.memo(({ action, currency, curr
           </Typography>
           <div className={styles.currencyInfo}>
             <span>
-              <img src={currency.image} width={30} height={30} alt={`${currency.name} icon`} />
+              <Image src={currency.image} width={30} height={30} alt={`${currency.name} icon`} />
               <Typography variant="regularText">{currency.name}</Typography>
             </span>
           </div>
@@ -175,7 +182,7 @@ export const BuySell: React.FC<PropsType> = React.memo(({ action, currency, curr
           </Typography>
           <div className={styles.currencyInfo}>
             <span>
-              <img
+              <Image
                 src="https://assets.coingecko.com/coins/images/325/large/Tether-logo.png?1598003707"
                 width={30}
                 height={30}
@@ -207,24 +214,30 @@ type PercentInputPropsType = {
   onClick: (val: string) => void;
 };
 
-const PercentInput: React.FC<PercentInputPropsType> = React.memo(
-  ({ precentage, currentAmount, amount, precision, action, onClick }) => {
-    const newAmount = roundDec(amount * (precentage / 100), precision);
-    return (
-      <div className={styles.percentInput}>
-        <input
-          className={`${action === 'buy' ? styles.percentInputBuy : styles.percentInputSell} ${
-            +newAmount <= +currentAmount
-              ? action === 'buy'
-                ? styles.percentInputBuyActive
-                : styles.percentInputSellActive
-              : ''
-          }`}
-          type="button"
-          onClick={() => onClick(`${newAmount}`)}
-        />
-        <label>{`${precentage}%`}</label>
-      </div>
-    );
-  }
-);
+const PercentInput: React.FC<PercentInputPropsType> = React.memo(function PercentInput({
+  precentage,
+  currentAmount,
+  amount,
+  precision,
+  action,
+  onClick,
+}) {
+  const newAmount = roundDec(amount * (precentage / 100), precision);
+  return (
+    <div className={styles.percentInput}>
+      <input
+        className={clsx(
+          action === 'buy' ? styles.percentInputBuy : styles.percentInputSell,
+          +newAmount <= +currentAmount
+            ? action === 'buy'
+              ? styles.percentInputBuyActive
+              : styles.percentInputSellActive
+            : ''
+        )}
+        type="button"
+        onClick={() => onClick(`${newAmount}`)}
+      />
+      <label>{`${precentage}%`}</label>
+    </div>
+  );
+});

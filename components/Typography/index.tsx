@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import React from 'react';
 import styles from './Typography.module.scss';
 
@@ -14,13 +15,13 @@ export const Typography: React.FC<PropsType> = React.memo(
   ({ children, variant, color, fw, fs, className }) => {
     return (
       <div
-        className={`
-      ${variant && styles[variant]} 
-      ${color && styles[color]}
-      ${fw && styles[fw]}
-      ${fs && styles[fs]}
-      ${className}
-      `}
+        className={clsx(
+          className,
+          variant && styles[variant],
+          color && styles[color],
+          fw && styles[fw],
+          fs && styles[fs]
+        )}
       >
         {children}
       </div>

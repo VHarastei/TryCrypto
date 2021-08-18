@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectIsWatclistedCurrency } from 'store/selectors';
@@ -26,9 +27,11 @@ export const WatchlistButton: React.FC<PropsTypes> = React.memo(({ currencyId, o
   return (
     <div
       onClick={handleIsWatchlisted}
-      className={`${styles.container} ${outlined && styles.outlined} ${
-        isWatchlisted ? styles.isWatchlisted : ''
-      }`}
+      className={clsx(
+        styles.container,
+        outlined && styles.outlined,
+        isWatchlisted && styles.isWatchlisted
+      )}
     ></div>
   );
 });

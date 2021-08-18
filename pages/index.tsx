@@ -31,7 +31,7 @@ export default function Landing() {
             <Button className={styles.titleButton}>Register Now</Button>
           </div>
           <div>
-            <Image src={cryptoIcon} width={170} height={170} />
+            <Image alt={'crypto icon'} src={cryptoIcon} width={170} height={170} />
           </div>
         </div>
         <div className={styles.charts}>
@@ -50,6 +50,7 @@ export default function Landing() {
               <div className={styles.portfolioContent}>
                 <div className={styles.portfolioImgContainer}>
                   <Image
+                    alt={'portfolio img'}
                     src={portfolioImg}
                     className={styles.portfolioImg}
                     width={766}
@@ -105,12 +106,24 @@ export default function Landing() {
                 <div className={styles.footerContactImg}>
                   <Link href="https://github.com/VHarastei">
                     <a target="_blank">
-                      <Image layout="fixed" src={githubIcon} width={42} height={42} />
+                      <Image
+                        alt={'github icon'}
+                        layout="fixed"
+                        src={githubIcon}
+                        width={42}
+                        height={42}
+                      />
                     </a>
                   </Link>
                   <Link href="https://www.linkedin.com/in/%D0%B2%D0%B0%D1%81%D1%8F-%D0%B3%D0%B0%D1%80%D0%B0%D1%81%D1%82%D0%B5%D0%B9-869769186/">
                     <a target="_blank">
-                      <Image layout="fixed" src={linkedinIcon} width={42} height={42} />
+                      <Image
+                        alt={'linkedin icon'}
+                        layout="fixed"
+                        src={linkedinIcon}
+                        width={42}
+                        height={42}
+                      />
                     </a>
                   </Link>
                 </div>
@@ -172,7 +185,7 @@ const PortfolioFeature: React.FC<PropsType> = ({ title, subTitle, icon }) => {
   return (
     <div className={styles.feature}>
       <div className={styles.featureImg}>
-        <Image layout="fixed" src={icon} width={36} height={36} />
+        <Image alt={'feature icon'} layout="fixed" src={icon} width={36} height={36} />
       </div>
       <div className={styles.featureContent}>
         <div className={styles.featureTitle}>{title}</div>

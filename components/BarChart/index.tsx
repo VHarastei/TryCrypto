@@ -7,7 +7,7 @@ type PropsType = {
   data: { x: number; y: number }[];
 };
 
-export const BarChart: React.FC<PropsType> = React.memo(({ data }) => {
+export const BarChart: React.FC<PropsType> = React.memo(function BarChart({ data }) {
   // data = dailyPNL.map((i) => {
   //   return { x: i[0], y: i[1] };
   // });
@@ -128,6 +128,8 @@ const CustomTooltip = React.memo(({ x, datum, length }: any) => {
     </foreignObject>
   );
 });
+
+CustomTooltip.displayName = 'CustomTooltip';
 
 const dailyPNL = [
   [1625961600000, 5.15],

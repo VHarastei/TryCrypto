@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import { Button } from 'components/Button';
 import { Card } from 'components/Card';
 import { Typography } from 'components/Typography';
@@ -84,8 +85,8 @@ export const TransactionItem: React.FC<Transaction> = React.memo(
 export const TransactionItemPreloader = React.memo(() => {
   return (
     <div className={styles.transactionContainer}>
-      <div className={`${styles.actionTypeShimmer} ${styles.shimmer}`}></div>
-      <div className={`${styles.contentShimmer} ${styles.shimmer}`}></div>
+      <div className={clsx(styles.actionTypeShimmer, styles.shimmer)}></div>
+      <div className={clsx(styles.contentShimmer, styles.shimmer)}></div>
     </div>
   );
 });

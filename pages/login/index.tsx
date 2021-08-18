@@ -49,6 +49,7 @@ export default function Login() {
       Cookies.set('token', user.token);
       router.push('/home');
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loadingState]);
 
   return (

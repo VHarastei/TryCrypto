@@ -7,7 +7,7 @@ type PropsType = {
   children: React.ReactNode;
 };
 
-export const Layout: React.FC<PropsType> = React.memo(({ children }) => {
+export const Layout: React.FC<PropsType> = React.memo(function Layout({ children }) {
   return (
     <div className={styles.container}>
       <Navbar>
@@ -15,14 +15,14 @@ export const Layout: React.FC<PropsType> = React.memo(({ children }) => {
       </Navbar>
       <div className={styles.footer}>
         <div>
-          <a href="https://github.com/VHarastei" target="_blank">
+          <a href="https://github.com/VHarastei" rel="noreferrer" target="_blank">
             VHarastei
           </a>
           <span> © 2021 TryCrypto</span>
         </div>
         <div>
           <span>Data provided by </span>
-          <a href="https://www.coingecko.com" target="_blank">
+          <a href="https://www.coingecko.com" rel="noreferrer" target="_blank">
             CoinGecko
           </a>
         </div>

@@ -5,7 +5,7 @@ import logoIcon from 'public/static/logo.png';
 import React from 'react';
 import styles from './LandingHeader.module.scss';
 
-export const LandingHeader = React.memo(() => {
+export const LandingHeader = React.memo(function LandingHeader() {
   return (
     <div className={styles.container}>
       <div className={styles.leftSide}>
@@ -14,12 +14,6 @@ export const LandingHeader = React.memo(() => {
             <Image src={logoIcon} alt="Logo icon" width={42} height={38} />
             <span>TryCrypto</span>
           </a>
-        </Link>
-        <Link href="/bonuses">
-          <a className={styles.navItem}>Bonuses</a>
-        </Link>
-        <Link href="/bonuses">
-          <a className={styles.navItem}>Learn&Earn</a>
         </Link>
       </div>
       <div>

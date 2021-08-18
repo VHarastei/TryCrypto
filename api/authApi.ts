@@ -10,7 +10,7 @@ export type AuthPayload = {
 export const authApi = (instance: AxiosInstance) => {
   return {
     register: ({ email, password, ref }: AuthPayload): Promise<undefined> => {
-      return instance.post(`/auth/register${ref && '?ref=' + ref}`, { email, password });
+      return instance.post(`/auth/register${ref ? '?ref=' + ref : ''}`, { email, password });
     },
     login: (payload: AuthPayload): Promise<User> => {
       return instance.post(`/auth/login`, payload).then(({ data }) => data.data);

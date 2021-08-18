@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import { Paper } from 'components/Paper';
 import React from 'react';
 import { Currency } from 'store/slices/types';
@@ -11,7 +12,10 @@ type PropsType = {
 
 export type BuySellType = 'buy' | 'sell';
 
-export const BuySellCard: React.FC<PropsType> = React.memo(({ currency, currentPrice }) => {
+export const BuySellCard: React.FC<PropsType> = React.memo(function BuySellCard({
+  currency,
+  currentPrice,
+}) {
   const [action, setAction] = React.useState<BuySellType>('buy');
   const handleChangeAction = (newAction: BuySellType) => {
     setAction(newAction);
@@ -22,9 +26,11 @@ export const BuySellCard: React.FC<PropsType> = React.memo(({ currency, currentP
       <div className={styles.actionsContainer}>
         <div
           onClick={() => handleChangeAction('buy')}
-          className={`${styles.action} ${styles.actionBuy} ${
+          className={clsx(
+            styles.action,
+            styles.actionBuy,
             action === 'buy' && styles.actionBuyActive
-          }`}
+          )}
         >
           BUY
         </div>
@@ -39,9 +45,11 @@ export const BuySellCard: React.FC<PropsType> = React.memo(({ currency, currentP
         </div>
         <div
           onClick={() => handleChangeAction('sell')}
-          className={`${styles.action} ${styles.actionSell} ${
+          className={clsx(
+            styles.action,
+            styles.actionSell,
             action === 'sell' && styles.actionSellActive
-          }`}
+          )}
         >
           SELL
         </div>

@@ -1,18 +1,18 @@
-import Image from 'next/image';
-import React from 'react';
-import styles from './UserDialog.module.scss';
-import userIcon from 'public/static/user.svg';
-import verifiedIcon from 'public/static/verified.svg';
-import unVerifiedIcon from 'public/static/unverified.svg';
-import verificationIcon from 'public/static/verification.svg';
-import referralIcon from 'public/static/referral.svg';
-import logoutIcon from 'public/static/logout.svg';
-import { useState } from 'react';
-import { RemoveScrollBar } from 'react-remove-scroll-bar';
-import { useSelector } from 'react-redux';
-import { selectUser } from 'store/selectors';
+import clsx from 'clsx';
 import { Typography } from 'components/Typography';
+import Image from 'next/image';
 import Link from 'next/link';
+import logoutIcon from 'public/static/logout.svg';
+import referralIcon from 'public/static/referral.svg';
+import unVerifiedIcon from 'public/static/unverified.svg';
+import userIcon from 'public/static/user.svg';
+import verificationIcon from 'public/static/verification.svg';
+import verifiedIcon from 'public/static/verified.svg';
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { RemoveScrollBar } from 'react-remove-scroll-bar';
+import { selectUser } from 'store/selectors';
+import styles from './UserDialog.module.scss';
 
 export const UserDialog = React.memo(() => {
   const [display, setDisplay] = useState(false);
@@ -34,12 +34,13 @@ export const UserDialog = React.memo(() => {
             <div className={styles.title}>{email}</div>
             <div className={styles.subTitleContainer}>
               <div className={styles.subTitle}>
-                UID: <Typography color="white">2345235</Typography>
+                UID: <Typography color="white">{user.id}</Typography>
               </div>
               <div
-                className={`${styles.verification} ${
+                className={clsx(
+                  styles.verification,
                   user.verified ? styles.verified : styles.unVerified
-                }`}
+                )}
               >
                 <Image
                   src={user.verified ? verifiedIcon : unVerifiedIcon}
@@ -65,7 +66,7 @@ export const UserDialog = React.memo(() => {
               </a>
             </Link>
             <Link href="/logout">
-              <a className={`${styles.dropDownMenuItem} ${styles.dropDownMenuLogout}`}>
+              <a className={clsx(styles.dropDownMenuItem, styles.dropDownMenuLogout)}>
                 <Image src={logoutIcon} alt="logoutIcon" width={30} height={30} />
                 <span>Log Out</span>
               </a>

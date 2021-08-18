@@ -28,7 +28,7 @@ export default function Home() {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(fetchUserAssets());
-  }, []);
+  }, [dispatch]);
 
   return (
     <Layout>

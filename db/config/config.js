@@ -17,13 +17,10 @@ module.exports = {
     logging: false,
   },
   production: {
-    username: process.env.DB_USER,
-    password: process.env.DB_PASS,
-    database: process.env.DB_NAME,
-    host: process.env.DB_HOST,
+    username: process.env.PLANETSCALE_DB_USERNAME,
+    password: process.env.PLANETSCALE_DB_PASSWORD,
+    database: process.env.PLANETSCALE_DB,
+    host: process.env.PLANETSCALE_DB_HOST,
     dialect: 'mysql',
-    dialectOptions: {
-      ssl: true,
-    },
   },
 };

@@ -8,7 +8,8 @@ type ApiReturnType = ReturnType<typeof userApi> & ReturnType<typeof authApi>;
 export const Api = (token?: string): ApiReturnType => {
   if (!token) token = Cookies.get('token');
   const instance = axios.create({
-    baseURL: 'http://localhost:3000/api',
+    //baseURL: 'http://localhost:3000/api',
+    baseURL: 'https://try-crypto.vercel.app/api',
     headers: {
       Authorization: 'Bearer ' + token || Cookies.get('token'),
     },

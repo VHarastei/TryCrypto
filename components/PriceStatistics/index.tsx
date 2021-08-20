@@ -14,7 +14,10 @@ type PropsType = {
   data: any;
 };
 
-export const PriceStatistics: React.FC<PropsType> = React.memo(({ currency, data }) => {
+export const PriceStatistics: React.FC<PropsType> = React.memo(function PriceStatistics({
+  currency,
+  data,
+}) {
   const [show, setShow] = React.useState(false);
 
   const handleChangeShow = () => {

@@ -15,7 +15,10 @@ type PropsType = {
   assets: Asset[];
 };
 
-export const PortfolioBalanceCard: React.FC<PropsType> = React.memo(({ balance, assets }) => {
+export const PortfolioBalanceCard: React.FC<PropsType> = React.memo(function PortfolioBalanceCard({
+  balance,
+  assets,
+}) {
   console.log(assets.length);
   return (
     <Card title="Portfolio balance" withPadding>

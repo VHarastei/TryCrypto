@@ -10,37 +10,39 @@ type PropsType = {
   data: Transaction[];
 };
 
-export const TransactionHistoryTable: React.FC<PropsType> = React.memo(({ data }) => {
-  return (
-    <div className={styles.table}>
-      <ul className={styles.tableHeader}>
-        <li className={styles.tableDate}>
-          <Typography variant="thinText" color="gray">
-            Date
-          </Typography>
-        </li>
-        <TableHeaderItem name="Type" />
-        <TableHeaderItem name="Asset" />
-        <TableHeaderItem name="Amount" />
-        <TableHeaderItem name="USD Value" />
-        <TableHeaderItem name="Total" />
-        <li className={styles.tableSource}>
-          <Typography variant="thinText" color="gray">
-            Source
-          </Typography>
-        </li>
-      </ul>
+export const TransactionHistoryTable: React.FC<PropsType> = React.memo(
+  function TransactionHistoryTable({ data }) {
+    return (
+      <div className={styles.table}>
+        <ul className={styles.tableHeader}>
+          <li className={styles.tableDate}>
+            <Typography variant="thinText" color="gray">
+              Date
+            </Typography>
+          </li>
+          <TableHeaderItem name="Type" />
+          <TableHeaderItem name="Asset" />
+          <TableHeaderItem name="Amount" />
+          <TableHeaderItem name="USD Value" />
+          <TableHeaderItem name="Total" />
+          <li className={styles.tableSource}>
+            <Typography variant="thinText" color="gray">
+              Source
+            </Typography>
+          </li>
+        </ul>
 
-      <div>
-        {data.map((trx) => {
-          return <TableRow key={trx.id} trx={trx} />;
-        })}
+        <div>
+          {data.map((trx) => {
+            return <TableRow key={trx.id} trx={trx} />;
+          })}
+        </div>
       </div>
-    </div>
-  );
-});
+    );
+  }
+);
 
-const TableHeaderItem = React.memo(({ name }: { name: string }) => {
+const TableHeaderItem = React.memo(function TableHeaderItem({ name }: { name: string }) {
   return (
     <li>
       <Typography variant="thinText" color="gray">
@@ -53,7 +55,7 @@ type TableRowPropsType = {
   trx: Transaction;
 };
 
-export const TableRow: React.FC<TableRowPropsType> = React.memo(({ trx }) => {
+export const TableRow: React.FC<TableRowPropsType> = React.memo(function TableRow({ trx }) {
   return (
     <ul className={styles.tableRowContainer}>
       <li className={styles.tableDate}>{format(parseISO(trx.date), 'yyyy-MM-dd hh:mm:ss')}</li>

@@ -7,6 +7,6 @@ type PropsType = {
   className?: string;
 };
 
-export const Paper: React.FC<PropsType> = React.memo(({ children, className }) => {
+export const Paper: React.FC<PropsType> = React.memo(function Paper({ children, className }) {
   return <div className={clsx(className, styles.container)}>{children}</div>;
 });

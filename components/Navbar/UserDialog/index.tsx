@@ -14,7 +14,7 @@ import { RemoveScrollBar } from 'react-remove-scroll-bar';
 import { selectUser } from 'store/selectors';
 import styles from './UserDialog.module.scss';
 
-export const UserDialog = React.memo(() => {
+export const UserDialog = React.memo(function UserDialog() {
   const [display, setDisplay] = useState(false);
   const user = useSelector(selectUser);
   if (!user) return null;

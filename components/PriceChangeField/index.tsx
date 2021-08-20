@@ -9,7 +9,11 @@ type PropsType = {
   fs?: 'fs-12' | 'fs-14' | 'fs-16' | 'fs-18' | 'fs-20' | 'fs-22' | 'fs-24';
 };
 
-export const PriceChangeField: React.FC<PropsType> = React.memo(({ value, fw, fs }) => {
+export const PriceChangeField: React.FC<PropsType> = React.memo(function PriceChangeField({
+  value,
+  fw,
+  fs,
+}) {
   return (
     <div className={value > 0 ? styles.green : styles.red}>
       <span></span>

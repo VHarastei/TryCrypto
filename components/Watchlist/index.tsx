@@ -14,7 +14,8 @@ import useSWR from 'swr';
 import { formatDollar } from 'utils/formatDollar';
 import { VictoryAxis, VictoryChart, VictoryLine } from 'victory';
 import styles from './Watchlist.module.scss';
-export const Watchlist = React.memo(() => {
+
+export const Watchlist = React.memo(function Watchlist() {
   const watchlist = useSelector(selectUserWatchlist).slice(0, 12); //max 12 elements
 
   const divider = watchlist.length % 3 === 0 ? 3 : watchlist.length % 5 === 0 ? 5 : 4;
@@ -82,7 +83,9 @@ type MiniChartPropsType = {
   currencyId: string;
 };
 
-export const MiniChart: React.FC<MiniChartPropsType> = React.memo(({ currencyId }) => {
+export const MiniChart: React.FC<MiniChartPropsType> = React.memo(function MiniChart({
+  currencyId,
+}) {
   const [display, setDisplay] = React.useState(false);
   const { data: currency } = useSWR(() => MarketApi.getCurrencyDataUrl(currencyId), fetcher);
 
@@ -129,7 +132,7 @@ export const MiniChart: React.FC<MiniChartPropsType> = React.memo(({ currencyId 
   );
 });
 
-const MiniChartPreloader = React.memo(() => {
+const MiniChartPreloader = React.memo(function MiniChartPreloader() {
   return (
     <div className={styles.miniChart}>
       <div className={styles.miniChartDesc}>
@@ -161,7 +164,7 @@ const MiniChartPreloader = React.memo(() => {
   );
 });
 
-const Sparkline = React.memo(({ data }: any) => {
+const Sparkline = React.memo(function Sparkline({ data }: any) {
   return (
     <VictoryChart width={500} height={150} padding={0} domainPadding={{ y: 16 }}>
       <VictoryLine

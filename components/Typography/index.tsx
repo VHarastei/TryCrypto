@@ -11,20 +11,25 @@ type PropsType = {
   className?: string;
 };
 
-export const Typography: React.FC<PropsType> = React.memo(
-  ({ children, variant, color, fw, fs, className }) => {
-    return (
-      <div
-        className={clsx(
-          className,
-          variant && styles[variant],
-          color && styles[color],
-          fw && styles[fw],
-          fs && styles[fs]
-        )}
-      >
-        {children}
-      </div>
-    );
-  }
-);
+export const Typography: React.FC<PropsType> = React.memo(function Typography({
+  children,
+  variant,
+  color,
+  fw,
+  fs,
+  className,
+}) {
+  return (
+    <div
+      className={clsx(
+        className,
+        variant && styles[variant],
+        color && styles[color],
+        fw && styles[fw],
+        fs && styles[fs]
+      )}
+    >
+      {children}
+    </div>
+  );
+});

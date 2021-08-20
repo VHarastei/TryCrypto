@@ -10,7 +10,12 @@ type PropsType = {
   register: any;
 };
 
-export const TextField: React.FC<PropsType> = React.memo(({ type, name, error, register }) => {
+export const TextField: React.FC<PropsType> = React.memo(function TextField({
+  type,
+  name,
+  error,
+  register,
+}) {
   return (
     <div className={styles.container}>
       <Typography fs="fs-14" fw="fw-500">

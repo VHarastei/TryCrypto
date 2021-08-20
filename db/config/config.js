@@ -17,11 +17,7 @@ module.exports = {
     logging: false,
   },
   production: {
-    username: process.env.PLANETSCALE_DB_USERNAME,
-    password: process.env.PLANETSCALE_DB_PASSWORD,
-    database: process.env.PLANETSCALE_DB,
-
-    host: process.env.PLANETSCALE_DB_HOST,
+    use_env_variable: 'CLEARDB_DATABASE_URL',
     dialect: 'mysql',
   },
 };

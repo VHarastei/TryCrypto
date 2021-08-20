@@ -9,7 +9,7 @@ export const Api = (token?: string): ApiReturnType => {
   if (!token) token = Cookies.get('token');
   const instance = axios.create({
     //baseURL: 'http://localhost:3000/api',
-    baseURL: 'https://try-crypto.vercel.app/api',
+    baseURL: 'https://try-crypto.herokuapp.com/api',
     headers: {
       Authorization: 'Bearer ' + token || Cookies.get('token'),
     },

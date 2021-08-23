@@ -2,8 +2,11 @@
 
 .rTTitle {
   display: flex;
-  align-items: center;
+  //align-items: center;
   justify-content: space-between;
+  @media all and (max-width: 768px) {
+    flex-direction: column;
+  }
 }
 .errorContainer {
   padding: 16px;

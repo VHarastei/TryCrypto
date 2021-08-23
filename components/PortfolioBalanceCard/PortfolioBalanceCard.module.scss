@@ -3,7 +3,12 @@
 .portfolioBalanceContainer {
   display: flex;
   justify-content: space-between;
-
+  @media all and (max-width: 768px) {
+    flex-direction: column;
+    .portfolioBalance {
+      margin-bottom: 10px;
+    }
+  }
   .portfolioBalance {
     width: 100%;
   }

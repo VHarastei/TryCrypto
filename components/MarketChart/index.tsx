@@ -1,4 +1,5 @@
 import { fetcher, MarketApi } from 'api/marketApi';
+import clsx from 'clsx';
 import { Paper } from 'components/Paper';
 import { Preloader } from 'components/Preloader';
 import { PriceChangeField } from 'components/PriceChangeField';
@@ -50,8 +51,8 @@ export const MarketChart: React.FC<PropsType> = React.memo(({ currencyId, market
   return (
     <Paper>
       <div className={styles.header}>
-        <div>
-          <div className={styles.chartSelectorContainer}>
+        <div className={styles.chartSelectors}>
+          <div className={clsx(styles.chartSelectorContainer, styles.chartSelectorTypes)}>
             {chartTypes.map((chartTps) => {
               return (
                 <IntervalSelector
@@ -63,16 +64,7 @@ export const MarketChart: React.FC<PropsType> = React.memo(({ currencyId, market
               );
             })}
           </div>
-          <div className={styles.chartPriceContainer}>
-            <div className={styles.chartPrice}>
-              {formatDollar(marketData.current_price.usd, 20)}
-            </div>
-            <div className={styles.chartPricePercent}>
-              <PriceChangeField value={marketData.price_change_percentage_24h} />
-            </div>
-          </div>
-        </div>
-        <div>
+
           <div className={styles.chartSelectorContainer}>
             {intervals.map((interval) => {
               return (
@@ -84,6 +76,12 @@ export const MarketChart: React.FC<PropsType> = React.memo(({ currencyId, market
                 />
               );
             })}
+          </div>
+        </div>
+        <div className={styles.chartPriceContainer}>
+          <div className={styles.chartPrice}>{formatDollar(marketData.current_price.usd, 20)}</div>
+          <div className={styles.chartPricePercent}>
+            <PriceChangeField value={marketData.price_change_percentage_24h} />
           </div>
         </div>
       </div>

@@ -29,6 +29,13 @@
     width: calc(100% - 82px);
     left: 82px;
   }
+  @media all and (max-width: 768px) {
+    left: 0px;
+    width: 100%;
+    .footerName {
+      display: none;
+    }
+  }
   div {
     a {
       color: $primary;
@@ -36,6 +43,7 @@
         text-decoration: underline;
       }
     }
+
     span {
       color: $gray;
       font-weight: 400;

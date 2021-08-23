@@ -8,7 +8,7 @@ import { TextField } from 'components/TextField';
 import { Button } from 'components/Button';
 import { useDispatch, useSelector } from 'react-redux';
 import { AuthPayload } from 'api/authApi';
-import { fetchLogin, fetchRegister } from 'store/slices/userSlice';
+import { fetchLogin, fetchRegister, setUserLoadingState } from 'store/slices/userSlice';
 import { selectUser, selectUserLoadingState } from 'store/selectors';
 import { LoadingState } from 'store/slices/types';
 import { useEffect } from 'react';
@@ -49,6 +49,11 @@ export default function Login() {
       Cookies.set('token', user.token);
       router.push('/home');
     }
+
+    return () => {
+      dispatch(setUserLoadingState(LoadingState.NEVER));
+    };
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loadingState]);
 

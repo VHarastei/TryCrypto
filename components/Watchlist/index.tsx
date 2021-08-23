@@ -98,7 +98,7 @@ export const MiniChart: React.FC<MiniChartPropsType> = React.memo(function MiniC
     >
       <div className={styles.miniChartDesc}>
         <div className={styles.miniChartInfo}>
-          <div>
+          <div className={styles.miniChartInfoImageNameCon}>
             <Image
               src={currency.image.small}
               alt={`${currency.symbol} icon`}
@@ -137,7 +137,7 @@ const MiniChartPreloader = React.memo(function MiniChartPreloader() {
     <div className={styles.miniChart}>
       <div className={styles.miniChartDesc}>
         <div className={styles.miniChartInfo}>
-          <div>
+          <div className={styles.miniChartInfoImageNameCon}>
             <div className={clsx(styles.miniChartInfoImg, styles.shimmer)}></div>
             <div className={clsx(styles.miniChartInfoCurrName, styles.shimmer)}></div>
           </div>

@@ -35,7 +35,7 @@ export default function Portfolio() {
     <Layout>
       <Paper className={styles.header}>
         <div className={styles.headerItem}>
-          <Typography variant="mediumText" color="gray">
+          <Typography fs="fs-16" fw="fw-500" color="gray">
             Estimated Balance
           </Typography>
           <div className={styles.headerItemValueContainer}>
@@ -44,7 +44,7 @@ export default function Portfolio() {
         </div>
         <div className={styles.headerPnls}>
           <div className={styles.headerItem}>
-            <Typography variant="mediumText" color="gray">
+            <Typography fs="fs-16" fw="fw-500" color="gray">
               Yesterday`s PNL
             </Typography>
             <div className={styles.headerItemValueContainer}>
@@ -62,7 +62,7 @@ export default function Portfolio() {
             </div>
           </div>
           <div className={styles.headerItem}>
-            <Typography variant="mediumText" color="gray">
+            <Typography fs="fs-16" fw="fw-500" color="gray">
               30 day`s PNL
             </Typography>
             <div className={styles.headerItemValueContainer}>
@@ -185,7 +185,7 @@ const AssetsTableRow: React.FC<AssetsTableRowPropsType> = React.memo(({ asset })
           <div className={styles.assetsTableAssetName}>
             <Typography variant="regularText">{asset.currency.name}</Typography>
           </div>
-          <Typography variant="regularText" color="gray">
+          <Typography className={styles.assetsTableAssetSymbol} variant="regularText" color="gray">
             {asset.currency.symbol.toUpperCase()}
           </Typography>
         </div>

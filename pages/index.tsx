@@ -158,7 +158,6 @@ export default function Landing() {
 export const getServerSideProps = wrapper.getServerSideProps((store) => async ({ req, res }) => {
   try {
     const isRedirect = await checkAuth(store, req.cookies.token);
-    //console.log(isRedirect);
     if (!isRedirect)
       return {
         props: {},

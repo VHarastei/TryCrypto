@@ -13,6 +13,7 @@ import { wrapper } from 'store';
 import { checkAuth } from 'utils/checkAuth';
 import { Api } from 'api';
 import { CopyButton } from 'components/CopyButton';
+import { isDevMode } from 'utils/isDevMode';
 
 type PropsType = {
   numberOfReferrals: number;
@@ -32,7 +33,9 @@ export default function Referral({ numberOfReferrals }: PropsType) {
           </Typography>
           {user && (
             <div className={styles.link}>
-              <span>{`localhost:3000/register?ref=${user.referralLink}`}</span>
+              <span>{`${isDevMode() ? 'localhost:3000' : 'try-crypto.herokuapp.com'}/register?ref=${
+                user.referralLink
+              }`}</span>
               <CopyButton refCode={user.referralLink} className={styles.button} />
             </div>
           )}

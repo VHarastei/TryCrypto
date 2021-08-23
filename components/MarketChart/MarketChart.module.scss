@@ -6,10 +6,21 @@
   padding-bottom: 6px;
   //align-items: center;
   justify-content: space-between;
-  .chartSelectorContainer {
+  flex-direction: column;
+  .chartSelectors {
     display: flex;
-    :last-of-type {
-      padding-right: 0px;
+    justify-content: space-between;
+
+    .chartSelectorContainer {
+      display: flex;
+      :last-of-type {
+        padding-right: 0px;
+      }
+    }
+    .chartSelectorTypes {
+      @media all and (max-width: 768px) {
+        display: none;
+      }
     }
   }
   .chartPriceContainer {

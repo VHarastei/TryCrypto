@@ -99,7 +99,6 @@ const handler = nextConnect()
     async (req: NextApiReqWithUser, res: NextApiResponse) => {
       try {
         const user = await db.User.findByPk(req.user.id);
-        console.log('ENVIROMENT', process.env.GMAIL_USER, process.env.GMAIL_PASS);
         const options = {
           host: 'smtp.gmail.com',
           port: 465,

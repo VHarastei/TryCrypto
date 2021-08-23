@@ -1,8 +1,17 @@
 @import 'styles/theme.scss';
 
+@media all and (max-width: 768px) {
+  .header {
+    flex-direction: column;
+  }
+  .headerPnls {
+    margin-top: 20px;
+    flex-direction: column;
+  }
+}
+
 .header {
   display: flex;
-  align-items: center;
   justify-content: space-between;
   padding: 16px;
   .headerItem {
@@ -42,11 +51,17 @@
     .assetsTableAssetName {
       margin: 0px 10px;
     }
+    .assetsTableAssetSymbol {
+      @media all and (max-width: 550px) {
+        display: none;
+      }
+    }
   }
   .assetsTableAmount {
     flex-basis: 25%;
     text-align: end;
   }
+
   .assetsTablePrice {
     flex-basis: 25%;
     text-align: end;

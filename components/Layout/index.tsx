@@ -18,10 +18,11 @@ export const Layout: React.FC<PropsType> = React.memo(function Layout({ children
           <a href="https://github.com/VHarastei" rel="noreferrer" target="_blank">
             VHarastei
           </a>
-          <span> © 2021 TryCrypto</span>
+          <span> © 2021 </span>
+          <span className={styles.footerName}> TryCrypto</span>
         </div>
         <div>
-          <span>Data provided by </span>
+          <span>Data from </span>
           <a href="https://www.coingecko.com" rel="noreferrer" target="_blank">
             CoinGecko
           </a>

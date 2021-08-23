@@ -19,7 +19,6 @@ export const PortfolioBalanceCard: React.FC<PropsType> = React.memo(function Por
   balance,
   assets,
 }) {
-  console.log(assets.length);
   return (
     <Card title="Portfolio balance" withPadding>
       <div className={styles.portfolioBalanceContainer}>

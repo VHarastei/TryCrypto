@@ -29,6 +29,9 @@
         display: none;
       }
     }
+    @media all and (max-width: 768px) {
+      background-color: $background;
+    }
     span {
       font-size: 26px;
       font-weight: 700;
@@ -61,6 +64,9 @@
   display: flex;
 
   .navContainer {
+    @media all and (max-width: 768px) {
+      display: none;
+    }
     position: sticky;
     top: 80px;
     height: calc(100vh - 80px);

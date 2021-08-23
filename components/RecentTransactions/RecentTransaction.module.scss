@@ -20,6 +20,11 @@
     .date {
       text-align: center;
     }
+    .description {
+      @media all and (max-width: 550px) {
+        display: none;
+      }
+    }
     .actionType {
       display: flex;
       align-items: center;

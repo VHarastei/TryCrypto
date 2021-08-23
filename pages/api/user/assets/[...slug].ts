@@ -77,7 +77,6 @@ const handler = nextConnect()
 
       const data = req.body;
       const currencyId = req.query.slug[0];
-      console.log(currencyId);
 
       //TODO: add transaction state: for example: pending, fullfilled, rejected
       const usdtAsset = await db.Asset.findOne({ where: { userId, currencyId: 'tether' } });

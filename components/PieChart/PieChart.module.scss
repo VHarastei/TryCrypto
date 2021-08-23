@@ -46,6 +46,11 @@
           background-color: $gray;
         }
       }
+      .chartItemValue {
+        @media all and (max-width: 768px) {
+          display: none;
+        }
+      }
     }
   }
 }

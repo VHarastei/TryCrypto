@@ -67,7 +67,7 @@ export const TransactionItem: React.FC<Transaction> = React.memo(function Transa
             {day}
           </Typography>
         </div>
-        <div>
+        <div className={styles.description}>
           <Typography variant="regularText">{`${
             type === 'buy' ? 'Bought' : type === 'receive' ? 'Received' : 'Sold'
           } ${asset.currency.name}`}</Typography>

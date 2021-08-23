@@ -77,7 +77,7 @@ export const PieChart: React.FC<PropsType> = ({ data }) => {
                       {item.currency.symbol.toUpperCase()}
                     </Typography>
                   </div>
-                  <div>
+                  <div className={styles.chartItemValue}>
                     <Typography variant="mediumText">
                       {formatPercent(item.usdValuePercentage)}
                     </Typography>

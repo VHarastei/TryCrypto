@@ -1,8 +1,22 @@
 @import 'styles/theme.scss';
 
+@media all and (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    margin-bottom: 16px !important;
+  }
+  .menu {
+    margin-top: 10px;
+
+    width: 100%;
+    .tab {
+      width: 50%;
+      text-align: center;
+    }
+  }
+}
 .header {
   display: flex;
-  align-items: center;
   justify-content: space-between;
   margin-bottom: 30px;
   margin-top: 6px;

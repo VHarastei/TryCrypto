@@ -19,6 +19,7 @@ import { selectUser, selectUserAssets, selectUserPortfolio } from 'store/selecto
 import { fetchUserAssets } from 'store/slices/assetsSlice';
 import { setUserWatchlist } from 'store/slices/watchlistSlice';
 import { checkAuth } from 'utils/checkAuth';
+import { isDevMode } from 'utils/isDevMode';
 import styles from './Home.module.scss';
 
 export default function Home() {
@@ -54,7 +55,9 @@ export default function Home() {
               email address
             </Typography>
             <div className={styles.inviteUrl}>
-              {`localhost:3000/register?ref=${user.referralLink}`.slice(0, 35) + '...'}
+              {`${isDevMode() ? 'localhost:3000' : 'try-crypto.herokuapp.com'}/register?ref=${
+                user.referralLink
+              }`.slice(0, 35) + '...'}
             </div>
             <CopyButton refCode={user.referralLink} fullWidth />
           </Card>

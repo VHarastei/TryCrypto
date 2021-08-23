@@ -56,7 +56,6 @@ const handler = nextConnect().get(
         historicalData.PNL.length &&
         historicalData.balance.length !== 1
       ) {
-        console.log(historicalData.PNL.length - 1);
         yesterdaysPNL = {
           usdValue: historicalData.PNL[0].usdValue,
           usdValueChangePercetage: calcChange(
@@ -92,7 +91,7 @@ const handler = nextConnect().get(
         },
       });
     } catch (err) {
-      //console.log(err);
+      console.log(err);
       res.statusCode = 500;
       res.json({
         status: 'error',

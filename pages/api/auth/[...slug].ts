@@ -99,7 +99,7 @@ const handler = nextConnect()
     async (req: NextApiReqWithUser, res: NextApiResponse) => {
       try {
         const user = await db.User.findByPk(req.user.id);
-        console.log(process.env.GMAIL_USER);
+        console.log('ENVIROMENT', process.env.GMAIL_USER, process.env.GMAIL_PASS);
         const options = {
           service: 'gmail',
           auth: {
@@ -114,17 +114,17 @@ const handler = nextConnect()
             to: user.email,
             subject: 'Email verification for TryCrypto',
             html: `To verify your email, go to <a href="http://localhost:3000/verification/${user.verifyHash}">this link</a>`,
-          },
-          (err) => {
-            if (err) {
-              console.log(err);
-              return res.status(500).json({
-                status: 'error',
-                message: 'Error when sending email',
-                details: err,
-              });
-            }
           }
+          // (err) => {
+          //   if (err) {
+          //     console.log(err);
+          //     return res.status(500).json({
+          //       status: 'error',
+          //       message: 'Error when sending email',
+          //       details: err,
+          //     });
+          //   }
+          // }
         );
         res.status(200).json({
           status: 'success',

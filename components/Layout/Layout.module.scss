@@ -49,4 +49,9 @@
       font-weight: 400;
     }
   }
+  .footerDataProvider {
+    @media all and (max-width: 350px) {
+      display: none;
+    }
+  }
 }

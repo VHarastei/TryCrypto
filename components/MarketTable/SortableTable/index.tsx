@@ -42,54 +42,54 @@ export const SortableTable: React.FC<PropsType> = React.memo(
     };
 
     return (
-      <div className={styles.table}>
-        <ul className={styles.tableHeader}>
-          <li className={styles.watch}></li>
-          <TableHeaderItem
-            name="#"
-            itemKey="ordNum"
-            requestSort={requestSort}
-            getClassName={getClassName}
-          />
+      <div className={styles.container}>
+        <table className={styles.table}>
+          <tr>
+            <th className={styles.watch}></th>
+            <TableHeaderItem
+              name="#"
+              itemKey="ordNum"
+              requestSort={requestSort}
+              getClassName={getClassName}
+            />
 
-          <TableHeaderItem
-            name="Name"
-            itemKey="name"
-            requestSort={requestSort}
-            getClassName={getClassName}
-          />
-          <TableHeaderItem
-            name="Price"
-            itemKey="current_price"
-            requestSort={requestSort}
-            getClassName={getClassName}
-          />
-          <TableHeaderItem
-            name="Change 24h"
-            itemKey="price_change_percentage_24h"
-            requestSort={requestSort}
-            getClassName={getClassName}
-          />
-          <TableHeaderItem
-            name="Change 7d"
-            itemKey="price_change_percentage_7d_in_currency"
-            requestSort={requestSort}
-            getClassName={getClassName}
-          />
-          <TableHeaderItem
-            name="Market Cap"
-            itemKey="market_cap"
-            requestSort={requestSort}
-            getClassName={getClassName}
-          />
-          <li className={styles.sparkline}>
-            <Typography variant="thinText" color="gray">
-              Last 7 days
-            </Typography>
-          </li>
-        </ul>
+            <TableHeaderItem
+              name="Name"
+              itemKey="name"
+              requestSort={requestSort}
+              getClassName={getClassName}
+            />
+            <TableHeaderItem
+              name="Price"
+              itemKey="current_price"
+              requestSort={requestSort}
+              getClassName={getClassName}
+            />
+            <TableHeaderItem
+              name="24h"
+              itemKey="price_change_percentage_24h"
+              requestSort={requestSort}
+              getClassName={getClassName}
+            />
+            <TableHeaderItem
+              name="7d"
+              itemKey="price_change_percentage_7d_in_currency"
+              requestSort={requestSort}
+              getClassName={getClassName}
+            />
+            <TableHeaderItem
+              name="Market Cap"
+              itemKey="market_cap"
+              requestSort={requestSort}
+              getClassName={getClassName}
+            />
+            <th className={styles.sparkline}>
+              <Typography variant="thinText" color="gray">
+                Last 7 days
+              </Typography>
+            </th>
+          </tr>
 
-        <div>
           {items.map((coin: TableCoin) => {
             return (
               <TableRow
@@ -99,7 +99,7 @@ export const SortableTable: React.FC<PropsType> = React.memo(
               />
             );
           })}
-        </div>
+        </table>
         {isSearchResult && (
           <div className={styles.foundQuantity}>
             <Typography>{`Found ${items.length} currencies`}</Typography>
@@ -124,12 +124,14 @@ const TableHeaderItem: React.FC<TableHeaderItemPropsType> = React.memo(function 
   getClassName,
 }) {
   return (
-    <li className={styles[itemKey]} onClick={() => requestSort(itemKey)}>
-      <Typography variant="thinText" color="gray">
-        {name}
-      </Typography>
-      <span className={clsx(styles.sort, styles[getClassName(itemKey)])}></span>
-    </li>
+    <th className={styles[itemKey]} onClick={() => requestSort(itemKey)}>
+      <div className={styles.tableHeaderItem}>
+        <Typography variant="thinText" color="gray">
+          {name}
+        </Typography>
+        <span className={clsx(styles.sort, styles[getClassName(itemKey)])}></span>
+      </div>
+    </th>
   );
 });
 
@@ -140,30 +142,35 @@ type TableRowPropsType = {
 
 export const TableRow: React.FC<TableRowPropsType> = React.memo(function TableRow({ coin }) {
   return (
-    <ul className={styles.tableRowContainer}>
-      <li className={styles.watch}>
-        {/* <Image layout="fixed" src={starIcon} alt={`star icon`} width={24} height={24} /> */}
+    <tr className={styles.tableRowContainer}>
+      <td className={styles.watch}>
         <WatchlistButton currencyId={coin.id} />
-      </li>
-      <li className={styles.ordNum}>{coin.ordNum}</li>
-      <li className={styles.name}>
+      </td>
+      <td className={styles.ordNum}>{coin.ordNum}</td>
+      <td>
         <Link href={`/market/${coin.id}`}>
           <a className={styles.name}>
-            <Image src={coin.image} alt={`${coin.symbol} icon`} width={30} height={30} />
+            <Image
+              layout="fixed"
+              src={coin.image}
+              alt={`${coin.symbol} icon`}
+              width={30}
+              height={30}
+            />
             <p>{coin.name}</p>
             <span>{coin.symbol.toUpperCase()}</span>
           </a>
         </Link>
-      </li>
-      <li className={styles.price}>{formatDollar(coin.current_price, 20)}</li>
-      <li className={styles.change}>
+      </td>
+      <td className={styles.price}>{formatDollar(coin.current_price, 20)}</td>
+      <td className={styles.change}>
         <PriceChangeField value={coin.price_change_percentage_24h} />
-      </li>
-      <li className={styles.change}>
+      </td>
+      <td className={clsx(styles.change, styles.change7d)}>
         <PriceChangeField value={coin.price_change_percentage_7d_in_currency} />
-      </li>
-      <li className={styles.marketCap}>{formatDollar(coin.market_cap, 12)}</li>
-      <li className={styles.sparkline}>
+      </td>
+      <td className={styles.marketCap}>{formatDollar(coin.market_cap, 12)}</td>
+      <td className={styles.sparkline}>
         <VictoryChart
           //animate={{ duration: 300, onLoad: { duration: 300 } }}
           width={150}
@@ -182,7 +189,7 @@ export const TableRow: React.FC<TableRowPropsType> = React.memo(function TableRo
           />
           <VictoryAxis style={{ axis: { stroke: 'none' } }} />
         </VictoryChart>
-      </li>
-    </ul>
+      </td>
+    </tr>
   );
 });

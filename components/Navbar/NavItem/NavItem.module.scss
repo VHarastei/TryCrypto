@@ -13,6 +13,12 @@
       display: none;
     }
   }
+  @media all and (max-width: 768px) {
+    width: 100%;
+    span {
+      display: inline;
+    }
+  }
   &:hover {
     color: white;
     cursor: pointer;

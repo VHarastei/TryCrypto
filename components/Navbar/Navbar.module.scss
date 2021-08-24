@@ -1,5 +1,20 @@
 @import 'styles/theme.scss';
 
+@media all and (max-width: 768px) {
+  .logoContainer {
+    background-color: $background !important;
+    span {
+      display: inline !important;
+    }
+  }
+  .activePage {
+    display: none !important;
+  }
+  .menuIcon {
+    display: inline !important;
+  }
+}
+
 .container {
   flex-direction: column;
   width: 100%;
@@ -22,31 +37,31 @@
     align-items: center;
     background-color: $backgroundGray;
     padding: 20px 20px;
+    width: 100%;
     @media all and (max-width: 1280px) {
       flex-basis: 82px;
-
       span {
         display: none;
       }
-    }
-    @media all and (max-width: 768px) {
-      background-color: $background;
     }
     span {
       font-size: 26px;
       font-weight: 700;
       color: $primary;
       margin-left: 10px;
+      @media all and (max-width: 350px) {
+        display: none !important;
+      }
     }
   }
   .headerBar {
     display: flex;
-    justify-content: space-between;
     width: 100%;
     align-items: center;
     padding: 20px 24px;
     background-color: $background;
-
+    height: 80px;
+    justify-content: space-between;
     .activePage {
       cursor: pointer;
       font-size: 24px;
@@ -57,12 +72,22 @@
         margin-left: 6px;
       }
     }
+    .dialogs {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      .menuIcon {
+        display: none;
+        margin-top: 4px;
+        margin-left: 16px;
+      }
+    }
   }
 }
 
 .content {
   display: flex;
-
   .navContainer {
     @media all and (max-width: 768px) {
       display: none;
@@ -71,13 +96,34 @@
     top: 80px;
     height: calc(100vh - 80px);
     padding: 0px 14px;
-    //min-width: 220px;
     background-color: $backgroundGray;
+  }
+  .navMobile {
+    display: block;
+    scroll-snap-stop: none;
+    z-index: 1001;
+    position: fixed;
+    top: 0px;
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
+    width: 100%;
+    padding: 0px 16px;
+    .closeIcon {
+      text-align: right;
+      margin: 28px 8px;
+      margin-bottom: 12px;
+    }
   }
   .childrenContainer {
     padding: 0px 24px;
     width: 100%;
     display: flex;
     justify-content: center;
+    @media all and (max-width: 1280px) {
+      width: calc(100% - 82px);
+    }
+    @media all and (max-width: 768px) {
+      width: 100%;
+    }
   }
 }

@@ -21,7 +21,7 @@ export const Layout: React.FC<PropsType> = React.memo(function Layout({ children
           <span> © 2021 </span>
           <span className={styles.footerName}> TryCrypto</span>
         </div>
-        <div>
+        <div className={styles.footerDataProvider}>
           <span>Data from </span>
           <a href="https://www.coingecko.com" rel="noreferrer" target="_blank">
             CoinGecko

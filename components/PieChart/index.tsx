@@ -92,7 +92,9 @@ export const PieChart: React.FC<PropsType> = ({ data }) => {
                   <div className={clsx(styles.chartItemColor, styles.bg_gray)}></div>
                   <Typography variant="regularText">Others</Typography>
                 </div>
-                <Typography variant="mediumText">{formatPercent(otherCurrencies)}</Typography>
+                <Typography className={styles.chartItemValue} variant="mediumText">
+                  {formatPercent(otherCurrencies)}
+                </Typography>
               </div>
             );
         })}

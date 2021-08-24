@@ -1,5 +1,19 @@
 @import 'styles/theme.scss';
 
+@media all and (max-width: 768px) {
+  .icon {
+    width: 28px !important;
+    height: 28px !important;
+  }
+  .dropDown {
+    width: 100% !important;
+  }
+  .dropDownMenu {
+    width: calc(100% - 48px) !important;
+    right: 24px !important;
+  }
+}
+
 .icon {
   display: flex;
   align-items: center;

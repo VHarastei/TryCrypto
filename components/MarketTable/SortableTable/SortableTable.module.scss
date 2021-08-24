@@ -1,26 +1,28 @@
 @import 'styles/theme.scss';
 
+.container {
+  overflow-x: auto;
+}
+
 .table {
   border: 0;
   border-spacing: 0;
-  border-collapse: initial;
+  border-collapse: collapse;
   width: 100%;
   text-align: center;
-  .tableHeader {
-    display: flex;
-    justify-content: space-between;
-    padding: 12px 24px;
-    margin: 0;
-    //border-bottom: 1px solid $gray;
-
-    li {
-      list-style: none;
-      font-size: 16px;
-      font-weight: 400;
-      color: $gray;
+  td,
+  th {
+    padding: 8px;
+  }
+  th {
+    list-style: none;
+    font-size: 16px;
+    font-weight: 400;
+    color: $gray;
+    user-select: none;
+    .tableHeaderItem {
       display: flex;
       align-items: center;
-      user-select: none;
       div {
         cursor: pointer;
       }
@@ -28,86 +30,50 @@
         color: $primary;
       }
     }
-    .sort {
-      width: 10px;
-      height: 5px;
-      margin-left: 6px;
-    }
-    .desc {
-      border-top: solid 5px $primary;
-      border-left: solid 5px transparent;
-      border-right: solid 5px transparent;
-    }
-    .asc {
-      border-bottom: solid 5px $primary;
-      border-left: solid 5px transparent;
-      border-right: solid 5px transparent;
-    }
+  }
+  .sort {
+    width: 10px;
+    height: 5px;
+    margin-left: 6px;
+  }
+  .desc {
+    border-top: solid 5px $primary;
+    border-left: solid 5px transparent;
+    border-right: solid 5px transparent;
+  }
+  .asc {
+    border-bottom: solid 5px $primary;
+    border-left: solid 5px transparent;
+    border-right: solid 5px transparent;
   }
   .watch {
-    text-align: center;
-    flex-basis: 3%;
-    justify-content: center;
-  }
-  .ordNum {
-    text-align: left;
-    flex-basis: 5%;
-  }
-  .name {
-    text-align: left;
-    flex-basis: 34%;
-  }
-  .current_price {
-    text-align: left;
-    flex-basis: 11.6%;
-  }
-  .price_change_percentage_24h {
-    text-align: left;
-    flex-basis: 11.6%;
-  }
-  .price_change_percentage_7d_in_currency {
-    text-align: left;
-    flex-basis: 11.6%;
-  }
-  .market_cap {
-    text-align: left;
-    flex-basis: 20.6%;
+    padding-left: 16px;
   }
   .sparkline {
     justify-content: center;
-    flex-basis: 16%;
+    padding-right: 16px;
   }
 }
 
 .tableRowContainer {
-  display: flex;
-  justify-content: space-between;
-  padding: 16px 24px;
   border-top: 1px solid $gray;
-  margin: 0;
-
   &:hover {
     background-color: $secondary;
   }
   li {
     list-style: none;
-    display: flex;
     align-items: center;
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 400;
   }
   .watch {
     text-align: left;
-    flex-basis: 3%;
-    // justify-content: center;
   }
   .ordNum {
     text-align: left;
-    flex-basis: 5%;
   }
   .name {
     text-align: left;
-    flex-basis: 34%;
     display: flex;
     align-items: center;
     font-size: 18px;
@@ -120,28 +86,30 @@
       margin: 0 10px 0px 16px;
     }
     span {
+      @media all and (max-width: 1024px) {
+        display: none;
+      }
       color: $gray;
     }
   }
   .price {
     text-align: left;
-    flex-basis: 11.6%;
   }
   .change {
     text-align: left;
-    flex-basis: 11.6%;
   }
   .marketCap {
     text-align: left;
-    flex-basis: 20.6%;
   }
   .sparkline {
+    min-width: 150px;
+    height: 30px;
     text-align: center;
-    flex-basis: 16%;
+    padding-right: 16px;
   }
 }
 .foundQuantity {
-  display: flex;
+  width: 100%;
   padding: 16px;
   border-top: 1px solid $gray;
 }

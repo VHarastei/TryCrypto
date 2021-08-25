@@ -13,6 +13,7 @@ import styles from './MarketChart.module.scss';
 import fullscreenIcon from 'public/static/fullscreen.svg';
 import fullscreenExitIcon from 'public/static/fullscreenExit.svg';
 import { RemoveScrollBar } from 'react-remove-scroll-bar';
+import { useFullscreenStatus } from 'hooks/useFullscreenStatus';
 
 type PropsType = {
   currencyId: string;
@@ -29,7 +30,10 @@ export const MarketChart: React.FC<PropsType> = React.memo(({ currencyId, market
   const [dataInterval, setDataInterval] = useState(intervals[1].value);
   const [chartType, setChartType] = useState<ChartType>('prices');
   const [chartData, setChartData] = useState<ChartData | undefined>(undefined);
-  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [isResized, setIsResized] = useState(false);
+
+  const maximizableElement = React.useRef(null);
+  const { isFullscreen, setIsFullscreen } = useFullscreenStatus(maximizableElement);
 
   const { data } = useSWR<ChartData>(
     MarketApi.getMarketChartUrl(currencyId, dataInterval),
@@ -54,7 +58,13 @@ export const MarketChart: React.FC<PropsType> = React.memo(({ currencyId, market
     );
 
   const handleResize = () => {
-    if (!isFullscreen) {
+    if (isFullscreen) {
+      document.exitFullscreen();
+    } else {
+      setIsFullscreen();
+    }
+
+    if (!isResized) {
       screen.orientation
         .lock('landscape-primary')
         .then(function () {
@@ -66,65 +76,69 @@ export const MarketChart: React.FC<PropsType> = React.memo(({ currencyId, market
     } else {
       screen.orientation.unlock();
     }
-    setIsFullscreen(!isFullscreen);
+
+    setIsResized(!isResized);
   };
 
   return (
-    <Paper className={clsx(isFullscreen && styles.fullscreenChart)}>
-      {isFullscreen && <RemoveScrollBar />}
-      <div className={styles.header}>
-        <div className={styles.chartSelectors}>
-          {!isFullscreen && (
-            <div className={clsx(styles.chartSelectorContainer, styles.chartSelectorTypes)}>
-              {chartTypes.map((chartTps) => {
-                return (
-                  <IntervalSelector
-                    key={chartTps.value}
-                    name={chartTps.name}
-                    isActive={chartTps.value === chartType}
-                    handleSelectChart={() => setChartType(chartTps.value)}
-                  />
-                );
-              })}
+    <div ref={maximizableElement}>
+      <Paper className={clsx(isResized && styles.fullscreenChart)}>
+        {isResized && <RemoveScrollBar />}
+        <div className={styles.header}>
+          <div className={styles.chartSelectors}>
+            {!isResized && (
+              <div className={clsx(styles.chartSelectorContainer, styles.chartSelectorTypes)}>
+                {chartTypes.map((chartTps) => {
+                  return (
+                    <IntervalSelector
+                      key={chartTps.value}
+                      name={chartTps.name}
+                      isActive={chartTps.value === chartType}
+                      handleSelectChart={() => setChartType(chartTps.value)}
+                    />
+                  );
+                })}
+              </div>
+            )}
+            <div className={clsx(styles.resizeContainer, isResized && styles.justify)}>
+              <div className={styles.chartSelectorContainer}>
+                {intervals.map((interval) => {
+                  return (
+                    <IntervalSelector
+                      key={interval.value}
+                      name={interval.name}
+                      isActive={interval.value === dataInterval}
+                      handleSelectChart={() => setDataInterval(interval.value)}
+                    />
+                  );
+                })}
+              </div>
+              <div
+                className={clsx(styles.resizeBtn, isResized && styles.display)}
+                onClick={handleResize}
+              >
+                <Image
+                  src={isResized ? fullscreenExitIcon : fullscreenIcon}
+                  layout="fixed"
+                  alt="resize icon"
+                  width={28}
+                  height={28}
+                />
+              </div>
             </div>
-          )}
-          <div className={clsx(styles.resizeContainer, isFullscreen && styles.justify)}>
-            <div className={styles.chartSelectorContainer}>
-              {intervals.map((interval) => {
-                return (
-                  <IntervalSelector
-                    key={interval.value}
-                    name={interval.name}
-                    isActive={interval.value === dataInterval}
-                    handleSelectChart={() => setDataInterval(interval.value)}
-                  />
-                );
-              })}
+          </div>
+
+          <div className={styles.chartPriceContainer}>
+            <div className={styles.chartPrice}>
+              {formatDollar(marketData.current_price.usd, 20)}
             </div>
-            <div
-              className={clsx(styles.resizeBtn, isFullscreen && styles.display)}
-              onClick={handleResize}
-            >
-              <Image
-                src={isFullscreen ? fullscreenExitIcon : fullscreenIcon}
-                layout="fixed"
-                alt="resize icon"
-                width={28}
-                height={28}
-              />
+            <div className={styles.chartPricePercent}>
+              <PriceChangeField value={marketData.price_change_percentage_24h} />
             </div>
           </div>
         </div>
 
-        <div className={styles.chartPriceContainer}>
-          <div className={styles.chartPrice}>{formatDollar(marketData.current_price.usd, 20)}</div>
-          <div className={styles.chartPricePercent}>
-            <PriceChangeField value={marketData.price_change_percentage_24h} />
-          </div>
-        </div>
-      </div>
-
-      {/* {isFullscreen && (
+        {/* {isResized && (
         <div>
           <RemoveScrollBar />
           <div className={styles.fullscreenChart}>
@@ -134,11 +148,12 @@ export const MarketChart: React.FC<PropsType> = React.memo(({ currencyId, market
           </div>
         </div>
       )} */}
-      <div className={styles.fullscreenData}>
-        <CustomChart data={chartData[chartType]} dataInterval={dataInterval} />
-      </div>
-      {/* <CustomBrushChart data={brushChartData?.prices} /> */}
-    </Paper>
+        <div className={styles.fullscreenData}>
+          <CustomChart data={chartData[chartType]} dataInterval={dataInterval} />
+        </div>
+        {/* <CustomBrushChart data={brushChartData?.prices} /> */}
+      </Paper>
+    </div>
   );
 });
 

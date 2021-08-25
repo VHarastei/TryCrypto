@@ -44,61 +44,64 @@ export const SortableTable: React.FC<PropsType> = React.memo(
     return (
       <div className={styles.container}>
         <table className={styles.table}>
-          <tr>
-            <th className={styles.watch}></th>
-            <TableHeaderItem
-              name="#"
-              itemKey="ordNum"
-              requestSort={requestSort}
-              getClassName={getClassName}
-            />
-
-            <TableHeaderItem
-              name="Name"
-              itemKey="name"
-              requestSort={requestSort}
-              getClassName={getClassName}
-            />
-            <TableHeaderItem
-              name="Price"
-              itemKey="current_price"
-              requestSort={requestSort}
-              getClassName={getClassName}
-            />
-            <TableHeaderItem
-              name="24h"
-              itemKey="price_change_percentage_24h"
-              requestSort={requestSort}
-              getClassName={getClassName}
-            />
-            <TableHeaderItem
-              name="7d"
-              itemKey="price_change_percentage_7d_in_currency"
-              requestSort={requestSort}
-              getClassName={getClassName}
-            />
-            <TableHeaderItem
-              name="Market Cap"
-              itemKey="market_cap"
-              requestSort={requestSort}
-              getClassName={getClassName}
-            />
-            <th className={styles.sparkline}>
-              <Typography variant="thinText" color="gray">
-                Last 7 days
-              </Typography>
-            </th>
-          </tr>
-
-          {items.map((coin: TableCoin) => {
-            return (
-              <TableRow
-                key={coin.id}
-                coin={coin}
-                //isWatchlisted={watchlist.some((i) => i.currencyId === coin.id)}
+          <thead>
+            <tr>
+              <th className={styles.watch}></th>
+              <TableHeaderItem
+                name="#"
+                itemKey="ordNum"
+                requestSort={requestSort}
+                getClassName={getClassName}
               />
-            );
-          })}
+
+              <TableHeaderItem
+                name="Name"
+                itemKey="name"
+                requestSort={requestSort}
+                getClassName={getClassName}
+              />
+              <TableHeaderItem
+                name="Price"
+                itemKey="current_price"
+                requestSort={requestSort}
+                getClassName={getClassName}
+              />
+              <TableHeaderItem
+                name="24h"
+                itemKey="price_change_percentage_24h"
+                requestSort={requestSort}
+                getClassName={getClassName}
+              />
+              <TableHeaderItem
+                name="7d"
+                itemKey="price_change_percentage_7d_in_currency"
+                requestSort={requestSort}
+                getClassName={getClassName}
+              />
+              <TableHeaderItem
+                name="Market Cap"
+                itemKey="market_cap"
+                requestSort={requestSort}
+                getClassName={getClassName}
+              />
+              <th className={styles.sparkline}>
+                <Typography variant="thinText" color="gray">
+                  Last 7 days
+                </Typography>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {items.map((coin: TableCoin) => {
+              return (
+                <TableRow
+                  key={coin.id}
+                  coin={coin}
+                  //isWatchlisted={watchlist.some((i) => i.currencyId === coin.id)}
+                />
+              );
+            })}
+          </tbody>
         </table>
         {isSearchResult && (
           <div className={styles.foundQuantity}>

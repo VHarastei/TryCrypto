@@ -65,14 +65,9 @@ export const MarketChart: React.FC<PropsType> = React.memo(({ currencyId, market
     }
 
     if (!isResized) {
-      screen.orientation
-        .lock('landscape-primary')
-        .then(function () {
-          alert('Locked');
-        })
-        .catch(function (error) {
-          alert(error);
-        });
+      screen.orientation.lock('landscape-primary').catch((error) => {
+        console.log(error);
+      });
     } else {
       screen.orientation.unlock();
     }

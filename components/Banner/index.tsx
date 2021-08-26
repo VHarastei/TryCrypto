@@ -24,7 +24,7 @@ export const Banner: React.FC<PropsType> = ({ title, text, button, href }) => {
         </div>
         <Link href={href}>
           <a>
-            <Button>{button}</Button>
+            <Button className={styles.button}>{button}</Button>
           </a>
         </Link>
       </div>

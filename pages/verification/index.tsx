@@ -55,7 +55,10 @@ export default function Verification() {
               </Link>
             </div>
           )}
+          <div className={styles.icon}>
+
           <Image alt="security icon" layout="fixed" src={securityIcon} width={200} height={150} />
+          </div>
         </Paper>
       </div>
     </Layout>

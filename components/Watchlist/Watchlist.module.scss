@@ -1,5 +1,14 @@
 @import 'styles/theme.scss';
 
+@media all and (max-width: 768px) {
+  .container {
+    row-gap: 16px !important;
+  }
+  .miniChartsContainer {
+    gap: 16px !important;
+  }
+}
+
 .container {
   display: flex;
   flex-direction: column;

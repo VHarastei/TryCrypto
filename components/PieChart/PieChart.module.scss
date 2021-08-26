@@ -46,12 +46,28 @@
           background-color: $gray;
         }
       }
-      .chartItemValue {
-        @media all and (max-width: 768px) {
-          display: none;
-        }
-      }
     }
+  }
+}
+
+@media all and (max-width: 768px) {
+  .chart {
+    display: flex;
+    align-items: center;
+  }
+  .chartShimmer {
+    height: 160px !important;
+    width: 160px !important;
+    .chartShimmerInner {
+      height: 130px !important;
+      width: 130px !important;
+    }
+  }
+  .chartItemValueShimmer {
+    display: none;
+  }
+  .chartItemValue {
+    display: none;
   }
 }
 
@@ -84,26 +100,3 @@
   background-color: $secondary;
   border-radius: 6px;
 }
-
-// .shimmer {
-//   animation: shimmer 3s;
-//   animation-iteration-count: infinite;
-//   background: linear-gradient(
-//     to right,
-//     $secondary 0%,
-//     #4f5355 10%,
-//     #5f6264 20%,
-//     #4f5355 30%,
-//     $secondary 40%,
-//     $secondary 80%
-//   );
-//   background-size: 800px 100%;
-// }
-// @keyframes shimmer {
-//   from {
-//     background-position: -400px 0;
-//   }
-//   to {
-//     background-position: 400px 0;
-//   }
-// }

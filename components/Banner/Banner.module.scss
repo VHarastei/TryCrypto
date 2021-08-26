@@ -2,8 +2,12 @@
 
 .container {
   padding: 16px;
-  margin-bottom: 24px;
 }
 .textContainer {
   margin: 0 0 20px;
+}
+.button {
+  @media all and (max-width: 768px) {
+    width: 100%;
+  }
 }

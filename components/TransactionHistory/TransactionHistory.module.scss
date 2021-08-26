@@ -52,3 +52,25 @@
     }
   }
 }
+.list {
+  padding: 0px 16px;
+  margin: 0;
+  :first-child {
+    border: none !important;
+    padding-top: 0 !important;
+  }
+  .li {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 8px 0px;
+    border-top: 1px solid $gray;
+    .liRow {
+      display: flex;
+      justify-content: space-between;
+    }
+    .liRowDivider {
+      height: 6px;
+    }
+  }
+}

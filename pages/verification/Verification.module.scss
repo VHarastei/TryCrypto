@@ -35,3 +35,11 @@
     padding: 16px;
   }
 }
+@media all and (max-width: 768px) {
+  .icon {
+    display: none;
+  }
+  .button {
+    width: 100%;
+  }
+}

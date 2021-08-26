@@ -23,6 +23,13 @@
     }
     .link {
       display: flex;
+      @media all and (max-width: 768px) {
+        flex-direction: column;
+        .button {
+          margin-top: 16px;
+          width: 100% !important;
+        }
+      }
       span {
         font-size: 18px;
         border: 1px solid $gray;
@@ -30,6 +37,9 @@
         padding: 16px;
         margin-right: 16px;
         width: 100%;
+        overflow: auto;
+        height: 58px;
+        word-break: break-all;
       }
       .button {
         padding: 8px;

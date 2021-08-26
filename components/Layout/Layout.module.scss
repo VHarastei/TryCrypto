@@ -32,6 +32,8 @@
   @media all and (max-width: 768px) {
     left: 0px;
     width: 100%;
+    padding: 0px 16px;
+
     .footerName {
       display: none;
     }
@@ -50,7 +52,7 @@
     }
   }
   .footerDataProvider {
-    @media all and (max-width: 350px) {
+    @media all and (max-width: 340px) {
       display: none;
     }
   }

@@ -5,4 +5,7 @@
   border-radius: 12px;
   margin-bottom: 24px;
   width: 100%;
+  @media all and (max-width: 768px) {
+    margin-bottom: 16px;
+  }
 }

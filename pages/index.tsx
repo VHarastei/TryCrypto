@@ -28,9 +28,13 @@ export default function Landing() {
           <div>
             <div className={styles.titleText}>Buy & sell Crypto in minutes</div>
             <div className={styles.titleSubText}>Join and try crypto with TryCrypto exchange</div>
-            <Button className={styles.titleButton}>Register Now</Button>
+            <Link href="/register">
+              <a>
+                <Button className={styles.titleButton}>Register Now</Button>
+              </a>
+            </Link>
           </div>
-          <div>
+          <div className={styles.titleIcon}>
             <Image alt={'crypto icon'} src={cryptoIcon} width={170} height={170} />
           </div>
         </div>
@@ -97,7 +101,11 @@ export default function Landing() {
         </div>
         <div className={styles.startNow}>
           <div className={styles.startNowTitle}>Start trading now</div>
-          <Button>Register Now</Button>
+          <Link href="/register">
+            <a>
+              <Button>Register Now</Button>
+            </a>
+          </Link>
         </div>
         <div className={styles.background}>
           <div className={styles.alignContainer}>
@@ -105,7 +113,7 @@ export default function Landing() {
               <div className={styles.footerContact}>
                 <div className={styles.footerContactImg}>
                   <Link href="https://github.com/VHarastei">
-                    <a target="_blank">
+                    <a target="_blank" className={styles.footerContactGit}>
                       <Image
                         alt={'github icon'}
                         layout="fixed"

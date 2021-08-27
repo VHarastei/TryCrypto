@@ -23,6 +23,9 @@
         color: $primary;
         margin-left: 10px;
         margin-bottom: 6px;
+        @media all and (max-width: 768px) {
+          display: none;
+        }
       }
     }
   }

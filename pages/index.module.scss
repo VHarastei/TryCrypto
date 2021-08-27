@@ -148,3 +148,49 @@
     margin-bottom: -10px;
   }
 }
+
+@media all and (max-width: 768px) {
+  .titleText {
+    font-size: 26px !important;
+  }
+  .titleSubText {
+    font-size: 16px !important;
+  }
+  .titleButton {
+    width: 100%;
+  }
+  .titleIcon {
+    display: none;
+  }
+  .content {
+    padding: 20px 0px !important;
+    .contentText {
+      font-size: 24px !important;
+    }
+    .contentSubText {
+      font-size: 16px !important;
+    }
+  }
+  .portfolioImgContainer {
+    display: none;
+  }
+  .portfolioFeatures {
+    padding: 0px !important;
+  }
+  .charts {
+    flex-direction: column;
+  }
+  .contentEducation {
+    flex-direction: column;
+    margin: -20px;
+  }
+  .logoContainer,
+  .gecko {
+    display: none !important;
+  }
+}
+@media all and (max-width: 350px) {
+  .footerContactGit {
+    display: none !important;
+  }
+}

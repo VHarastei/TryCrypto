@@ -34,5 +34,6 @@ yarn-error.log*
 # vercel
 .vercel
 
-/db/seeders/*
-!/db/seeders/20210713150632-currency.js
+/db/seeders/
+#/db/seeders/*
+#!/db/seeders/20210713150632-currency.js

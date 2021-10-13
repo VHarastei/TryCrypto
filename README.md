@@ -1,34 +1,31 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+#TryCrypto
 
-## Getting Started
+An application that simulates the work of a cryptocurrency exchange. You can try to work with cryptocurrency: buy, sell, watch the dynamics of prices, view your transaction history
 
-First, run the development server:
+![TC Preview](https://i.ibb.co/Xsg4CRM/try-crypto-herokuapp-com.png)
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+## Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- SSR
+- Data provided by CoinGecko API
+- Responsive design
+- Portfolio with daily PNL
+- Transaction history
+- Email verification
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+## Technologies
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.tsx`.
+The application is written in TypeScript. The main feature is Server Side Rendering, which is made using React framework Next JS. The backend is made using the Route API provided by Next JS
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+Technologies used: 
+- React, React-Hook-Form
+- Redux-Toolkit
+- Next JS, Route API, SWR, Next-Connect
+- Sass, Css Modules
+- Victory (for charts)
+- Sequelize, Passport, JWT, Nodemailer
 
-## Learn More
+The application has a MySQL database with ORM Sequelize. Entity relationship diagram of database:
 
-To learn more about Next.js, take a look at the following resources:
+![TC DB](https://i.ibb.co/0X2yMsS/Try-Crypto-DB.png)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.

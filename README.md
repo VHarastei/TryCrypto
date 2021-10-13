@@ -1,4 +1,4 @@
-#TryCrypto
+# TryCrypto
 
 An application that simulates the work of a cryptocurrency exchange. You can try to work with cryptocurrency: buy, sell, watch the dynamics of prices, view your transaction history
 
